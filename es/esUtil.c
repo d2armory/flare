@@ -292,13 +292,13 @@ void ESUTIL_API esMainLoop ( ESContext *esContext )
     struct timeval t1, t2;
     struct timezone tz;
     float deltatime;
-    float totaltime = 0.0f;
-    unsigned int frames = 0;
+    //float totaltime = 0.0f;
+    //unsigned int frames = 0;
 
     gettimeofday ( &t1 , &tz );
 
     // Just one iteration! while(userInterrupt(esContext) == GL_FALSE)
-    {
+    //{
         gettimeofday(&t2, &tz);
         deltatime = (float)(t2.tv_sec - t1.tv_sec + (t2.tv_usec - t1.tv_usec) * 1e-6);
         t1 = t2;
@@ -310,7 +310,7 @@ void ESUTIL_API esMainLoop ( ESContext *esContext )
 
         eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface);
 
-        totaltime += deltatime;
+       /* totaltime += deltatime;
         frames++;
         if (totaltime >  2.0f)
         {
@@ -318,7 +318,7 @@ void ESUTIL_API esMainLoop ( ESContext *esContext )
             totaltime -= 2.0f;
             frames = 0;
         }
-    }
+    }*/
 }
 
 

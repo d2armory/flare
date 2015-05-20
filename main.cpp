@@ -16,13 +16,23 @@
 //    OpenGL ES 2.0 rendering.
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
+
+#include <emscripten.h>
+
 #include "es/esUtil.h"
-#include "glm/common.hpp"
+#include <sys/time.h>
+
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 typedef struct
 {
    // Handle to a program object
    GLuint programObject;
+   GLuint rotateLocation;
+   float deg;
 
 } UserData;
 
@@ -78,6 +88,7 @@ GLuint LoadShader ( GLenum type, const char *shaderSrc )
 ///
 // Initialize the shader and program object
 //
+
 int Init ( ESContext *esContext )
 {
    esContext->userData = (char*) malloc(sizeof(UserData));
@@ -85,10 +96,11 @@ int Init ( ESContext *esContext )
    UserData *userData = (UserData*) esContext->userData;
    GLbyte vShaderStr[] =  
       "attribute vec4 vPosition;    \n"
+      "uniform mat4 rotate;         \n"
       "varying vec4 pos;            \n"
       "void main()                  \n"
       "{                            \n"
-      "   gl_Position = vPosition;  \n"
+      "   gl_Position = rotate * vPosition;  \n"
       "   pos = vPosition;  \n"
       "}                            \n";
    
@@ -149,6 +161,10 @@ int Init ( ESContext *esContext )
 
    // Store the program object
    userData->programObject = programObject;
+   userData->rotateLocation = glGetUniformLocation(programObject, "rotate");
+   userData->deg = 0;
+   
+   printf("%d\n",userData->rotateLocation);
 
    glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
    return GL_TRUE;
@@ -157,6 +173,7 @@ int Init ( ESContext *esContext )
 ///
 // Draw a triangle using the shader pair created in Init()
 //
+
 void Draw ( ESContext *esContext )
 {
    UserData *userData = (UserData*) esContext->userData;
@@ -183,8 +200,43 @@ void Draw ( ESContext *esContext )
    glBindBuffer(GL_ARRAY_BUFFER, vertexPosObject);
    glVertexAttribPointer(0 /* ? */, 3, GL_FLOAT, 0, 0, 0);
    glEnableVertexAttribArray(0);
+   
+   glm::mat4 m = glm::rotate(glm::mat4(1),userData->deg,glm::vec3(0,0,1));
+   glUniformMatrix4fv(userData->rotateLocation, 1, GL_FALSE, &m[0][0]);
+   
+   userData->deg += M_PI/90;
+   
+   //printf("%f \n",userData->deg);
 
    glDrawArrays ( GL_TRIANGLES, 0, 3 );
+}
+
+ESContext esContext;
+UserData  userData;
+
+struct timeval t1, t2;
+struct timezone tz;
+float deltatime;
+float totaltime = 0.0f;
+unsigned int frames = 0;
+
+void mainloop()
+{
+   
+   gettimeofday(&t2, &tz);
+   deltatime = (float)(t2.tv_sec - t1.tv_sec + (t2.tv_usec - t1.tv_usec) * 1e-6);
+   t1 = t2;
+
+   esMainLoop(&esContext);
+
+   totaltime += deltatime;
+   frames++;
+   if (totaltime >  2.0f)
+   {
+      printf("%4d frames rendered in %1.4f seconds -> FPS=%3.4f\n", frames, totaltime, frames/totaltime);
+      totaltime -= 2.0f;
+      frames = 0;
+   }
 }
 
 int main ( int argc, char *argv[] )
@@ -195,18 +247,25 @@ int main ( int argc, char *argv[] )
     
     printf("%f %f %f %f\n",v.x,v.y,v.z,v.w); 
     
-   ESContext esContext;
-   UserData  userData;
+    glm::mat4 m = glm::rotate( glm::mat4(1.0f), (float) M_PI / 2 , glm::vec3(-1.0f, 0.0f, 0.0f));
+    
+    v = v * m;
+    
+    printf("%f %f %f %f\n",v.x,v.y,v.z,v.w); 
 
    esInitContext ( &esContext );
    esContext.userData = &userData;
 
-   esCreateWindow ( &esContext, "Hello Triangle", 320, 240, ES_WINDOW_RGB );
+   esCreateWindow ( &esContext, "Hello Triangle", 960, 960, ES_WINDOW_RGB );
 
    if ( !Init ( &esContext ) )
       return 0;
 
    esRegisterDrawFunc ( &esContext, Draw );
 
-   esMainLoop ( &esContext );
+   //esMainLoop ( &esContext );
+   
+   gettimeofday ( &t1 , &tz );
+   
+   emscripten_set_main_loop(mainloop, -1,0);
 }
