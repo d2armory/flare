@@ -29,7 +29,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-const char* testName = "materials/models/heroes/axe/axe_armor_normal.vtf";
+const char* testName = "materials/models/heroes/chen/chen_color.vtf";
 
 typedef struct
 {

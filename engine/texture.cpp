@@ -121,6 +121,7 @@ void Texture::Update()
 							if(tmpW<1) tmpW = 1;
 							if(tmpH<1) tmpH = 1;
 						}
+						// TODO: enable cubemap support (offset *= 6, bind to cubemap texture, etc)
 						for(int j = txtHeader->mipmapCount - 1; j >= 0; j--)
 						{
 							imgSize[j*4 + 3] = offset;

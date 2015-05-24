@@ -32,7 +32,8 @@ void FileLoader::PrepareDirectory(const char* fileName)
 void FileLoader::Load(const char* fileName)
 {
 	
-	std::string baseUrl = "http://104.236.208.106/dota2/";
+	//std::string baseUrl = "http://104.236.208.106/dota2/";
+	std::string baseUrl = "http://104.236.208.106:8080/";
 	std::string fName(fileName);
 	
 	std::string fileUrl = baseUrl + fName;
