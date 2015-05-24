@@ -6,8 +6,8 @@ OPTIMIZE =
 
 all: flare
 
-flare: main.bc es/esUtil.bc glm.bc assets.bc engine.bc
-	$(COMPILER) $(OPTIMIZE) main.bc es/esUtil.bc engine.bc -o /usr/share/nginx/html/app/raw.html --preload-file assets
+flare: main.bc es/esUtil.bc glm.bc assets.bc engine.bc squish.bc
+	$(COMPILER) $(OPTIMIZE) main.bc es/esUtil.bc engine.bc squish.bc -o /usr/share/nginx/html/app/raw.html --preload-file assets
 
 main.bc: main.cpp
 	$(COMPILER) $(OPTIMIZE) main.cpp -o main.bc
@@ -15,30 +15,32 @@ main.bc: main.cpp
 es/esUtil.bc: es/esUtil.h es/esUtil.c
 	$(COMPILER) $(OPTIMIZE) es/esUtil.c -o es/esUtil.bc
 	
-engine.bc: engine/fileLoader.bc engine/material.bc engine/model.bc engine/texture.bc engine/manager.bc
+engine.bc: engine/fileLoader.cpp engine/fileLoader.hpp engine/material.cpp engine/material.hpp engine/model.cpp engine/model.hpp engine/texture.cpp engine/texture.hpp engine/manager.cpp engine/manager.hpp
+	$(COMPILER) $(OPTIMIZE) engine/manager.cpp -o engine/manager.bc
+	$(COMPILER) $(OPTIMIZE) engine/texture.cpp -o engine/texture.bc
+	$(COMPILER) $(OPTIMIZE) engine/model.cpp -o engine/model.bc
+	$(COMPILER) $(OPTIMIZE) engine/material.cpp -o engine/material.bc
+	$(COMPILER) $(OPTIMIZE) engine/fileLoader.cpp -o engine/fileLoader.bc
 	$(COMPILER) $(OPTIMIZE) engine/fileLoader.bc engine/material.bc engine/model.bc engine/texture.bc engine/manager.bc -o engine.bc
 		
-engine/fileLoader.bc: engine/fileLoader.cpp engine/fileLoader.hpp
-	$(COMPILER) $(OPTIMIZE) engine/fileLoader.cpp -o engine/fileLoader.bc
-
-engine/material.bc: engine/material.cpp engine/material.hpp
-	$(COMPILER) $(OPTIMIZE) engine/material.cpp -o engine/material.bc
-	
-engine/model.bc: engine/model.cpp engine/model.hpp
-	$(COMPILER) $(OPTIMIZE) engine/model.cpp -o engine/model.bc
-	
-engine/texture.bc: engine/texture.cpp engine/texture.hpp
-	$(COMPILER) $(OPTIMIZE) engine/texture.cpp -o engine/texture.bc
-	
-engine/manager.bc: engine/manager.cpp engine/manager.hpp
-	$(COMPILER) $(OPTIMIZE) engine/manager.cpp -o engine/manager.bc
+squish.bc: squish/squish.h
+	$(COMPILER) $(OPTIMIZE) squish/alpha.cpp -o squish/alpha.bc
+	$(COMPILER) $(OPTIMIZE) squish/clusterfit.cpp -o squish/clusterfit.bc
+	$(COMPILER) $(OPTIMIZE) squish/colourblock.cpp -o squish/colourblock.bc
+	$(COMPILER) $(OPTIMIZE) squish/colourfit.cpp -o squish/colourfit.bc
+	$(COMPILER) $(OPTIMIZE) squish/colourset.cpp -o squish/colourset.bc
+	$(COMPILER) $(OPTIMIZE) squish/maths.cpp -o squish/maths.bc
+	$(COMPILER) $(OPTIMIZE) squish/rangefit.cpp -o squish/rangefit.bc
+	$(COMPILER) $(OPTIMIZE) squish/singlecolourfit.cpp -o squish/singlecolourfit.bc
+	$(COMPILER) $(OPTIMIZE) squish/squish.cpp -o squish/squish.bc
+	$(COMPILER) $(OPTIMIZE) squish/alpha.bc squish/clusterfit.bc squish/colourblock.bc squish/colourfit.bc squish/colourset.bc squish/maths.bc squish/rangefit.bc squish/singlecolourfit.bc squish/squish.bc -o squish.bc
 	
 glm.bc: glm/common.hpp
-	echo GLM needs no armor
+	echo GLM needs no armor > /dev/null
 	touch glm.bc
 	
 assets.bc: assets/shader.frag assets/shader.vert
-	echo Assets also need no armors
+	echo Assets also need no armors > /dev/null
 	touch assets.bc
 	
 test: test.cpp

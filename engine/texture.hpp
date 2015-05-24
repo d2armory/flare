@@ -3,7 +3,9 @@
 #include "enum.hpp"
 #include "../es/esUtil.h"
 #include "fileLoader.hpp"
+#include "../mdl/common.h"
 #include <cstring>
+#include "../squish/squish.h"
 
 #define TEXTURE_NAME_LENGTH 128
 
@@ -17,7 +19,9 @@ public:
 
 	// function
 	void Update();
-	void Draw();
+	
+	void Bind(int i);
+	void Unbind(int i);
 
 	unsigned int fnHash;
 	char fileName[TEXTURE_NAME_LENGTH];
@@ -26,6 +30,9 @@ public:
 	// mdlTexture is temporary
 	
 	GLuint textureId;
+	
+	// might considering remove/ replace with only header
+	char* textureData;
 	
 	// manager
 	Texture* nextTexture;

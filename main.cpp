@@ -29,11 +29,14 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+const char* testName = "materials/models/heroes/axe/axe_armor_normal.vtf";
+
 typedef struct
 {
 	// Handle to a program object
 	GLuint programObject;
 	GLuint rotateLocation;
+	GLuint textureLocation;
 	float deg;
 
 } UserData;
@@ -161,6 +164,7 @@ int Init ( ESContext *esContext )
 	// Store the program object
 	userData->programObject = programObject;
 	userData->rotateLocation = glGetUniformLocation(programObject, "modelTransform");
+	userData->textureLocation = glGetUniformLocation(programObject, "texture");
 	userData->deg = 0;
 	
 	printf("%d\n",userData->rotateLocation);
@@ -168,14 +172,14 @@ int Init ( ESContext *esContext )
 	glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
 	
 	
-	Texture* t1 = new Texture("materials/models/heroes/axe/axe_armor_color.vtf");
+	Texture* t1 = new Texture(testName);
 	Manager::add(t1);
-	Texture* t2 = new Texture("materials/models/heroes/axe/axe_armor_normal.vtf");
-	Manager::add(t2);
-	Texture* t3 = new Texture("materials/models/heroes/axe/axe_armor_masks1.vtf");
-	Manager::add(t3);
-	Texture* t4 = new Texture("materials/models/heroes/axe/axe_armor_masks2.vtf");
-	Manager::add(t4);
+	//Texture* t2 = new Texture("materials/models/heroes/axe/axe_armor_normal.vtf");
+	//Manager::add(t2);
+	//Texture* t3 = new Texture("materials/models/heroes/axe/axe_armor_masks1.vtf");
+	//Manager::add(t3);
+	//Texture* t4 = new Texture("materials/models/heroes/axe/axe_armor_masks2.vtf");
+	//Manager::add(t4);
 	
 	return GL_TRUE;
 }
@@ -192,15 +196,27 @@ void Update ( ESContext *esContext, float deltaTime )
 void Draw ( ESContext *esContext )
 {
 	UserData *userData = (UserData*) esContext->userData;
-	GLfloat vVertices[] = {  0.0f,  0.5f, 0.0f, 
-									-0.5f, -0.5f, 0.0f,
-									 0.5f, -0.5f, 0.0f };
+	/* GLfloat vVertices[] = {  
+		0.0f,  0.5f, 0.0f, 
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f 
+	};
+	*/
+	
+	GLfloat vVertices[] = {  
+		-0.5f,  0.5f, 0.0f, 
+		-0.5f, -0.5f, 0.0f,
+		0.5f,  -0.5f, 0.0f,
+		-0.5f,  0.5f, 0.0f, 
+		0.5f,  -0.5f, 0.0f, 
+		0.5f,  0.5f, 0.0f,
+	};
 
 	// No clientside arrays, so do this in a webgl-friendly manner
 	GLuint vertexPosObject;
 	glGenBuffers(1, &vertexPosObject);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexPosObject);
-	glBufferData(GL_ARRAY_BUFFER, 9*4, vVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 18*4, vVertices, GL_STATIC_DRAW);
 	
 	// Set the viewport
 	glViewport ( 0, 0, esContext->width, esContext->height );
@@ -219,11 +235,17 @@ void Draw ( ESContext *esContext )
 	glm::mat4 m = glm::rotate(glm::mat4(1),userData->deg,glm::vec3(0,0,1));
 	glUniformMatrix4fv(userData->rotateLocation, 1, GL_FALSE, &m[0][0]);
 	
-	userData->deg += M_PI/90;
+	userData->deg += M_PI/90 / 5;
 	
 	//printf("%f \n",userData->deg);
 
-	glDrawArrays ( GL_TRIANGLES, 0, 3 );
+	Manager::find(testName)->Bind(0);
+	
+	glUniform1i(userData->textureLocation, 0);
+
+	glDrawArrays ( GL_TRIANGLES, 0, 6 );
+	
+	Manager::find(testName)->Unbind(0);
 }
 
 ESContext esContext;
@@ -248,10 +270,13 @@ void mainloop()
 
 	totaltime += deltatime;
 	frames++;
-	if (totaltime >  2.0f)
+	
+	const float fpsRefresh = 5.0f;
+	
+	if (totaltime >  fpsRefresh)
 	{
 		printf("%4d frames rendered in %1.4f seconds -> FPS=%3.4f\n", frames, totaltime, frames/totaltime);
-		totaltime -= 2.0f;
+		totaltime -= fpsRefresh;
 		frames = 0;
 	}
 	

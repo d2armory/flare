@@ -93,6 +93,7 @@ Texture* Manager::find(const char* fileName)
 			else 
 			{
 				ret = cur;
+				break;
 			}
 		}
 		else if(hash > cur->fnHash)
