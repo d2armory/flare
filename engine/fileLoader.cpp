@@ -42,18 +42,18 @@ void FileLoader::Load(const char* fileName)
 	
 	printf("Fetching: %s\n",fileUrl.c_str());
 	
-	emscripten_async_wget(fileUrl.c_str(),fileName,&FileLoader::LoadCallbackSuccess,&FileLoader::LoadCallbackFail);
+	emscripten_async_wget2(fileUrl.c_str(),fileName,"GET","",0,&FileLoader::LoadCallbackSuccess,&FileLoader::LoadCallbackFail,0);
 	
 }
 
-void FileLoader::LoadCallbackSuccess(const char* fileName)
+void FileLoader::LoadCallbackSuccess(unsigned int num, void* some, const char* fileName)
 {
 	printf("Fetched: %s\n",fileName);
 }
 
-void FileLoader::LoadCallbackFail(const char* fileName)
+void FileLoader::LoadCallbackFail(unsigned int num, void* some, int num2)
 {
-	printf("Fail to load: %s\n",fileName);
+	//printf("Fail to load: %s\n",fileName);
 }
 
 bool FileLoader::FileExist(const char* fileName)

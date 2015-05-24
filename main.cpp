@@ -29,7 +29,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-const char* testName = "materials/models/heroes/chen/chen_color.vtf";
+const char* testName = "materials/models/heroes/bounty_hunter/bountyhunter_body_color.vtf";
 
 typedef struct
 {
@@ -171,16 +171,6 @@ int Init ( ESContext *esContext )
 
 	glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
 	
-	
-	Texture* t1 = new Texture(testName);
-	Manager::add(t1);
-	//Texture* t2 = new Texture("materials/models/heroes/axe/axe_armor_normal.vtf");
-	//Manager::add(t2);
-	//Texture* t3 = new Texture("materials/models/heroes/axe/axe_armor_masks1.vtf");
-	//Manager::add(t3);
-	//Texture* t4 = new Texture("materials/models/heroes/axe/axe_armor_masks2.vtf");
-	//Manager::add(t4);
-	
 	return GL_TRUE;
 }
 
@@ -188,9 +178,36 @@ int Init ( ESContext *esContext )
 // Draw a triangle using the shader pair created in Init()
 //
 
+ESContext esContext;
+UserData  userData;
+
+struct timeval t1, t2;
+struct timezone tz;
+float deltatime;
+float totaltime = 0.0f;
+unsigned int frames = 0;
+
+bool axe_data = false;
+bool bounty_data = false;
+
+float total = 0;
+
 void Update ( ESContext *esContext, float deltaTime )
 {
 	Manager::Update();
+	
+	if(totaltime > 1 && !bounty_data)
+	{
+		bounty_data = true;
+		Texture* t1 = new Texture(testName);
+		Manager::add(t1);
+		Texture* t2 = new Texture("materials/models/heroes/axe/axe_armor_normal.vtf");
+		Manager::add(t2);
+		Texture* t3 = new Texture("materials/models/heroes/axe/axe_armor_masks1.vtf");
+		Manager::add(t3);
+		Texture* t4 = new Texture("materials/models/heroes/axe/axe_armor_masks2.vtf");
+		Manager::add(t4);
+	}
 }
 
 void Draw ( ESContext *esContext )
@@ -239,25 +256,16 @@ void Draw ( ESContext *esContext )
 	
 	//printf("%f \n",userData->deg);
 
-	Manager::find(testName)->Bind(0);
+	Texture* t = Manager::find(testName);
+
+	if(t) t->Bind(0);
 	
 	glUniform1i(userData->textureLocation, 0);
 
 	glDrawArrays ( GL_TRIANGLES, 0, 6 );
 	
-	Manager::find(testName)->Unbind(0);
+	if(t) t->Unbind(0);
 }
-
-ESContext esContext;
-UserData  userData;
-
-struct timeval t1, t2;
-struct timezone tz;
-float deltatime;
-float totaltime = 0.0f;
-unsigned int frames = 0;
-
-bool axe_data = false;
 
 void mainloop()
 {
@@ -271,7 +279,7 @@ void mainloop()
 	totaltime += deltatime;
 	frames++;
 	
-	const float fpsRefresh = 5.0f;
+	const float fpsRefresh = 15.0f;
 	
 	if (totaltime >  fpsRefresh)
 	{
@@ -336,7 +344,7 @@ int main ( int argc, char *argv[] )
 	
 	gettimeofday ( &t1 , &tz );
 	
-	FileLoader::Load("models/heroes/axe/axe.mdl");
+	//FileLoader::Load("models/heroes/axe/axe.mdl");
 	
 	emscripten_set_main_loop(mainloop, -1,0);
 	
