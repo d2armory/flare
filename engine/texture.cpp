@@ -53,6 +53,13 @@ void Texture::Update()
 			
 			unsigned int reiPad = 80;	// entry start at 80 from file pointer
 			
+			isCubemap = ((txtHeader->flags & 0x4000) != 0);
+			
+			txtType = GL_TEXTURE_2D;
+			if(isCubemap) txtType = GL_TEXTURE_CUBE_MAP;
+			
+			int numFaces = (isCubemap)?6:1;
+			
 			for(int r=0;r<txtHeader->numResources;r++)
 			{
 				vtfResouceEntryInfo* rei = (vtfResouceEntryInfo*) (txtData + reiPad + (sizeof(vtfResouceEntryInfo) * r));
@@ -74,13 +81,13 @@ void Texture::Update()
 					{
 						
 						glGenTextures(1, &this->textureId);
-						glBindTexture(GL_TEXTURE_2D, this->textureId);
+						glBindTexture(txtType, this->textureId);
 						
 						// TODO: use texture flag
-						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+						glTexParameteri(txtType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+						glTexParameteri(txtType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+						glTexParameteri(txtType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+						glTexParameteri(txtType, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 						
 						int* imgSize = new int[txtHeader->mipmapCount * 4];
 						
@@ -125,48 +132,77 @@ void Texture::Update()
 						for(int j = txtHeader->mipmapCount - 1; j >= 0; j--)
 						{
 							imgSize[j*4 + 3] = offset;
-							offset += imgSize[j*4 + 2];
+							offset += imgSize[j*4 + 2] * numFaces;
 						}
 						
 						for(int m=0;m<txtHeader->mipmapCount;m++)
 						{
-							char* data = entry + imgSize[m*4+3];
-							
-							if(txtHeader->highResImageFormat == IMAGE_FORMAT_DXT1)
+							for(int f=0;f<numFaces;f++)
 							{
-								glCompressedTexImage2D(	GL_TEXTURE_2D, m, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
-							
-								printf("----- mm #%d : %dx%d , dxtSize: %d (webgl dxt1)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2]);
+								char* data = entry + imgSize[m*4+3] + f*imgSize[m*4+2];
 								
-							}
-							else
-							{
-								// sadly, webgl doesn't support dxt5
-								// we have to unpack this on the fly :(
-								//glCompressedTexImage2D(	GL_TEXTURE_2D, i, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, imgSize[i*3+1], imgSize[i*3+0], 0, imgSize[i*3+2], data);
-							
-								// rgba
-								int allocSize = imgSize[m*4 + 0] * imgSize[m*4 + 1] * 4;
-								
-								printf("----- mm #%d : %dx%d , dxtSize: %d, rgbaSize: %d (webgl no dxt5 support)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],allocSize);
-								
-								unsigned char* unpacked = (unsigned char*) malloc(allocSize);
-								
-								squish::DecompressImage( unpacked, imgSize[m*4 + 1], imgSize[m*4 + 0], data, sqImageType );
-								
-								glTexImage2D(GL_TEXTURE_2D, m, GL_RGBA, imgSize[m*4 + 1], imgSize[m*4 + 0], 0, GL_RGBA, GL_UNSIGNED_BYTE, unpacked);
-								
-								/* if(m==0)
+								unsigned int txtTypeFS = txtType;
+								if(txtTypeFS == GL_TEXTURE_CUBE_MAP)
 								{
-									for(int b=0;b<allocSize;b++)
+									switch(f)
 									{
-										//printf("%X",unpacked[b]);
-										//if(b%32==31) printf("\n");
+										case 0:
+											txtTypeFS = GL_TEXTURE_CUBE_MAP_POSITIVE_Z;
+											break;
+										case 1:
+											txtTypeFS = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z;
+											break;
+										case 2:
+											txtTypeFS = GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+											break;
+										case 3:
+											txtTypeFS = GL_TEXTURE_CUBE_MAP_NEGATIVE_X;
+											break;
+										case 4:
+											txtTypeFS = GL_TEXTURE_CUBE_MAP_POSITIVE_Y;
+											break;
+										case 5:
+											txtTypeFS = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y;
+											break;
 									}
-									//printf("\n");
-								} */
+								}
 								
-								free(unpacked);
+								if(txtHeader->highResImageFormat == IMAGE_FORMAT_DXT1)
+								{
+									glCompressedTexImage2D(	txtTypeFS, m, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
+								
+									printf("----- mm #%d : %dx%d , dxtSize: %d (webgl dxt1)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2]);
+									
+								}
+								else
+								{
+									// sadly, webgl doesn't support dxt5
+									// we have to unpack this on the fly :(
+									//glCompressedTexImage2D(	GL_TEXTURE_2D, i, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, imgSize[i*3+1], imgSize[i*3+0], 0, imgSize[i*3+2], data);
+								
+									// rgba
+									int allocSize = imgSize[m*4 + 0] * imgSize[m*4 + 1] * 4;
+									
+									printf("----- mm #%d : %dx%d , dxtSize: %d, rgbaSize: %d (webgl no dxt5 support)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],allocSize);
+									
+									unsigned char* unpacked = (unsigned char*) malloc(allocSize);
+									
+									squish::DecompressImage( unpacked, imgSize[m*4 + 1], imgSize[m*4 + 0], data, sqImageType );
+									
+									glTexImage2D(txtTypeFS, m, GL_RGBA, imgSize[m*4 + 1], imgSize[m*4 + 0], 0, GL_RGBA, GL_UNSIGNED_BYTE, unpacked);
+									
+									/* if(m==0)
+									{
+										for(int b=0;b<allocSize;b++)
+										{
+											//printf("%X",unpacked[b]);
+											//if(b%32==31) printf("\n");
+										}
+										//printf("\n");
+									} */
+									
+									free(unpacked);
+								}
 							}
 							
 						}
@@ -188,7 +224,7 @@ void Texture::Bind(int i)
 	if(state == FS_READY)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, this->textureId);
+		glBindTexture(txtType, this->textureId);
 	}
 }
 void Texture::Unbind(int i)
@@ -196,6 +232,6 @@ void Texture::Unbind(int i)
 	if(state == FS_READY)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(txtType, 0);
 	}
 }

@@ -29,6 +29,8 @@ public:
 	FILE_STATE state;
 	// mdlTexture is temporary
 	
+	bool isCubemap;
+	unsigned int txtType;
 	GLuint textureId;
 	
 	// might considering remove/ replace with only header
