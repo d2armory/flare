@@ -26,6 +26,8 @@
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
+#include <html5.h>
+
 #ifdef __cplusplus
 
 extern "C" {

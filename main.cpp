@@ -29,14 +29,19 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-const char* testName = "materials/models/heroes/bounty_hunter/bountyhunter_body_color.vtf";
+const char* testName = "materials/models/heroes/axe/axe_body_color.vtf";
 
 typedef struct
 {
 	// Handle to a program object
 	GLuint programObject;
-	GLuint rotateLocation;
+	
+	GLuint modelTransform;
+	GLuint viewTransform;
+	GLuint projTransform;
+	
 	GLuint textureLocation;
+	
 	float deg;
 
 } UserData;
@@ -77,7 +82,7 @@ GLuint LoadShader ( GLenum type, const char *shaderSrc )
 			char* infoLog = (char*) malloc (sizeof(char) * infoLen );
 
 			glGetShaderInfoLog ( shader, infoLen, NULL, infoLog );
-			esLogMessage ( "Error compiling shader:\n%s\n", infoLog );            
+			esLogMessage ( "Error compiling shader %s :\n%s\n",shaderSrc, infoLog );            
 			
 			free ( infoLog );
 		}
@@ -134,6 +139,16 @@ int Init ( ESContext *esContext )
 
 	// Bind vPosition to attribute 0   
 	glBindAttribLocation ( programObject, 0, "vPosition" );
+	glBindAttribLocation ( programObject, 1, "vNormal" );
+	glBindAttribLocation ( programObject, 2, "vUV" );
+	glBindAttribLocation ( programObject, 3, "vBoneCount" );
+	glBindAttribLocation ( programObject, 4, "vBone1" );
+	glBindAttribLocation ( programObject, 5, "vBone2" );
+	glBindAttribLocation ( programObject, 6, "vBone3" );
+	glBindAttribLocation ( programObject, 7, "vBoneweight1" );
+	glBindAttribLocation ( programObject, 8, "vBoneweight2" );
+	glBindAttribLocation ( programObject, 9, "vBoneweight3" );
+	glBindAttribLocation ( programObject, 10, "vTangent" );
 
 	// Link the program
 	glLinkProgram ( programObject );
@@ -163,11 +178,15 @@ int Init ( ESContext *esContext )
 
 	// Store the program object
 	userData->programObject = programObject;
-	userData->rotateLocation = glGetUniformLocation(programObject, "modelTransform");
+	
+	userData->modelTransform = glGetUniformLocation(programObject, "modelTransform");
+	userData->viewTransform = glGetUniformLocation(programObject, "viewTransform");
+	userData->projTransform = glGetUniformLocation(programObject, "projTransform");
+	
 	userData->textureLocation = glGetUniformLocation(programObject, "texture");
 	userData->deg = 0;
 	
-	printf("%d\n",userData->rotateLocation);
+	//printf("%d\n",userData->rotateLocation);
 
 	glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
 	
@@ -192,6 +211,8 @@ bool bounty_data = false;
 
 float total = 0;
 
+Model* mx;
+
 void Update ( ESContext *esContext, float deltaTime )
 {
 	Manager::Update();
@@ -201,12 +222,15 @@ void Update ( ESContext *esContext, float deltaTime )
 		bounty_data = true;
 		Texture* t1 = new Texture(testName);
 		Manager::add(t1);
-		Texture* t2 = new Texture("materials/models/heroes/axe/axe_armor_normal.vtf");
-		Manager::add(t2);
-		Texture* t3 = new Texture("materials/models/heroes/axe/axe_armor_masks1.vtf");
-		Manager::add(t3);
-		Texture* t4 = new Texture("materials/models/heroes/axe/axe_armor_masks2.vtf");
-		Manager::add(t4);
+		//Texture* t2 = new Texture("materials/models/heroes/axe/axe_armor_normal.vtf");
+		//Manager::add(t2);
+		//Texture* t3 = new Texture("materials/models/heroes/axe/axe_armor_masks1.vtf");
+		//Manager::add(t3);
+		//Texture* t4 = new Texture("materials/models/heroes/axe/axe_armor_masks2.vtf");
+		//Manager::add(t4);
+		Model* m1 = new Model("models/heroes/axe/axe.mdl");
+		Manager::add(m1);
+		mx = m1;
 	}
 }
 
@@ -220,20 +244,51 @@ void Draw ( ESContext *esContext )
 	};
 	*/
 	
-	GLfloat vVertices[] = {  
+	/* GLfloat vVertices[] = {  
 		-0.5f,  0.5f, 0.0f, 
 		-0.5f, -0.5f, 0.0f,
 		0.5f,  -0.5f, 0.0f,
 		-0.5f,  0.5f, 0.0f, 
 		0.5f,  -0.5f, 0.0f, 
 		0.5f,  0.5f, 0.0f,
-	};
+	}; */
+	
+	vvdVertexFormat vVer[6];
+	vVer[0].m_vecPosition = glm::vec3(-0.5f,  0.5f, 0.0f);
+	vVer[1].m_vecPosition = glm::vec3(-0.5f, -0.5f, 0.0f);
+	vVer[2].m_vecPosition = glm::vec3(0.5f,  -0.5f, 0.0f);
+	vVer[3].m_vecPosition = glm::vec3(-0.5f,  0.5f, 0.0f);
+	vVer[4].m_vecPosition = glm::vec3(0.5f,  -0.5f, 0.0f);
+	vVer[5].m_vecPosition = glm::vec3(0.5f,  0.5f, 0.0f);
+	
+	vVer[0].m_vecTexCoord = glm::vec2(0.0f, 1.0f);
+	vVer[1].m_vecTexCoord = glm::vec2(0.0f, 0.0f);
+	vVer[2].m_vecTexCoord = glm::vec2(1.0f, 0.0f);
+	vVer[3].m_vecTexCoord = glm::vec2(0.0f, 1.0f);
+	vVer[4].m_vecTexCoord = glm::vec2(1.0f, 0.0f);
+	vVer[5].m_vecTexCoord = glm::vec2(1.0f, 1.0f);
+
+	/* if(!axe_data){
+		axe_data = true;
+		for(int i=0;i<sizeof(vvdVertexFormat)*6;i++)
+		{
+			printf("%2X ",*(((char*)(vVer))+i));
+			if(i%48==47) printf("\n");
+		}	
+	} */
+	
 
 	// No clientside arrays, so do this in a webgl-friendly manner
-	GLuint vertexPosObject;
-	glGenBuffers(1, &vertexPosObject);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexPosObject);
-	glBufferData(GL_ARRAY_BUFFER, 18*4, vVertices, GL_STATIC_DRAW);
+	//GLuint vertexPosObject;
+	//glGenBuffers(1, &vertexPosObject);
+	//glBindBuffer(GL_ARRAY_BUFFER, vertexPosObject);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vvdVertexFormat) * 6, vVer, GL_STATIC_DRAW);
+	
+	if(mx->state == FS_READY)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, mx->vbo[0]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mx->vbo[1]);
+	}
 	
 	// Set the viewport
 	glViewport ( 0, 0, esContext->width, esContext->height );
@@ -245,12 +300,25 @@ void Draw ( ESContext *esContext )
 	glUseProgram ( userData->programObject );
 
 	// Load the vertex data
-	glBindBuffer(GL_ARRAY_BUFFER, vertexPosObject);
-	glVertexAttribPointer(0 /* ? */, 3, GL_FLOAT, 0, 0, 0);
-	glEnableVertexAttribArray(0);
+	//glBindBuffer(GL_ARRAY_BUFFER, vertexPosObject);
+	//glVertexAttribPointer(0 /* ? */, 3, GL_FLOAT, 0, 0, 0);
+	//glEnableVertexAttribArray(0);
+	if(mx->state == FS_READY)
+	{
+		mx->SetVAO();
+	}
 	
-	glm::mat4 m = glm::rotate(glm::mat4(1),userData->deg,glm::vec3(0,0,1));
-	glUniformMatrix4fv(userData->rotateLocation, 1, GL_FALSE, &m[0][0]);
+	//mx->Draw();
+	
+	//glm::mat4 m0 = glm::rotate(glm::mat4(1),(float) M_PI,glm::vec3(1,0,0));
+	glm::mat4 m = glm::rotate(glm::mat4(1),userData->deg,glm::vec3(0,1,0));
+	glUniformMatrix4fv(userData->modelTransform, 1, GL_FALSE, &m[0][0]);
+	
+	glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,-100,-100));
+	glUniformMatrix4fv(userData->viewTransform, 1, GL_FALSE, &v[0][0]);
+	
+	glm::mat4 p = glm::perspective (30.0f, 1.0f, 0.01f, 1000.0f);
+	glUniformMatrix4fv(userData->projTransform, 1, GL_FALSE, &p[0][0]);
 	
 	userData->deg += M_PI/90 / 5;
 	
@@ -262,7 +330,18 @@ void Draw ( ESContext *esContext )
 	
 	glUniform1i(userData->textureLocation, 0);
 
-	glDrawArrays ( GL_TRIANGLES, 0, 6 );
+	//mx->Draw();
+
+	//glDrawArrays ( GL_TRIANGLES, 0, 6 );
+	if(mx->state == FS_READY)
+	{
+		//glDrawArrays ( GL_TRIANGLES, 1899, 300 );
+		
+		glDrawElements(GL_TRIANGLES, mx->elementLength, GL_UNSIGNED_SHORT, 0);
+		
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
 	
 	if(t) t->Unbind(0);
 }
@@ -288,7 +367,7 @@ void mainloop()
 		frames = 0;
 	}
 	
-	if(!axe_data) 
+	/* if(!axe_data) 
 	{
 		bool ex = FileLoader::FileExist("models/heroes/axe/axe.mdl");
 		if(ex)
@@ -310,7 +389,7 @@ void mainloop()
 			
 			free(fileData);
 		}
-	}
+	} */
 	
 }
 

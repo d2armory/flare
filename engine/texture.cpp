@@ -24,10 +24,7 @@ void Texture::Update()
 	if(state == FS_UNINIT)
 	{
 		state = FS_LOADING;
-		if(!FileLoader::FileExist(fileName))
-		{
-			FileLoader::Load(fileName);
-		}
+		FileLoader::Load(fileName);
 	}
 	if(state == FS_LOADING)
 	{
@@ -174,8 +171,21 @@ void Texture::Update()
 									printf("----- mm #%d : %dx%d , dxtSize: %d (webgl dxt1)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2]);
 									
 								}
+								else if(txtHeader->highResImageFormat == IMAGE_FORMAT_DXT5)
+								{
+									
+									const GLenum COMPRESSED_RGBA_S3TC_DXT5_EXT = 0x83F3;
+
+									glCompressedTexImage2D(	txtTypeFS, m, COMPRESSED_RGBA_S3TC_DXT5_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
+								
+									printf("----- mm #%d : %dx%d , dxtSize: %d (webgl dxt5 extension)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2]);
+									
+								}
 								else
 								{
+									
+									// old code -  not used anymore
+									
 									// sadly, webgl doesn't support dxt5
 									// we have to unpack this on the fly :(
 									//glCompressedTexImage2D(	GL_TEXTURE_2D, i, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, imgSize[i*3+1], imgSize[i*3+0], 0, imgSize[i*3+2], data);
