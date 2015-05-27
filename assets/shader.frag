@@ -64,12 +64,12 @@ void main()
 	float NdotL = -1.0 * dot(txtN, tangentL);
 	//float NdotL = dot(N, L);
 	
-	vec4 lColor = vec4(0.8,0.8,0.8,1);
-	vec4 sColor = vec4(0.9,0.8,1.0,1);
-	vec4 ambient = vec4(0.4,0.4,0.4,1);
+	vec3 lColor = vec3(0.8,0.8,0.8);
+	vec3 sColor = vec3(0.9,0.8,1.0);
+	vec3 ambient = vec3(0.4,0.4,0.4);
 	
-	vec4 diffuse = vec4(0,0,0,1);
-	vec4 specular = vec4(0,0,0,1);
+	vec3 diffuse = vec3(0,0,0);
+	vec3 specular = vec3(0,0,0);
 	
 	float diffuseLight = mask1.a;
 	if(NdotL > 1e-6)
@@ -88,11 +88,10 @@ void main()
 		vec3 tangentR = tangentL + (txtN * NdotL * 2.0);
 		float RdotV = dot(tangentR, tangentV);
 		
-		sColor = (sColor * (1.0 - mask2.b)) + (color * (mask2.b));
+		sColor = (sColor * (1.0 - mask2.b)) + (color.rgb * (mask2.b));
 		
 		float specExp = 20.0;
 		float specScale = 0.5;//2.5;
-		
 		
 		if(RdotV > 1e-6)
 		{
@@ -104,16 +103,16 @@ void main()
 	vec3 rimColor = vec3(1,1,1);
 	
 	float VdotN = dot(tangentV,txtN);
-	vec4 rimLight = vec4(0,0,0,1);
+	vec3 rimLight = vec3(0,0,0);
 	//if(VdotN > 1e-6)
 	//{
 		//rimLight = vec4(rimColor * (smoothstep(0.6, 1.0,(1.0 - VdotN)) * (rimScale * mask2.g)),1);
 	//}
 	
-	vec4 light = ambient + diffuse; 
+	vec3 light = ambient + diffuse; 
 	vec3 finalcolor = (color.rgb) * (1.0 - mask1.b);
 	
-	gl_FragColor = (light * vec4(finalcolor,1)) + specular + rimLight;
+	gl_FragColor = vec4((light * finalcolor) + specular + rimLight,1);
 	//gl_FragColor = vec4((txtNworld) * 0.25,1) + vec4(0.25,0.25,0.25,0) + (vec4(0.5,0.5,0.5,0) * ((fTangent.a / 2.0) + 0.5));
 	//gl_FragColor = (vec4(fTangent.aaa,1) / 4.0) + vec4(0.5,0.5,0.5,0);
 	//gl_FragColor = vec4(texture2D( texture[3], fUV ).rrr,1);

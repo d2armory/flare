@@ -21,7 +21,8 @@ Model::Model(const char* fileName)
 Model::~Model()
 {
 	if(data) delete data;
-	//if(vData) delete vData;
+	if(vData) delete vData;
+	if(mData) delete mData;
 }
 
 void Model::Update()
@@ -53,6 +54,53 @@ void Model::Update()
 		if(mdlState == FS_READY && meshState == FS_READY && vertexState == FS_READY)
 		{
 			state = FS_READY;
+			
+			mdlHeader* mh =  data = (mdlHeader*) FileLoader::ReadFile(fileName);
+			
+			char* mhId = (char*) &mh->id;
+			
+			printf("model: %s\n",fileName);
+			printf("- ID: %c%c%c%c (0x%X)\n",*mhId,*(mhId+1),*(mhId+2),*(mhId+3),mh->id);
+			printf("- Version: %d\n",mh->version);
+			printf("- Checksum: 0x%X\n",mh->checksum);
+			printf("- Name: %s\n",mh->name);
+			printf("- Length: %d\n",mh->length);
+			
+			
+			const bool dumpBones = true;
+			const bool dumpTextures = true;
+			
+			
+			if(dumpBones)
+			{
+				printf("- Retrieving bone data\n");
+				
+				printf("--- Num bones: %d\n",mh->numbones);
+				
+				for(int i=0;i<mh->numbones;i++)
+				{
+					mdlBone* bone = mh->pBone(i);
+					printf("----- %i: %s",i,bone->pszName());
+					if(bone->parent != -1)
+					{
+						printf(" - %s (%i)",mh->pBone(bone->parent)->pszName(),bone->parent);
+					}
+					printf("\n");
+				}
+			}
+			
+			if(dumpTextures)
+			{
+				printf("- Retrieving texture list\n");
+				
+				printf("--- Num textures: %d\n",mh->numtextures);
+				
+				for(int i=0;i<mh->numtextures;i++)
+				{
+					mdlTexture* texture = mh->pTexture(i);
+					printf("----- %i: %s\n",i,texture->pszName());
+				}
+			}
 			
 			// NO VAO for us :(
 			// VAO gen
