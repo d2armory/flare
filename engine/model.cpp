@@ -59,7 +59,8 @@ void Model::Update()
 			//glBindVertexArray(this->vao);
 			
 			// VBO gen
-			glGenBuffers(MODEL_VBO_COUNT, &this->vbo[0]);
+			glGenBuffers(1, &this->vertexVBO);
+			glGenBuffers(MODEL_STRIP_COUNT, (GLuint*) &this->meshVBO);
 			
 			// load vertex data
 			
@@ -82,7 +83,7 @@ void Model::Update()
 			char* vertexData = (char*) vData;
 			vertexData += vData->vertexDataStart;
 			
-			glBindBuffer(GL_ARRAY_BUFFER, this->vbo[0]);
+			glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO);
 			// vertex and tangent
 			unsigned int vertexBufferSize = (sizeof(vvdVertexFormat)/* + sizeof(glm::vec3)*/) * vertexCount;
 			glBufferData(GL_ARRAY_BUFFER, vertexBufferSize , vertexData, GL_STATIC_DRAW);
@@ -100,7 +101,7 @@ void Model::Update()
 			printf("- num lods: %d\n",mData->numLODs);
 			printf("- num bodyparts: %d\n",mData->numBodyParts);
 			
-			elementLength = 0;
+			//elementLength = 0;
 			
 			// assume 1 body parts
 			if(mData->numBodyParts==1)
@@ -131,20 +132,20 @@ void Model::Update()
 									printf("--------- strips: %d\n",stripgr->numStrips);
 									printf("--------- flag: 0x%X\n",stripgr->flags);
 									
-									if(true || (stripgr->flags & 0x02) != 0)
+									if((stripgr->flags & 0x02) != 0)
 									{
 										//for(int s=0;s<stripgr->numStrips;s++)
 										//{
-										vtxStrip* strip = ((vtxStrip*) (((char*)(stripgr)) + stripgr->stripOffset));
+										//vtxStrip* strip = ((vtxStrip*) (((char*)(stripgr)) + stripgr->stripOffset));
 										//printf("--------- strip %d\n",s);
-										printf("----------- verts: %d\n",strip->numVerts);
-										printf("----------- indices: %d\n",strip->numIndices);
-										printf("--------- flag: 0x%X\n",strip->flags);
+										//printf("----------- verts: %d\n",strip->numVerts);
+										//printf("----------- indices: %d\n",strip->numIndices);
+										//printf("----------- flag: 0x%X\n",strip->flags);
 										//}
 										
-										if(elementLength>0) continue;
+										//if(elementLength>0) continue;
 										
-										elementLength = stripgr->numIndices;
+										elementLength[numStrip] = stripgr->numIndices;
 										unsigned short* elementBuffer = new unsigned short[stripgr->numIndices];
 										
 										vtxVertex* vertexArr = ((vtxVertex*) (((char*)(stripgr)) + stripgr->vertOffset));
@@ -152,9 +153,9 @@ void Model::Update()
 										
 										//vertexArr = ((vtxVertex*) (((char*)(stripgr)) + strip->vertOffset));
 										//printf("%X\n",vertexArr);
-										unsigned int* indexArr = (unsigned int*) (((char*) (stripgr)) + stripgr->indexOffset);
+										unsigned short* indexArr = (unsigned short*) (((char*) (stripgr)) + stripgr->indexOffset);
 										
-										for(int v=0;v<elementLength;v++)
+										/* for(int v=0;v<elementLength;v++)
 										{
 											printf("%hu ",indexArr[v]);
 										}
@@ -164,9 +165,9 @@ void Model::Update()
 										{
 											printf("%hu ",vertexArr[v].origMeshVertID);
 										}
-										printf("\n");
+										printf("\n"); */
 										
-										for(int v=0;v<elementLength;v++)
+										for(int v=0;v<elementLength[numStrip];v++)
 										{
 											unsigned short idx = indexArr[v];
 											//printf("%hu ",idx);
@@ -180,19 +181,29 @@ void Model::Update()
 											//}
 											
 											//printf("%d: %hu - %hu - %hu\n",v,indexArr[v],vertexArr[v].origMeshVertID,elementBuffer[v]);
+											
+											/* if(v%3==2)
+											{
+												// swap 2 and 3
+												unsigned short tmp = elementBuffer[v-1];
+												elementBuffer[v-1] = elementBuffer[v];
+												elementBuffer[v] = tmp;
+											} */
 										}
 										
-										/* for(int v=0;v<elementLength;v++)
+										/* for(int v=0;v<elementLength[numStrip];v++)
 										{
 											printf("%hu ",elementBuffer[v]);
 										}
-										printf("\n"); */
+										printf("\n");*/
 										
+										printf("--------- put stripgroup %d to vbo %d : %d unsigned short transfered\n",sg,this->meshVBO[numStrip],stripgr->numIndices);
 										
-										
-										glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo[1]);
+										glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->meshVBO[numStrip]);
 										glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * stripgr->numIndices, elementBuffer, GL_STATIC_DRAW);
 										glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+										
+										numStrip++;
 										
 										delete elementBuffer;
 									}
@@ -232,14 +243,14 @@ void Model::Draw()
 {
 	if(state == FS_READY)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, this->vbo[0]);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo[1]);
-		this->SetVAO();
+		//glBindBuffer(GL_ARRAY_BUFFER, this->vbo[0]);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo[1]);
+		//this->SetVAO();
 		
-		glDrawElements(GL_TRIANGLE_STRIP, elementLength, GL_UNSIGNED_SHORT, 0);
+		//glDrawElements(GL_TRIANGLE_STRIP, elementLength, GL_UNSIGNED_SHORT, 0);
 		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		//glBindBuffer(GL_ARRAY_BUFFER, 0);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 }
 
@@ -272,6 +283,6 @@ void Model::SetVAO()
 	glVertexAttribPointer(9, 1, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 8);
 	glEnableVertexAttribArray(9);
 	// tangent
-	//glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) (tangentOffset));
-	//glEnableVertexAttribArray(10);
+	glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) (tangentOffset));
+	glEnableVertexAttribArray(10);
 }

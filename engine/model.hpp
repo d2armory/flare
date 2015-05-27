@@ -7,7 +7,7 @@
 #include <string>
 
 #define MODEL_NAME_LENGTH 128
-#define MODEL_VBO_COUNT 2
+#define MODEL_STRIP_COUNT 4
 
 class Model
 {
@@ -41,10 +41,12 @@ public:
 	vtxHeader* mData;
 	
 	int vertexCount;
-	int elementLength;
 	// no vao in es2.0 :(
 	//GLuint vao;
-	GLuint vbo[MODEL_VBO_COUNT];
+	GLuint vertexVBO;
+	int numStrip;
+	GLuint meshVBO[MODEL_STRIP_COUNT];
+	int elementLength[MODEL_STRIP_COUNT];
 	int tangentOffset;
 	
 	Material* material;

@@ -188,7 +188,13 @@ int Init ( ESContext *esContext )
 	
 	//printf("%d\n",userData->rotateLocation);
 
-	glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
+	glClearColor ( 0.5f, 0.5f, 0.5f, 1.0f );
+	
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CW);
+	
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 	
 	return GL_TRUE;
 }
@@ -220,10 +226,10 @@ void Update ( ESContext *esContext, float deltaTime )
 	if(totaltime > 1 && !bounty_data)
 	{
 		bounty_data = true;
-		Texture* t1 = new Texture(testName);
+		Texture* t1 = new Texture("materials/models/heroes/axe/axe_body_color.vtf");
 		Manager::add(t1);
-		//Texture* t2 = new Texture("materials/models/heroes/axe/axe_armor_normal.vtf");
-		//Manager::add(t2);
+		Texture* t2 = new Texture("materials/models/heroes/axe/axe_body_normal.vtf");
+		Manager::add(t2);
 		//Texture* t3 = new Texture("materials/models/heroes/axe/axe_armor_masks1.vtf");
 		//Manager::add(t3);
 		//Texture* t4 = new Texture("materials/models/heroes/axe/axe_armor_masks2.vtf");
@@ -237,113 +243,68 @@ void Update ( ESContext *esContext, float deltaTime )
 void Draw ( ESContext *esContext )
 {
 	UserData *userData = (UserData*) esContext->userData;
-	/* GLfloat vVertices[] = {  
-		0.0f,  0.5f, 0.0f, 
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f 
-	};
-	*/
-	
-	/* GLfloat vVertices[] = {  
-		-0.5f,  0.5f, 0.0f, 
-		-0.5f, -0.5f, 0.0f,
-		0.5f,  -0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f, 
-		0.5f,  -0.5f, 0.0f, 
-		0.5f,  0.5f, 0.0f,
-	}; */
-	
-	vvdVertexFormat vVer[6];
-	vVer[0].m_vecPosition = glm::vec3(-0.5f,  0.5f, 0.0f);
-	vVer[1].m_vecPosition = glm::vec3(-0.5f, -0.5f, 0.0f);
-	vVer[2].m_vecPosition = glm::vec3(0.5f,  -0.5f, 0.0f);
-	vVer[3].m_vecPosition = glm::vec3(-0.5f,  0.5f, 0.0f);
-	vVer[4].m_vecPosition = glm::vec3(0.5f,  -0.5f, 0.0f);
-	vVer[5].m_vecPosition = glm::vec3(0.5f,  0.5f, 0.0f);
-	
-	vVer[0].m_vecTexCoord = glm::vec2(0.0f, 1.0f);
-	vVer[1].m_vecTexCoord = glm::vec2(0.0f, 0.0f);
-	vVer[2].m_vecTexCoord = glm::vec2(1.0f, 0.0f);
-	vVer[3].m_vecTexCoord = glm::vec2(0.0f, 1.0f);
-	vVer[4].m_vecTexCoord = glm::vec2(1.0f, 0.0f);
-	vVer[5].m_vecTexCoord = glm::vec2(1.0f, 1.0f);
-
-	/* if(!axe_data){
-		axe_data = true;
-		for(int i=0;i<sizeof(vvdVertexFormat)*6;i++)
-		{
-			printf("%2X ",*(((char*)(vVer))+i));
-			if(i%48==47) printf("\n");
-		}	
-	} */
-	
-
-	// No clientside arrays, so do this in a webgl-friendly manner
-	//GLuint vertexPosObject;
-	//glGenBuffers(1, &vertexPosObject);
-	//glBindBuffer(GL_ARRAY_BUFFER, vertexPosObject);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(vvdVertexFormat) * 6, vVer, GL_STATIC_DRAW);
-	
-	if(mx->state == FS_READY)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, mx->vbo[0]);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mx->vbo[1]);
-	}
 	
 	// Set the viewport
 	glViewport ( 0, 0, esContext->width, esContext->height );
 	
 	// Clear the color buffer
 	glClear ( GL_COLOR_BUFFER_BIT );
+	// Clear the depth buffer
+	glClear ( GL_DEPTH_BUFFER_BIT );
 
 	// Use the program object
 	glUseProgram ( userData->programObject );
 
 	// Load the vertex data
-	//glBindBuffer(GL_ARRAY_BUFFER, vertexPosObject);
-	//glVertexAttribPointer(0 /* ? */, 3, GL_FLOAT, 0, 0, 0);
-	//glEnableVertexAttribArray(0);
-	if(mx->state == FS_READY)
+	for(int i=0;i<mx->numStrip;i++) 
 	{
-		mx->SetVAO();
-	}
-	
-	//mx->Draw();
-	
-	//glm::mat4 m0 = glm::rotate(glm::mat4(1),(float) M_PI,glm::vec3(1,0,0));
-	glm::mat4 m = glm::rotate(glm::mat4(1),userData->deg,glm::vec3(0,1,0));
-	glUniformMatrix4fv(userData->modelTransform, 1, GL_FALSE, &m[0][0]);
-	
-	glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,-100,-100));
-	glUniformMatrix4fv(userData->viewTransform, 1, GL_FALSE, &v[0][0]);
-	
-	glm::mat4 p = glm::perspective (30.0f, 1.0f, 0.01f, 1000.0f);
-	glUniformMatrix4fv(userData->projTransform, 1, GL_FALSE, &p[0][0]);
-	
-	userData->deg += M_PI/90 / 5;
-	
-	//printf("%f \n",userData->deg);
-
-	Texture* t = Manager::find(testName);
-
-	if(t) t->Bind(0);
-	
-	glUniform1i(userData->textureLocation, 0);
-
-	//mx->Draw();
-
-	//glDrawArrays ( GL_TRIANGLES, 0, 6 );
-	if(mx->state == FS_READY)
-	{
-		//glDrawArrays ( GL_TRIANGLES, 1899, 300 );
+		if(mx->state == FS_READY)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, mx->vertexVBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mx->meshVBO[i]);
+			mx->SetVAO();
+		}
 		
-		glDrawElements(GL_TRIANGLES, mx->elementLength, GL_UNSIGNED_SHORT, 0);
+		//mx->Draw();
 		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
+		glm::mat4 m0 = glm::rotate(glm::mat4(1),(float) M_PI,glm::vec3(1,0,0));
+		glm::mat4 m1 = glm::rotate(m0,userData->deg,glm::vec3(0,1,0));
+		glm::mat4 m2 = glm::translate(m1, glm::vec3(0,0,0));
+		glUniformMatrix4fv(userData->modelTransform, 1, GL_FALSE, &m2[0][0]);
+		
+		glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,100,-100));
+		glUniformMatrix4fv(userData->viewTransform, 1, GL_FALSE, &v[0][0]);
+		
+		glm::mat4 p = glm::perspective (30.0f, 1.0f, 0.01f, 1000.0f);
+		glUniformMatrix4fv(userData->projTransform, 1, GL_FALSE, &p[0][0]);
+		
+		userData->deg += M_PI/90 / 5;
+		
+		//printf("%f \n",userData->deg);
 	
-	if(t) t->Unbind(0);
+		Texture* t_color = Manager::find("materials/models/heroes/axe/axe_body_color.vtf");
+		Texture* t_normal = Manager::find("materials/models/heroes/axe/axe_body_normal.vtf");
+	
+		if(t_color) t_color->Bind(0);
+		if(t_normal) t_normal->Bind(1);
+		
+		glUniform1i(userData->textureLocation, 0);
+	
+		//mx->Draw();
+	
+		//glDrawArrays ( GL_TRIANGLES, 0, 6 );
+		if(mx->state == FS_READY)
+		{
+			//glDrawArrays ( GL_TRIANGLES, 1899, 300 );
+			glDrawElements(GL_TRIANGLES, mx->elementLength[i], GL_UNSIGNED_SHORT, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
+		
+		if(t_color) t_color->Unbind(0);
+		if(t_normal) t_normal->Unbind(1);
+		
+	}
 }
 
 void mainloop()
@@ -410,7 +371,7 @@ int main ( int argc, char *argv[] )
 	esInitContext ( &esContext );
 	esContext.userData = &userData;
 
-	esCreateWindow ( &esContext, "Hello Triangle", 640, 640, ES_WINDOW_RGB );
+	esCreateWindow ( &esContext, "Hello Triangle", 640, 640, ES_WINDOW_RGB | ES_WINDOW_DEPTH );
 
 	if ( !Init ( &esContext ) )
 		return 0;

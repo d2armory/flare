@@ -73,6 +73,9 @@ struct vtxStripGroup
 	int stripOffset;
 
 	unsigned char flags;
+	
+	int unknown1;
+	int unknown2;
 
 };
 
