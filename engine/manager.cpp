@@ -77,11 +77,14 @@ Texture* Manager::find(const char* fileName)
 	std::hash<std::string> hasher;
 	unsigned int hash = (unsigned int) hasher(fnStr);
 	
+	//printf("Finding %s\n",fileName);
+	
 	Texture* ret = 0;
 	
 	Texture* cur = rootTexture;
 	while(cur!=0)
 	{
+		//printf("Current = %s\n",cur->fileName);
 		if(hash == cur->fnHash)
 		{
 			std::string curFnStr(cur->fileName);
@@ -89,19 +92,23 @@ Texture* Manager::find(const char* fileName)
 			{
 				// key collision
 				cur = cur->childRight;
+				//printf("Key collision\n");
 			}
 			else 
 			{
 				ret = cur;
+				//printf("Found\n");
 				break;
 			}
 		}
 		else if(hash > cur->fnHash)
 		{
+			//printf("Go right\n");
 			cur = cur->childRight;
 		}
 		else if(hash < cur->fnHash)
 		{
+			//printf("Go left\n");
 			cur = cur->childLeft;
 		}
 	}

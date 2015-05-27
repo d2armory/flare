@@ -9,6 +9,9 @@ Texture::Texture(const char* fileName)
 	this->fnHash = (unsigned int) hasher(fnStr);
 	state = FS_UNINIT;
 	textureData = 0;
+	childLeft = 0;
+	childRight = 0;
+	nextTexture = 0;
 }
 Texture::~Texture()
 {

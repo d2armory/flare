@@ -188,7 +188,7 @@ int Init ( ESContext *esContext )
 	
 	//printf("%d\n",userData->rotateLocation);
 
-	glClearColor ( 0.5f, 0.5f, 0.5f, 1.0f );
+	glClearColor (0, 0, 0, 1.0f );
 	
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CW);
@@ -230,10 +230,10 @@ void Update ( ESContext *esContext, float deltaTime )
 		Manager::add(t1);
 		Texture* t2 = new Texture("materials/models/heroes/axe/axe_body_normal.vtf");
 		Manager::add(t2);
-		//Texture* t3 = new Texture("materials/models/heroes/axe/axe_armor_masks1.vtf");
-		//Manager::add(t3);
-		//Texture* t4 = new Texture("materials/models/heroes/axe/axe_armor_masks2.vtf");
-		//Manager::add(t4);
+		Texture* t3 = new Texture("materials/models/heroes/axe/axe_body_masks1.vtf");
+		Manager::add(t3);
+		Texture* t4 = new Texture("materials/models/heroes/axe/axe_body_masks2.vtf");
+		Manager::add(t4);
 		Model* m1 = new Model("models/heroes/axe/axe.mdl");
 		Manager::add(m1);
 		mx = m1;
@@ -255,55 +255,62 @@ void Draw ( ESContext *esContext )
 	// Use the program object
 	glUseProgram ( userData->programObject );
 
-	// Load the vertex data
-	for(int i=0;i<mx->numStrip;i++) 
+	if(mx->state == FS_READY)
 	{
-		if(mx->state == FS_READY)
+		// Load the vertex data
+		for(int i=0;i<mx->numStrip;i++) 
 		{
-			glBindBuffer(GL_ARRAY_BUFFER, mx->vertexVBO);
+			
+			//glBindBuffer(GL_ARRAY_BUFFER, mx->vertexVBO);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mx->meshVBO[i]);
 			mx->SetVAO();
+			
+			//mx->Draw();
+			
+			glm::mat4 m0 = glm::rotate(glm::mat4(1),(float) M_PI,glm::vec3(1,0,0));
+			glm::mat4 m1 = glm::rotate(m0,userData->deg,glm::vec3(0,1,0));
+			glm::mat4 m2 = glm::translate(m1, glm::vec3(0,0,0));
+			glUniformMatrix4fv(userData->modelTransform, 1, GL_FALSE, &m2[0][0]);
+			
+			glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,100,-120));
+			glUniformMatrix4fv(userData->viewTransform, 1, GL_FALSE, &v[0][0]);
+			
+			glm::mat4 p = glm::perspective (30.0f, 1.0f, 0.01f, 1000.0f);
+			glUniformMatrix4fv(userData->projTransform, 1, GL_FALSE, &p[0][0]);
+			
+			userData->deg += M_PI/90 / 5;
+			
+			//printf("%f \n",userData->deg);
+		
+			Texture* t_color = Manager::find("materials/models/heroes/axe/axe_body_color.vtf");
+			Texture* t_normal = Manager::find("materials/models/heroes/axe/axe_body_normal.vtf");
+			Texture* t_mask1 = Manager::find("materials/models/heroes/axe/axe_body_masks1.vtf");
+			Texture* t_mask2 = Manager::find("materials/models/heroes/axe/axe_body_masks2.vtf");
+			
+		
+			//printf("%X\n",t_normal);
+		
+			if(t_color) t_color->Bind(0);
+			if(t_normal) t_normal->Bind(1);
+			if(t_mask1) t_mask1->Bind(2);
+			if(t_mask2) t_mask2->Bind(3);
+			
+			const GLint samplers[4] = {0,1,2,3}; // we've bound our textures in textures 0 and 1.
+			glUniform1iv( userData->textureLocation, 4, samplers );
+			//mx->Draw();
+		
+			//glDrawArrays ( GL_TRIANGLES, 0, 6 );
+				//glDrawArrays ( GL_TRIANGLES, 1899, 300 );
+				glDrawElements(GL_TRIANGLES, mx->elementLength[i], GL_UNSIGNED_SHORT, 0);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
+			if(t_color) t_color->Unbind(0);
+			if(t_normal) t_normal->Unbind(1);
+			if(t_mask1) t_mask1->Unbind(2);
+			if(t_mask2) t_mask2->Unbind(3);
+			
 		}
-		
-		//mx->Draw();
-		
-		glm::mat4 m0 = glm::rotate(glm::mat4(1),(float) M_PI,glm::vec3(1,0,0));
-		glm::mat4 m1 = glm::rotate(m0,userData->deg,glm::vec3(0,1,0));
-		glm::mat4 m2 = glm::translate(m1, glm::vec3(0,0,0));
-		glUniformMatrix4fv(userData->modelTransform, 1, GL_FALSE, &m2[0][0]);
-		
-		glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,100,-100));
-		glUniformMatrix4fv(userData->viewTransform, 1, GL_FALSE, &v[0][0]);
-		
-		glm::mat4 p = glm::perspective (30.0f, 1.0f, 0.01f, 1000.0f);
-		glUniformMatrix4fv(userData->projTransform, 1, GL_FALSE, &p[0][0]);
-		
-		userData->deg += M_PI/90 / 5;
-		
-		//printf("%f \n",userData->deg);
-	
-		Texture* t_color = Manager::find("materials/models/heroes/axe/axe_body_color.vtf");
-		Texture* t_normal = Manager::find("materials/models/heroes/axe/axe_body_normal.vtf");
-	
-		if(t_color) t_color->Bind(0);
-		if(t_normal) t_normal->Bind(1);
-		
-		glUniform1i(userData->textureLocation, 0);
-	
-		//mx->Draw();
-	
-		//glDrawArrays ( GL_TRIANGLES, 0, 6 );
-		if(mx->state == FS_READY)
-		{
-			//glDrawArrays ( GL_TRIANGLES, 1899, 300 );
-			glDrawElements(GL_TRIANGLES, mx->elementLength[i], GL_UNSIGNED_SHORT, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-		}
-		
-		if(t_color) t_color->Unbind(0);
-		if(t_normal) t_normal->Unbind(1);
-		
 	}
 }
 

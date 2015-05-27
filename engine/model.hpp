@@ -43,7 +43,7 @@ public:
 	int vertexCount;
 	// no vao in es2.0 :(
 	//GLuint vao;
-	GLuint vertexVBO;
+	GLuint vertexVBO[2];
 	int numStrip;
 	GLuint meshVBO[MODEL_STRIP_COUNT];
 	int elementLength[MODEL_STRIP_COUNT];

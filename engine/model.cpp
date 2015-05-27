@@ -15,6 +15,7 @@ Model::Model(const char* fileName)
 	mdlState = FS_UNINIT;
 	meshState = FS_UNINIT;
 	vertexState = FS_UNINIT;
+	numStrip = 0;
 }
 
 Model::~Model()
@@ -59,8 +60,14 @@ void Model::Update()
 			//glBindVertexArray(this->vao);
 			
 			// VBO gen
-			glGenBuffers(1, &this->vertexVBO);
+			glGenBuffers(2, (GLuint*) &this->vertexVBO);
 			glGenBuffers(MODEL_STRIP_COUNT, (GLuint*) &this->meshVBO);
+			
+			if(this->vertexVBO[0]==0 || this->meshVBO[0]==0)
+			{
+				printf("Error: unbale to gen buffer for vertex\n");
+				return;
+			}
 			
 			// load vertex data
 			
@@ -83,14 +90,24 @@ void Model::Update()
 			char* vertexData = (char*) vData;
 			vertexData += vData->vertexDataStart;
 			
-			glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO);
+			glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[0]);
 			// vertex and tangent
-			unsigned int vertexBufferSize = (sizeof(vvdVertexFormat)/* + sizeof(glm::vec3)*/) * vertexCount;
+			unsigned int vertexBufferSize = (sizeof(vvdVertexFormat)) * vertexCount;
 			glBufferData(GL_ARRAY_BUFFER, vertexBufferSize , vertexData, GL_STATIC_DRAW);
 			
 			printf("err = %d\n",glGetError());
 			
-			tangentOffset = vData->tangentDataStart - vData->vertexDataStart;
+			//tangentOffset = vData->tangentDataStart - vData->vertexDataStart;
+			
+			//printf("tOffset = %d , calcSize = %d\n",tangentOffset, sizeof(vvdVertexFormat) * vertexCount);
+			
+			char* tangentData = (char*) vData;
+			tangentData += vData->tangentDataStart;
+			
+			glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[1]);
+			// vertex and tangent
+			unsigned int tangentBufferSize = sizeof(glm::vec4) * vertexCount;
+			glBufferData(GL_ARRAY_BUFFER, tangentBufferSize , tangentData, GL_STATIC_DRAW);
 			
 			//this->SetVAO();
 			
@@ -256,6 +273,7 @@ void Model::Draw()
 
 void Model::SetVAO()
 {
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[0]);
 	// XYZ pos
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 16);
 	glEnableVertexAttribArray(0);
@@ -282,7 +300,9 @@ void Model::SetVAO()
 	glEnableVertexAttribArray(8);
 	glVertexAttribPointer(9, 1, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 8);
 	glEnableVertexAttribArray(9);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[1]);
 	// tangent
-	glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) (tangentOffset));
+	glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*) 0);
 	glEnableVertexAttribArray(10);
 }
