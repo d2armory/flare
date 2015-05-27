@@ -26,6 +26,11 @@ vec3 v3normalize(vec3 a)
 	return a / length(a);
 }
 
+mat3 m3transpose(mat3 m)
+{
+	return mat3(m[0].x,m[1].x,m[2].x,m[0].y,m[1].y,m[2].y,m[0].z,m[1].z,m[2].z);
+}
+
 // main
 void main()
 {
@@ -36,53 +41,70 @@ void main()
 	vec4 mask1 = texture2D( texture[2], fUV);
 	vec4 mask2 = texture2D( texture[3], fUV);
 	
-	vec3 L = vec3(1,0,0);
+	vec3 L = vec3(0.5,0.5,-1.0);
 	L = v3normalize(L);
 	
 	mat3 normalTransform = mat3(viewTransform) * mat3(modelTransform);
 	
 	L = mat3(viewTransform) * L;
 	
-	vec3 N = normalTransform * fNormal;
-	vec3 T = normalTransform * fTangent.xyz;
-	vec3 B = cross(N, T);
+	vec3 N = normalTransform * v3normalize(fNormal);
+	vec3 T = normalTransform * v3normalize(fTangent.xyz);
+	vec3 B = cross(T, N);
 
 	mat3 TBN = mat3( T.x, B.x, N.x, T.y, B.y, N.y, T.z, B.z, N.z );
+	//mat3 invTBN = m3transpose(TBN);
+	//mat3 invNT = m3transpose(normalTransform);
+	
+	//vec3 txtNworld = invNT * invTBN * v3normalize((normal.rgb * 2.0) - 1.0);
 
-	vec3 txtN = normal.rgb;
+	vec3 txtN = v3normalize((normal.rgb * 2.0) - 1.0);
 	vec3 tangentL = TBN * L;
 	
 	float NdotL = -1.0 * dot(txtN, tangentL);
 	//float NdotL = dot(N, L);
 	
-	vec4 lColor = vec4(0.5,0.5,0.5,1);
-	vec4 sColor = vec4(0.5,0.5,0.5,1);
-	vec4 ambient = vec4(0.5,0.5,0.5,1);
+	vec4 lColor = vec4(0.8,0.8,0.8,1);
+	vec4 sColor = vec4(0.9,0.8,1.0,1);
+	vec4 ambient = vec4(0.4,0.4,0.4,1);
 	
-	float diffuseLight = NdotL + mask1.a;
-	
-	vec4 diffuse = lColor * max(diffuseLight, 1e-6);
-	
-	vec3 V = v3normalize(-fPos);
-	vec3 tangentV = TBN * V;
-	
-	//vec3 R = tangentL - (txtN * NdotL * 2.0);
-	vec3 tangentR = tangentL + (txtN * NdotL * 2.0);
-	float RdotV = dot(tangentR, tangentV);
-	
-	sColor = (sColor * (1.0 - mask2.b)) + (color * (mask2.b));
-  
+	vec4 diffuse = vec4(0,0,0,1);
 	vec4 specular = vec4(0,0,0,1);
-	if(NdotL > 1e-6 && RdotV > 1e-6)
+	
+	float diffuseLight = mask1.a;
+	if(NdotL > 1e-6)
 	{
-		specular = sColor * (pow(max(1e-6, RdotV ), 1.0 + 4.0 * mask2.a) * mask2.r);
+		diffuseLight  = diffuseLight + NdotL;
+	}
+	diffuse = lColor * max(diffuseLight, 1e-6);
+	
+	if(NdotL > 1e-6)
+	{	
+	
+		vec3 V = v3normalize(-fPos);
+		vec3 tangentV = TBN * V;
+		
+		//vec3 R = tangentL - (txtN * NdotL * 2.0);
+		vec3 tangentR = tangentL + (txtN * NdotL * 2.0);
+		float RdotV = dot(tangentR, tangentV);
+		
+		sColor = (sColor * (1.0 - mask2.b)) + (color * (mask2.b));
+		
+		float specExp = 20.0;
+		float specScale = 0.5;//2.5;
+		
+		
+		if(RdotV > 1e-6)
+		{
+			specular = sColor * (pow(max(1e-6, RdotV ), specExp * mask2.a) * mask2.r * specScale);
+		}
 	}
 	
 	vec4 light = ambient + diffuse; 
 	vec3 finalcolor = (color.rgb) * (1.0 - mask1.b);
 	
-	gl_FragColor = (light * vec4(color.rgb,1)) + specular;
-	//gl_FragColor = specular;
+	gl_FragColor = (light * vec4(finalcolor,1)) + specular;
+	//gl_FragColor = vec4((txtNworld) * 0.25,1) + vec4(0.25,0.25,0.25,0) + (vec4(0.5,0.5,0.5,0) * ((fTangent.a / 2.0) + 0.5));
 	//gl_FragColor = (vec4(fTangent.aaa,1) / 4.0) + vec4(0.5,0.5,0.5,0);
 	//gl_FragColor = vec4(texture2D( texture[3], fUV ).rrr,1);
 }
