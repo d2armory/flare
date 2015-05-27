@@ -78,11 +78,11 @@ void main()
 	}
 	diffuse = lColor * max(diffuseLight, 1e-6);
 	
+	vec3 V = v3normalize(-fPos);
+	vec3 tangentV = TBN * V;
+	
 	if(NdotL > 1e-6)
 	{	
-	
-		vec3 V = v3normalize(-fPos);
-		vec3 tangentV = TBN * V;
 		
 		//vec3 R = tangentL - (txtN * NdotL * 2.0);
 		vec3 tangentR = tangentL + (txtN * NdotL * 2.0);
@@ -100,10 +100,20 @@ void main()
 		}
 	}
 	
+	float rimScale = 1.0;
+	vec3 rimColor = vec3(1,1,1);
+	
+	float VdotN = dot(tangentV,txtN);
+	vec4 rimLight = vec4(0,0,0,1);
+	//if(VdotN > 1e-6)
+	//{
+		//rimLight = vec4(rimColor * (smoothstep(0.6, 1.0,(1.0 - VdotN)) * (rimScale * mask2.g)),1);
+	//}
+	
 	vec4 light = ambient + diffuse; 
 	vec3 finalcolor = (color.rgb) * (1.0 - mask1.b);
 	
-	gl_FragColor = (light * vec4(finalcolor,1)) + specular;
+	gl_FragColor = (light * vec4(finalcolor,1)) + specular + rimLight;
 	//gl_FragColor = vec4((txtNworld) * 0.25,1) + vec4(0.25,0.25,0.25,0) + (vec4(0.5,0.5,0.5,0) * ((fTangent.a / 2.0) + 0.5));
 	//gl_FragColor = (vec4(fTangent.aaa,1) / 4.0) + vec4(0.5,0.5,0.5,0);
 	//gl_FragColor = vec4(texture2D( texture[3], fUV ).rrr,1);
