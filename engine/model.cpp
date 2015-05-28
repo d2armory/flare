@@ -69,41 +69,15 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			printf("- Name: %s\n",mh->name);
 			printf("- Length: %d\n",mh->length);
 			
+			// assume 1 material per model
+			mdlTexture* texture = mh->pTexture(0);
+			//printf("----- %i: %s\n",i,texture->pszName());
+			std::string txtFilename = std::string(texture->pszName());
+			txtFilename = "materials/" + txtFilename + ".vmt";
 			
-			const bool dumpBones = true;
-			const bool dumpTextures = true;
-			
-			
-			if(dumpBones)
-			{
-				printf("- Retrieving bone data\n");
-				
-				printf("--- Num bones: %d\n",mh->numbones);
-				
-				for(int i=0;i<mh->numbones;i++)
-				{
-					mdlBone* bone = mh->pBone(i);
-					printf("----- %i: %s",i,bone->pszName());
-					if(bone->parent != -1)
-					{
-						printf(" - %s (%i)",mh->pBone(bone->parent)->pszName(),bone->parent);
-					}
-					printf("\n");
-				}
-			}
-			
-			if(dumpTextures)
-			{
-				printf("- Retrieving texture list\n");
-				
-				printf("--- Num textures: %d\n",mh->numtextures);
-				
-				for(int i=0;i<mh->numtextures;i++)
-				{
-					mdlTexture* texture = mh->pTexture(i);
-					printf("----- %i: %s\n",i,texture->pszName());
-				}
-			}
+			// TODO: read actual file
+			material = new Material(txtFilename.c_str());
+			Manager::add(material);
 			
 			// NO VAO for us :(
 			// VAO gen
@@ -331,27 +305,18 @@ void Model::Draw(ESContext *esContext)
 			glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,100,-150));
 			glUniformMatrix4fv(shader->locViewTransform, 1, GL_FALSE, &v[0][0]);
 			
-			glm::mat4 p = glm::perspective (30.0f, 1.0f, 0.01f, 1000.0f);
+			glm::mat4 p = glm::perspective (30.0f, 1.5f, 0.01f, 1000.0f);
 			glUniformMatrix4fv(shader->locProjTransform, 1, GL_FALSE, &p[0][0]);
 			
 			//printf("%f \n",userData->deg);
 			
-			Texture* t_color = 0;
-			Texture* t_normal = 0;
-			Texture* t_mask1 = 0;
-			Texture* t_mask2 = 0;
+			// TODO:
+			// bind material specific value
+			// e.g. specular scale, rim light color
 			
 			if(material != 0)
 			{
-				t_color = material->textureDiffuse;
-				t_normal = material->textureNormal;
-				t_mask1 = material->textureMask1;
-				t_mask2 = material->textureMask2;
-
-				if(t_color) t_color->Bind(0);
-				if(t_normal) t_normal->Bind(1);
-				if(t_mask1) t_mask1->Bind(2);
-				if(t_mask2) t_mask2->Bind(3);
+				material->Bind();
 			}
 			
 			const GLint samplers[4] = {0,1,2,3}; // we've bound our textures in textures 0 and 1.
@@ -365,11 +330,7 @@ void Model::Draw(ESContext *esContext)
 	
 			if(material != 0)
 			{
-			// thse into unbind
-				if(t_color) t_color->Unbind(0);
-				if(t_normal) t_normal->Unbind(1);
-				if(t_mask1) t_mask1->Unbind(2);
-				if(t_mask2) t_mask2->Unbind(3);
+				material->Unbind();
 			}
 			
 			shader->Unbind(this);

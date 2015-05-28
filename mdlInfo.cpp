@@ -4,6 +4,32 @@
 #include <stdlib.h>
 #include "mdl/common.h"
 #include "glm/glm.hpp"
+#include "engine/kvreader.hpp"
+
+void PrintNode(PCST* cur)
+{
+	if(cur==0) return;
+	for(int i=0;i<cur->depth;i++)
+	{
+		printf("==");
+	}
+	if(cur->key!=0)
+	{
+		printf("= '%s' :",cur->key);
+	}
+	else 
+	{
+		printf("=  nil");
+	}
+	if(cur->value)
+	{
+		printf(" '%s'",cur->value);
+	}
+	printf("\n");
+	
+	PrintNode(cur->child);
+	PrintNode(cur->sibling);
+}
 
 int main(void)
 {
@@ -101,7 +127,7 @@ int main(void)
 	free(fileData);
 	*/
 	
-	printf("Openning vtx file\n");
+	/* printf("Openning vtx file\n");
 	
 	const char* fileName = "testbin/axe.dx90.vtx";
 	
@@ -182,17 +208,17 @@ int main(void)
 								//printf("%X\n",vertexArr);
 								unsigned short* indexArr = (unsigned short*) (((char*) (stripgr)) + stripgr->indexOffset);
 								
-								/* for(int v=0;v<elementLength;v++)
-								{
-									printf("%hu ",indexArr[v]);
-								}
-								printf("\n");
+								//for(int v=0;v<elementLength;v++)
+								//{
+								//	printf("%hu ",indexArr[v]);
+								//}
+								//printf("\n");
 								
-								for(int v=0;v<strip->numVerts;v++)
-								{
-									printf("%hu ",vertexArr[v].origMeshVertID);
-								}
-								printf("\n"); */
+								//for(int v=0;v<strip->numVerts;v++)
+								//{
+								//	printf("%hu ",vertexArr[v].origMeshVertID);
+								//}
+								//printf("\n"); 
 								
 								for(int v=0;v<elementLength;v++)
 								{
@@ -247,6 +273,38 @@ int main(void)
 	{
 		printf("- unsporrted num bodyparts count\n");
 	}
+	
+	free(fileData);
+	*/
+	
+	printf("Openning vtm file\n");
+	
+	const char* fileName = "testbin/axe_armor_color.vmt";
+	
+	FILE* fp = fopen(fileName,"rb");
+	fseek(fp, 0, SEEK_END);
+	int fileSize = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+	
+	printf("File size: %d bytes\n",fileSize);
+	
+	char* fileData = (char*) malloc(fileSize);
+	int frrt = fread(fileData,fileSize,fileSize,fp);
+	
+	if(frrt==0) {
+		printf("File read failed!\n");
+		return 1;
+	}
+	
+	printf("File data read into memory (0x%X)\n",(unsigned int) fileData);
+	
+	PCST* root = KVReader::Parse(fileData, fileSize);
+	
+	PCST* cur = root;
+	
+	PrintNode(root);
+	
+	KVReader::Clean(root);
 	
 	free(fileData);
 	

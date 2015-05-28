@@ -72,7 +72,7 @@ bool FileLoader::FileExist(const char* fileName)
 	return false;
 }
 
-char* FileLoader::ReadFile(const char* fileName)
+char* FileLoader::ReadFile(const char* fileName, unsigned int& size)
 {
 	FILE* fp = fopen(fileName,"rb");
 	
@@ -96,6 +96,14 @@ char* FileLoader::ReadFile(const char* fileName)
 		return 0;
 	}
 	
+	size = fileSize;
+	
 	return fileData;
 
+}
+
+char* FileLoader::ReadFile(const char* fileName)
+{
+	unsigned int size = 0;
+	return ReadFile(fileName, size);	
 }

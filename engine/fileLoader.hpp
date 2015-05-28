@@ -18,5 +18,6 @@ public:
 	
 	static bool FileExist(const char* fileName);
 	static char* ReadFile(const char* fileName);
+	static char* ReadFile(const char* fileName, unsigned int& size);
 	
 };

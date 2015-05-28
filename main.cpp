@@ -79,8 +79,9 @@ bool bounty_data = false;
 
 float total = 0;
 
-Model* mx1;
-Model* mx2;
+int modelCount = 5;
+
+Model** mx;
 
 void Update ( ESContext *esContext, float deltaTime )
 {
@@ -94,36 +95,23 @@ void Update ( ESContext *esContext, float deltaTime )
 	if(totaltime > 0.1f && !bounty_data)
 	{
 		bounty_data = true;
-		Texture* tt = 0;
-		Material* mt = new Material();
-		
-		// TODO: move all of these into Model/Material constructor
-		
-		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_body_color.vtf"));
-		mt->textureDiffuse = tt;
-		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_body_normal.vtf"));
-		mt->textureNormal = tt;
-		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_body_masks1.vtf"));
-		mt->textureMask1 = tt;
-		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_body_masks2.vtf"));
-		mt->textureMask2 = tt;
-		Manager::add(mx1 = new Model("models/heroes/axe/axe.mdl"));
-		mx1->material = mt;
-		mx1->shader = userData->heroShader;
-		
-		mt = new Material();
-		
-		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_armor_color.vtf"));
-		mt->textureDiffuse = tt;
-		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_armor_normal.vtf"));
-		mt->textureNormal = tt;
-		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_armor_masks1.vtf"));
-		mt->textureMask1 = tt;
-		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_armor_masks2.vtf"));
-		mt->textureMask2 = tt;
-		Manager::add(mx2 = new Model("models/heroes/axe/axe_armor.mdl"));
-		mx2->material = mt;
-		mx2->shader = userData->heroShader;
+
+		char* modelName[5] = {
+			"models/heroes/axe/axe.mdl",
+			"models/heroes/axe/axe_armor.mdl",
+			"models/heroes/axe/axe_belt.mdl",
+			"models/heroes/axe/axe_ponytail.mdl",
+			"models/heroes/axe/axe_weapon.mdl"
+		};
+
+		mx = new Model*[5];
+
+		for(int i=0;i<modelCount;i++)
+		{
+			mx[i] = new Model(modelName[i]);
+			mx[i]->shader = userData->heroShader;
+			Manager::add(mx[i]);
+		}
 		
 	}
 }
@@ -141,8 +129,7 @@ void Draw ( ESContext *esContext )
 	glClear ( GL_DEPTH_BUFFER_BIT );
 
 	// TODO: use scene graph
-	Model* mx[2] = {mx1, mx2};
-	for(int m=0;m<2;m++)
+	for(int m=0;m<modelCount;m++)
 	{
 		mx[m]->Draw(esContext);
 	}
@@ -212,7 +199,7 @@ int main ( int argc, char *argv[] )
 	esInitContext ( &esContext );
 	esContext.userData = &userData;
 
-	esCreateWindow ( &esContext, "Hello Triangle", 640, 640, ES_WINDOW_RGB | ES_WINDOW_DEPTH );
+	esCreateWindow ( &esContext, "Hello Triangle", 960, 640, ES_WINDOW_RGB | ES_WINDOW_DEPTH );
 
 	if ( !Init ( &esContext ) )
 		return 0;

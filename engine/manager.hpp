@@ -3,6 +3,10 @@
 #include <string>
 #include <functional>
 
+// forward dec
+class Model;
+class Material;
+
 #include "model.hpp"
 #include "material.hpp"
 #include "texture.hpp"

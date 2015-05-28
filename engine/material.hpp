@@ -2,6 +2,8 @@
 
 #include "enum.hpp"
 #include "texture.hpp"
+#include "manager.hpp"
+#include "kvreader.hpp"
 
 #define MATERIAL_NAME_LENGTH 128
 
@@ -10,12 +12,13 @@ class Material
 
 public:
 
-	Material();
+	Material(const char* fileName);
 	~Material();
 
 	// function
 	void Update();
-	void Draw();
+	void Bind();
+	void Unbind();
 
 	char fileName[MATERIAL_NAME_LENGTH];
 

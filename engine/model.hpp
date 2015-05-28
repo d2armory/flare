@@ -4,6 +4,7 @@
 #include "../mdl/common.h"
 #include "../es/esUtil.h"
 #include "enum.hpp"
+#include "manager.hpp"
 #include "material.hpp"
 #include "heroshader.hpp"
 #include <string>

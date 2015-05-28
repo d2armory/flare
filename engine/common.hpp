@@ -8,3 +8,4 @@
 #include "manager.hpp"
 #include "shader.hpp"
 #include "heroshader.hpp"
+#include "kvreader.hpp"
