@@ -276,7 +276,12 @@ GLboolean ESUTIL_API esCreateWindow ( ESContext *esContext, const char* title, G
       return GL_FALSE;
    }
    
-   emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(0),"WEBGL_compressed_texture_s3tc");
+   char dxtsupport = emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(0),"WEBGL_compressed_texture_s3tc");
+
+    if(!dxtsupport)
+    {
+        printf("DXT is not supported on this browser\n");
+    }
 
    return GL_TRUE;
 }

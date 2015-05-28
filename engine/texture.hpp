@@ -6,6 +6,7 @@
 #include "../mdl/common.h"
 #include <cstring>
 #include "../squish/squish.h"
+#include <html5.h>
 
 #define TEXTURE_NAME_LENGTH 128
 

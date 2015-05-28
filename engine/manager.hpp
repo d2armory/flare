@@ -23,7 +23,7 @@ public:
 	static Texture* find(const char* fileName);
 	
 	static void Init();
-	static void Update();
+	static void Update(ESContext *esContext, float deltaTime);
 	static void Uninit();
 	
 	static Model* headModel;

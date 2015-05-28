@@ -25,75 +25,7 @@
 
 #include "engine/common.hpp"
 
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-
-const char* testName = "materials/models/heroes/axe/axe_body_color.vtf";
-
-typedef struct
-{
-	// Handle to a program object
-	GLuint programObject;
-	
-	GLuint modelTransform;
-	GLuint viewTransform;
-	GLuint projTransform;
-	
-	GLuint textureLocation;
-	
-	float deg;
-
-} UserData;
-
-///
-// Create a shader object, load the shader source, and
-// compile the shader.
-//
-
-GLuint LoadShader ( GLenum type, const char *shaderSrc )
-{
-	GLuint shader;
-	GLint compiled;
-	
-	// Create the shader object
-	shader = glCreateShader ( type );
-
-	if ( shader == 0 )
-		return 0;
-
-	// Load the shader source
-	glShaderSource ( shader, 1, &shaderSrc, NULL );
-	
-	// Compile the shader
-	glCompileShader ( shader );
-
-	// Check the compile status
-	glGetShaderiv ( shader, GL_COMPILE_STATUS, &compiled );
-
-	if ( !compiled ) 
-	{
-		GLint infoLen = 0;
-
-		glGetShaderiv ( shader, GL_INFO_LOG_LENGTH, &infoLen );
-		
-		if ( infoLen > 1 )
-		{
-			char* infoLog = (char*) malloc (sizeof(char) * infoLen );
-
-			glGetShaderInfoLog ( shader, infoLen, NULL, infoLog );
-			esLogMessage ( "Error compiling shader %s :\n%s\n",shaderSrc, infoLog );            
-			
-			free ( infoLog );
-		}
-
-		glDeleteShader ( shader );
-		return 0;
-	}
-
-	return shader;
-
-}
+#include "common.h"
 
 ///
 // Initialize the shader and program object
@@ -108,82 +40,10 @@ int Init ( ESContext *esContext )
 
 	UserData *userData = (UserData*) esContext->userData;
 	
-	char vShaderFilename[] = "assets/shader.vert";
-	char fShaderFilename[] = "assets/shader.frag";
+	HeroShader* hShader = new HeroShader();
+	hShader->Load();
+	userData->heroShader = hShader;
 	
-	char* vShaderStr = FileLoader::ReadFile(vShaderFilename);
-	char* fShaderStr = FileLoader::ReadFile(fShaderFilename);
-	
-	//printf("%s\n",vShaderStr);
-
-	GLuint vertexShader;
-	GLuint fragmentShader;
-	GLuint programObject;
-	GLint linked;
-
-	// Load the vertex/fragment shaders
-	vertexShader = LoadShader ( GL_VERTEX_SHADER, (const char*) vShaderStr );
-	fragmentShader = LoadShader ( GL_FRAGMENT_SHADER, (const char*) fShaderStr );
-	
-	free(vShaderStr);
-	free(fShaderStr);
-
-	// Create the program object
-	programObject = glCreateProgram ( );
-	
-	if ( programObject == 0 )
-		return 0;
-
-	glAttachShader ( programObject, vertexShader );
-	glAttachShader ( programObject, fragmentShader );
-
-	// Bind vPosition to attribute 0   
-	glBindAttribLocation ( programObject, 0, "vPosition" );
-	glBindAttribLocation ( programObject, 1, "vNormal" );
-	glBindAttribLocation ( programObject, 2, "vUV" );
-	glBindAttribLocation ( programObject, 3, "vBoneCount" );
-	glBindAttribLocation ( programObject, 4, "vBone1" );
-	glBindAttribLocation ( programObject, 5, "vBone2" );
-	glBindAttribLocation ( programObject, 6, "vBone3" );
-	glBindAttribLocation ( programObject, 7, "vBoneweight1" );
-	glBindAttribLocation ( programObject, 8, "vBoneweight2" );
-	glBindAttribLocation ( programObject, 9, "vBoneweight3" );
-	glBindAttribLocation ( programObject, 10, "vTangent" );
-
-	// Link the program
-	glLinkProgram ( programObject );
-
-	// Check the link status
-	glGetProgramiv ( programObject, GL_LINK_STATUS, &linked );
-
-	if ( !linked ) 
-	{
-		GLint infoLen = 0;
-
-		glGetProgramiv ( programObject, GL_INFO_LOG_LENGTH, &infoLen );
-		
-		if ( infoLen > 1 )
-		{
-			char* infoLog = (char*) malloc (sizeof(char) * infoLen );
-
-			glGetProgramInfoLog ( programObject, infoLen, NULL, infoLog );
-			esLogMessage ( "Error linking program:\n%s\n", infoLog );            
-			
-			free ( infoLog );
-		}
-
-		glDeleteProgram ( programObject );
-		return GL_FALSE;
-	}
-
-	// Store the program object
-	userData->programObject = programObject;
-	
-	userData->modelTransform = glGetUniformLocation(programObject, "modelTransform");
-	userData->viewTransform = glGetUniformLocation(programObject, "viewTransform");
-	userData->projTransform = glGetUniformLocation(programObject, "projTransform");
-	
-	userData->textureLocation = glGetUniformLocation(programObject, "texture");
 	userData->deg = 0;
 	
 	//printf("%d\n",userData->rotateLocation);
@@ -224,28 +84,53 @@ Model* mx2;
 
 void Update ( ESContext *esContext, float deltaTime )
 {
-	Manager::Update();
+	Manager::Update( esContext, deltaTime );
 	
-	if(totaltime > 1 && !bounty_data)
+	// model rotation
+	UserData *userData = (UserData*) esContext->userData;
+	userData->deg += M_PI/90 / 10;
+	
+	// data loading
+	if(totaltime > 0.1f && !bounty_data)
 	{
 		bounty_data = true;
-		Manager::add(new Texture("materials/models/heroes/axe/axe_body_color.vtf"));
-		Manager::add(new Texture("materials/models/heroes/axe/axe_body_normal.vtf"));
-		Manager::add(new Texture("materials/models/heroes/axe/axe_body_masks1.vtf"));
-		Manager::add(new Texture("materials/models/heroes/axe/axe_body_masks2.vtf"));
+		Texture* tt = 0;
+		Material* mt = new Material();
+		
+		// TODO: move all of these into Model/Material constructor
+		
+		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_body_color.vtf"));
+		mt->textureDiffuse = tt;
+		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_body_normal.vtf"));
+		mt->textureNormal = tt;
+		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_body_masks1.vtf"));
+		mt->textureMask1 = tt;
+		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_body_masks2.vtf"));
+		mt->textureMask2 = tt;
 		Manager::add(mx1 = new Model("models/heroes/axe/axe.mdl"));
-		Manager::add(new Texture("materials/models/heroes/axe/axe_armor_color.vtf"));
-		Manager::add(new Texture("materials/models/heroes/axe/axe_armor_normal.vtf"));
-		Manager::add(new Texture("materials/models/heroes/axe/axe_armor_masks1.vtf"));
-		Manager::add(new Texture("materials/models/heroes/axe/axe_armor_masks2.vtf"));
+		mx1->material = mt;
+		mx1->shader = userData->heroShader;
+		
+		mt = new Material();
+		
+		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_armor_color.vtf"));
+		mt->textureDiffuse = tt;
+		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_armor_normal.vtf"));
+		mt->textureNormal = tt;
+		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_armor_masks1.vtf"));
+		mt->textureMask1 = tt;
+		Manager::add(tt = new Texture("materials/models/heroes/axe/axe_armor_masks2.vtf"));
+		mt->textureMask2 = tt;
 		Manager::add(mx2 = new Model("models/heroes/axe/axe_armor.mdl"));
+		mx2->material = mt;
+		mx2->shader = userData->heroShader;
+		
 	}
 }
 
 void Draw ( ESContext *esContext )
 {
-	UserData *userData = (UserData*) esContext->userData;
-	
+
 	// Set the viewport
 	glViewport ( 0, 0, esContext->width, esContext->height );
 	
@@ -255,77 +140,11 @@ void Draw ( ESContext *esContext )
 	// Clear the depth buffer
 	glClear ( GL_DEPTH_BUFFER_BIT );
 
-	// Use the program object
-	glUseProgram ( userData->programObject );
-
-	Model* mx = mx1;
+	// TODO: use scene graph
+	Model* mx[2] = {mx1, mx2};
 	for(int m=0;m<2;m++)
 	{
-		if(m==1) mx = mx2;
-		if(mx->state == FS_READY)
-		{
-			// Load the vertex data
-			for(int i=0;i<mx->numStrip;i++) 
-			{
-				
-				//glBindBuffer(GL_ARRAY_BUFFER, mx->vertexVBO);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mx->meshVBO[i]);
-				mx->SetVAO();
-				
-				//mx->Draw();
-				
-				glm::mat4 m0 = glm::rotate(glm::mat4(1),(float) M_PI,glm::vec3(1,0,0));
-				glm::mat4 m1 = glm::rotate(m0,userData->deg,glm::vec3(0,1,0));
-				glm::mat4 m2 = glm::translate(m1, glm::vec3(0,0,0));
-				glUniformMatrix4fv(userData->modelTransform, 1, GL_FALSE, &m2[0][0]);
-				
-				glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,100,-150));
-				glUniformMatrix4fv(userData->viewTransform, 1, GL_FALSE, &v[0][0]);
-				
-				glm::mat4 p = glm::perspective (30.0f, 1.0f, 0.01f, 1000.0f);
-				glUniformMatrix4fv(userData->projTransform, 1, GL_FALSE, &p[0][0]);
-				
-				userData->deg += M_PI/90 / 10;
-				
-				//printf("%f \n",userData->deg);
-				
-				Texture* t_color = Manager::find("materials/models/heroes/axe/axe_body_color.vtf");
-				Texture* t_normal = Manager::find("materials/models/heroes/axe/axe_body_normal.vtf");
-				Texture* t_mask1 = Manager::find("materials/models/heroes/axe/axe_body_masks1.vtf");
-				Texture* t_mask2 = Manager::find("materials/models/heroes/axe/axe_body_masks2.vtf");
-
-				if(m==1)
-				{
-					t_color = Manager::find("materials/models/heroes/axe/axe_armor_color.vtf");
-					t_normal = Manager::find("materials/models/heroes/axe/axe_armor_normal.vtf");
-					t_mask1 = Manager::find("materials/models/heroes/axe/axe_armor_masks1.vtf");
-					t_mask2 = Manager::find("materials/models/heroes/axe/axe_armor_masks2.vtf");
-				}
-			
-				//printf("%X\n",t_normal);
-			
-				if(t_color) t_color->Bind(0);
-				if(t_normal) t_normal->Bind(1);
-				if(t_mask1) t_mask1->Bind(2);
-				if(t_mask2) t_mask2->Bind(3);
-				
-				const GLint samplers[4] = {0,1,2,3}; // we've bound our textures in textures 0 and 1.
-				glUniform1iv( userData->textureLocation, 4, samplers );
-				//mx->Draw();
-			
-				//glDrawArrays ( GL_TRIANGLES, 0, 6 );
-					//glDrawArrays ( GL_TRIANGLES, 1899, 300 );
-					glDrawElements(GL_TRIANGLES, mx->elementLength[i], GL_UNSIGNED_SHORT, 0);
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-					glBindBuffer(GL_ARRAY_BUFFER, 0);
-		
-				if(t_color) t_color->Unbind(0);
-				if(t_normal) t_normal->Unbind(1);
-				if(t_mask1) t_mask1->Unbind(2);
-				if(t_mask2) t_mask2->Unbind(3);
-				
-			}
-		}
+		mx[m]->Draw(esContext);
 	}
 }
 

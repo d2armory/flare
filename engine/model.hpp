@@ -1,10 +1,13 @@
 #pragma once
 
+#include "../common.h"
 #include "../mdl/common.h"
 #include "../es/esUtil.h"
 #include "enum.hpp"
 #include "material.hpp"
+#include "heroshader.hpp"
 #include <string>
+
 
 #define MODEL_NAME_LENGTH 128
 #define MODEL_STRIP_COUNT 4
@@ -18,8 +21,8 @@ public:
 	~Model();
 
 	// function
-	void Update();
-	void Draw();
+	void Update(ESContext *esContext, float deltaTime);
+	void Draw(ESContext *esContext);
 	
 	// use on every draw call because no vao
 	void SetVAO();
@@ -49,6 +52,7 @@ public:
 	int elementLength[MODEL_STRIP_COUNT];
 	int tangentOffset;
 	
+	HeroShader* shader;
 	Material* material;
 	
 	// manager

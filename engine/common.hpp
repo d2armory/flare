@@ -6,3 +6,5 @@
 #include "material.hpp"
 #include "model.hpp"
 #include "manager.hpp"
+#include "shader.hpp"
+#include "heroshader.hpp"

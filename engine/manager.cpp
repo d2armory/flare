@@ -121,7 +121,7 @@ void Manager::Init()
 	// do nothing currently
 }
 
-void Manager::Update()
+void Manager::Update(ESContext *esContext, float deltaTime)
 {
 	Texture* t = headTexture;
 	while(t!=0)
@@ -132,13 +132,14 @@ void Manager::Update()
 	Material* mt = headMaterial;
 	while(mt!=0)
 	{
+		//TODO: material update too, for detail map animation
 		mt->Update();
 		mt = mt->nextMaterial;
 	}
 	Model* m = headModel;
 	while(m!=0)
 	{
-		m->Update();
+		m->Update(esContext, deltaTime);
 		m = m->nextModel;
 	}
 }

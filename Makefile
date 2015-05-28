@@ -18,13 +18,15 @@ main.bc: main.cpp
 es/esUtil.bc: es/esUtil.h es/esUtil.c
 	$(COMPILER) $(OPTIMIZE) es/esUtil.c -o es/esUtil.bc
 	
-engine.bc: engine/fileLoader.cpp engine/fileLoader.hpp engine/material.cpp engine/material.hpp engine/model.cpp engine/model.hpp engine/texture.cpp engine/texture.hpp engine/manager.cpp engine/manager.hpp
+engine.bc: engine/fileLoader.cpp engine/fileLoader.hpp engine/material.cpp engine/material.hpp engine/model.cpp engine/model.hpp engine/texture.cpp engine/texture.hpp engine/manager.cpp engine/manager.hpp engine/shader.cpp engine/shader.hpp engine/heroshader.cpp engine/heroshader.hpp
 	$(COMPILER) $(OPTIMIZE) engine/manager.cpp -o engine/manager.bc
 	$(COMPILER) $(OPTIMIZE) engine/texture.cpp -o engine/texture.bc
 	$(COMPILER) $(OPTIMIZE) engine/model.cpp -o engine/model.bc
 	$(COMPILER) $(OPTIMIZE) engine/material.cpp -o engine/material.bc
 	$(COMPILER) $(OPTIMIZE) engine/fileLoader.cpp -o engine/fileLoader.bc
-	$(COMPILER) $(OPTIMIZE) engine/fileLoader.bc engine/material.bc engine/model.bc engine/texture.bc engine/manager.bc -o engine.bc
+	$(COMPILER) $(OPTIMIZE) engine/shader.cpp -o engine/shader.bc
+	$(COMPILER) $(OPTIMIZE) engine/heroshader.cpp -o engine/heroshader.bc
+	$(COMPILER) $(OPTIMIZE) engine/fileLoader.bc engine/material.bc engine/model.bc engine/texture.bc engine/manager.bc engine/shader.bc engine/heroshader.bc -o engine.bc
 		
 squish.bc: squish/squish.h
 	$(COMPILER) $(OPTIMIZE) squish/alpha.cpp -o squish/alpha.bc

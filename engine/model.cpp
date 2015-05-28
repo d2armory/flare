@@ -16,6 +16,9 @@ Model::Model(const char* fileName)
 	meshState = FS_UNINIT;
 	vertexState = FS_UNINIT;
 	numStrip = 0;
+	nextModel = 0;
+	material = 0;
+	shader = 0;
 }
 
 Model::~Model()
@@ -25,7 +28,7 @@ Model::~Model()
 	if(mData) delete mData;
 }
 
-void Model::Update()
+void Model::Update(ESContext *esContext, float deltaTime)
 {
 	if(state==FS_UNINIT)
 	{
@@ -304,18 +307,74 @@ void Model::Update()
 	}
 }
 
-void Model::Draw()
+void Model::Draw(ESContext *esContext)
 {
 	if(state == FS_READY)
 	{
-		//glBindBuffer(GL_ARRAY_BUFFER, this->vbo[0]);
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo[1]);
-		//this->SetVAO();
-		
-		//glDrawElements(GL_TRIANGLE_STRIP, elementLength, GL_UNSIGNED_SHORT, 0);
-		
-		//glBindBuffer(GL_ARRAY_BUFFER, 0);
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		// Load the vertex data
+		for(int i=0;i<numStrip;i++) 
+		{
+			
+			shader->Bind(this);
+			
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVBO[i]);
+			SetVAO();
+			
+			// TODO: move all of these into shader
+			// -- start of todo
+			UserData *userData = (UserData*) esContext->userData;
+			glm::mat4 m0 = glm::rotate(glm::mat4(1),(float) M_PI,glm::vec3(1,0,0));
+			glm::mat4 m1 = glm::rotate(m0,userData->deg,glm::vec3(0,1,0));
+			glm::mat4 m2 = glm::translate(m1, glm::vec3(0,0,0));
+			glUniformMatrix4fv(shader->locModelTransform, 1, GL_FALSE, &m2[0][0]);
+			
+			glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,100,-150));
+			glUniformMatrix4fv(shader->locViewTransform, 1, GL_FALSE, &v[0][0]);
+			
+			glm::mat4 p = glm::perspective (30.0f, 1.0f, 0.01f, 1000.0f);
+			glUniformMatrix4fv(shader->locProjTransform, 1, GL_FALSE, &p[0][0]);
+			
+			//printf("%f \n",userData->deg);
+			
+			Texture* t_color = 0;
+			Texture* t_normal = 0;
+			Texture* t_mask1 = 0;
+			Texture* t_mask2 = 0;
+			
+			if(material != 0)
+			{
+				t_color = material->textureDiffuse;
+				t_normal = material->textureNormal;
+				t_mask1 = material->textureMask1;
+				t_mask2 = material->textureMask2;
+
+				if(t_color) t_color->Bind(0);
+				if(t_normal) t_normal->Bind(1);
+				if(t_mask1) t_mask1->Bind(2);
+				if(t_mask2) t_mask2->Bind(3);
+			}
+			
+			const GLint samplers[4] = {0,1,2,3}; // we've bound our textures in textures 0 and 1.
+			glUniform1iv( shader->locTexture, 4, samplers );
+			// end of todo 1
+			
+			// real drawing code, just 3 lines lol
+			glDrawElements(GL_TRIANGLES, elementLength[i], GL_UNSIGNED_SHORT, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
+			if(material != 0)
+			{
+			// thse into unbind
+				if(t_color) t_color->Unbind(0);
+				if(t_normal) t_normal->Unbind(1);
+				if(t_mask1) t_mask1->Unbind(2);
+				if(t_mask2) t_mask2->Unbind(3);
+			}
+			
+			shader->Unbind(this);
+			
+		}
 	}
 }
 

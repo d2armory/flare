@@ -26,7 +26,7 @@ public:
 	Texture* textureNormal;
 	Texture* textureMask1;
 	Texture* textureMask2;
-	Texture* textureEnvmap;
+	Texture* textureDetail;
 	
 	// manager
 	Material* nextMaterial;
