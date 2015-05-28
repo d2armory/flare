@@ -44,7 +44,7 @@ int Init ( ESContext *esContext )
 	hShader->Load();
 	userData->heroShader = hShader;
 	
-	userData->deg = 0;
+	userData->deg = M_PI;
 	
 	//printf("%d\n",userData->rotateLocation);
 
@@ -102,9 +102,24 @@ void Update ( ESContext *esContext, float deltaTime )
 			"models/heroes/axe/axe_belt.mdl",
 			"models/heroes/axe/axe_ponytail.mdl",
 			"models/heroes/axe/axe_weapon.mdl"
+			//"models/heroes/bounty_hunter/bounty_hunter.mdl",
+			//"models/heroes/bounty_hunter/bounty_hunter_backpack.mdl",
+			//"models/heroes/bounty_hunter/bounty_hunter_bandana.mdl",
+			//"models/heroes/bounty_hunter/bounty_hunter_bweapon.mdl",
+			//"models/heroes/bounty_hunter/bounty_hunter_lweapon.mdl",
+			//"models/heroes/bounty_hunter/bounty_hunter_rweapon.mdl",
+			//"models/heroes/bounty_hunter/bounty_hunter_pads.mdl",
+			//"models/heroes/bounty_hunter/bounty_hunter_shuriken.mdl"
+			//"models/heroes/tidehunter/tidehunter.mdl",
+			//"models/heroes/tidehunter/tidehunter_anchor.mdl",
+			//"models/heroes/tidehunter/tidehunter_belt.mdl",
+			//"models/heroes/tidehunter/tidehunter_bracer.mdl",
+			//"models/heroes/tidehunter/tidehunter_fish.mdl"
+			////"models/heroes/tidehunter/tidehunter_hook.mdl"
+			//"models/heroes/enigma/enigma.mdl"
 		};
 
-		mx = new Model*[5];
+		mx = new Model*[modelCount];
 
 		for(int i=0;i<modelCount;i++)
 		{

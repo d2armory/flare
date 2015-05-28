@@ -53,7 +53,7 @@ void Material::Update()
 					{
 						printf("Use %s as diffuse\n",txtFNC);
 						if((textureDiffuse = Manager::find(txtFNC))==0) Manager::add(textureDiffuse = new Texture(txtFNC));
-						printf("mat %X %X %X %X\n",textureDiffuse,textureNormal,textureMask1,textureMask2);
+						//printf("mat %X %X %X %X\n",textureDiffuse,textureNormal,textureMask1,textureMask2);
 					}
 					else if(strcmp(node->key,"$normalmap") == 0)
 					{

@@ -15,15 +15,34 @@ uniform mat4 projTransform;
 // fs output
 varying vec2 fUV;
 varying vec3 fPos;
+
 varying vec3 fNormal;
 varying vec4 fTangent;
+
+varying vec3 fT;
+varying vec3 fB;
+varying vec3 fN;
+
+vec3 v3normalize(vec3 a)
+{
+	return a / length(a);
+}
+
 
 // main
 void main()
 {
+	// TODO: move MV and MVP to uniform
 	gl_Position = projTransform * viewTransform * modelTransform * vec4(vPosition,1);
 	fUV = vUV;
 	fPos = (viewTransform * modelTransform * vec4(vPosition,1)).xyz;
 	fNormal = vNormal;
 	fTangent = vTangent;//normalTransform * vTangent;
+	
+	// TODO: move to uniform
+	mat3 normalTransform = mat3(viewTransform) * mat3(modelTransform);
+	
+	fN = normalTransform * v3normalize(fNormal);
+	fT = normalTransform * v3normalize(fTangent.xyz);
+	fB = cross(fT, fN);
 }

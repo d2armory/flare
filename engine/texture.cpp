@@ -62,6 +62,8 @@ void Texture::Update()
 			
 			char dxtsupport = emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(),"WEBGL_compressed_texture_s3tc");
 			
+			if(dxtsupport) printf("- using webgl compressed texture\n");
+			
 			for(int r=0;r<txtHeader->numResources;r++)
 			{
 				vtfResouceEntryInfo* rei = (vtfResouceEntryInfo*) (txtData + reiPad + (sizeof(vtfResouceEntryInfo) * r));
@@ -173,7 +175,7 @@ void Texture::Update()
 								{
 									glCompressedTexImage2D(	txtTypeFS, m, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
 								
-									printf("----- mm #%d : %dx%d , dxtSize: %d (webgl dxt1)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2]);
+									//printf("----- mm #%d : %dx%d , dxtSize: %d (webgl dxt1)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2]);
 									
 								}
 								else if(dxtsupport && txtHeader->highResImageFormat == IMAGE_FORMAT_DXT5)
@@ -183,7 +185,7 @@ void Texture::Update()
 
 									glCompressedTexImage2D(	txtTypeFS, m, COMPRESSED_RGBA_S3TC_DXT5_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
 								
-									printf("----- mm #%d : %dx%d , dxtSize: %d (webgl dxt5 extension)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2]);
+									//printf("----- mm #%d : %dx%d , dxtSize: %d (webgl dxt5 extension)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2]);
 									
 								}
 								else
@@ -198,10 +200,10 @@ void Texture::Update()
 									// rgba
 									int allocSize = imgSize[m*4 + 0] * imgSize[m*4 + 1] * 4;
 									
-									if(txtHeader->highResImageFormat == IMAGE_FORMAT_DXT1)
-										printf("----- mm #%d : %dx%d , dxtSize: %d, rgbaSize: %d (decompressed, dxt1 not supported)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],allocSize);
-									else
-										printf("----- mm #%d : %dx%d , dxtSize: %d, rgbaSize: %d (decompressed, dxt5 not supported)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],allocSize);
+									//if(txtHeader->highResImageFormat == IMAGE_FORMAT_DXT1)
+									//	printf("----- mm #%d : %dx%d , dxtSize: %d, rgbaSize: %d (decompressed, dxt1 not supported)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],allocSize);
+									//else
+									//	printf("----- mm #%d : %dx%d , dxtSize: %d, rgbaSize: %d (decompressed, dxt5 not supported)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],allocSize);
 									
 									unsigned char* unpacked = (unsigned char*) malloc(allocSize);
 									

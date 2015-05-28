@@ -8,6 +8,10 @@ varying vec3 fPos;
 varying vec3 fNormal;
 varying vec4 fTangent;
 
+varying vec3 fT;
+varying vec3 fB;
+varying vec3 fN;
+
 // uniform
 uniform mat4 modelTransform;
 uniform mat4 viewTransform;
@@ -44,13 +48,15 @@ void main()
 	vec3 L = vec3(0.5,0.5,-1.0);
 	L = v3normalize(L);
 	
-	mat3 normalTransform = mat3(viewTransform) * mat3(modelTransform);
+	// TODO: move to uniform
+	// mat3 normalTransform = mat3(viewTransform) * mat3(modelTransform);
 	
+	// TODO: precomputed L in camera coord
 	L = mat3(viewTransform) * L;
 	
-	vec3 N = normalTransform * v3normalize(fNormal);
-	vec3 T = normalTransform * v3normalize(fTangent.xyz);
-	vec3 B = cross(T, N);
+	vec3 N = fN;//normalTransform * v3normalize(fNormal);
+	vec3 T = fT;//normalTransform * v3normalize(fTangent.xyz);
+	vec3 B = fB;//cross(T, N);
 
 	mat3 TBN = mat3( T.x, B.x, N.x, T.y, B.y, N.y, T.z, B.z, N.z );
 	//mat3 invTBN = m3transpose(TBN);
@@ -99,14 +105,16 @@ void main()
 		}
 	}
 	
-	float rimScale = 1.0;
+	float rimScale = 0.75;
 	vec3 rimColor = vec3(1,1,1);
 	
-	float VdotN = dot(tangentV,txtN);
+	// somehow, normal from normal map break rimlight
+	// disabled until I find a reliable way to detect edge
+	//float VdotN = dot(V,N);
 	vec3 rimLight = vec3(0,0,0);
 	//if(VdotN > 1e-6)
 	//{
-		//rimLight = vec4(rimColor * (smoothstep(0.6, 1.0,(1.0 - VdotN)) * (rimScale * mask2.g)),1);
+	//	rimLight = rimColor * (smoothstep(0.8, 1.0,(1.0 - VdotN)) * (rimScale * mask2.g));
 	//}
 	
 	vec3 light = ambient + diffuse; 

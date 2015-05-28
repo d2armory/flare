@@ -192,18 +192,22 @@ void Model::Update(ESContext *esContext, float deltaTime)
 										
 										vtxVertex* vertexArr = ((vtxVertex*) (((char*)(stripgr)) + stripgr->vertOffset));
 										//printf("%X\n",stripgr->vertOffset);
+										unsigned char* vertexArrC = (unsigned char*) (((unsigned int)(stripgr)) + stripgr->vertOffset);
 										
 										//vertexArr = ((vtxVertex*) (((char*)(stripgr)) + strip->vertOffset));
 										//printf("%X\n",vertexArr);
-										unsigned short* indexArr = (unsigned short*) (((char*) (stripgr)) + stripgr->indexOffset);
+										unsigned short* indexArr = (unsigned short*) (((unsigned int) (stripgr)) + stripgr->indexOffset);
+										unsigned char* indexArrC = (unsigned char*) (((unsigned int) (stripgr)) + stripgr->indexOffset);
 										
-										/* for(int v=0;v<elementLength;v++)
+										//printf("%d\n",((unsigned int)indexArr)-((unsigned int)mData));
+										
+										/* for(int v=0;v<10;v++)
 										{
-											printf("%hu ",indexArr[v]);
+											printf("%u ",&(indexArr[v]) - ((unsigned int) mData));
 										}
-										printf("\n");
+										printf("\n"); */
 										
-										for(int v=0;v<strip->numVerts;v++)
+										/* for(int v=0;v<stripgr->numVerts;v++)
 										{
 											printf("%hu ",vertexArr[v].origMeshVertID);
 										}
@@ -211,10 +215,25 @@ void Model::Update(ESContext *esContext, float deltaTime)
 										
 										for(int v=0;v<elementLength[numStrip];v++)
 										{
-											unsigned short idx = indexArr[v];
+											// need hack to access short correctly on non-aligned byte
+											//unsigned short idx = *((unsigned short*) (((unsigned int) indexArr) + (v * 2)));
+											unsigned char* fp = indexArrC + (v<<1);
+											unsigned char* fp2 = fp + 1;
+											unsigned short vp = *fp;
+											unsigned short vp2 = *fp2;
+											unsigned short idx = (vp2 << 8) + vp;
+											//printf("%u ",((unsigned int) (indexArr + v)) - ((unsigned int)mData));
+											//printf("%X %X ",vp, vp2);
 											//printf("%hu ",idx);
 											//if(v%32==31) printf("\n");
-											elementBuffer[v] = vertexArr[idx].origMeshVertID;
+											//char* fp = vertexArrC + (idx*9) + 3;
+											//char* fp2 = fp + 1;
+											unsigned char* efp = vertexArrC + (idx*9) + 4;
+											unsigned char* efp2 = efp + 1;
+											unsigned short evp = *efp;
+											unsigned short evp2 = *efp2;
+											elementBuffer[v] = (evp2 << 8) + evp;
+											//printf("%hu %hu ",*fp,*fp2);
 											
 											//if(elementBuffer[idx] >= vertexCount) 
 											//{
@@ -237,7 +256,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 										{
 											printf("%hu ",elementBuffer[v]);
 										}
-										printf("\n");*/
+										printf("\n"); */
 										
 										printf("--------- put stripgroup %d to vbo %d : %d unsigned short transfered\n",sg,this->meshVBO[numStrip],stripgr->numIndices);
 										
