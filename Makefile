@@ -2,15 +2,15 @@ SHELL := /bin/bash
 PATH  := /root/emsdk_portable:/root/emsdk_portable/clang/fastcomp/build_master_64/bin:/root/emsdk_portable/emscripten/master:$(PATH)
 
 COMPILER = emcc
-OPTIMIZE = -O2
+OPTIMIZE = 
 
 all: flare
 
 flare: main.bc es/esUtil.bc glm.bc assets.bc engine.bc squish.bc
 	$(COMPILER) $(OPTIMIZE) main.bc es/esUtil.bc engine.bc squish.bc -o /usr/share/nginx/html/app/raw.html --preload-file assets
 	sed -i 's/div\.emscripten_border { border: 1px solid black;/div\.emscripten_border { border: 1px solid black; background: url(https:\/\/www\.dropbox\.com\/s\/t96thgdi6x9np13\/5\.jpeg?raw=1);/' /usr/share/nginx/html/app/raw.html
-	sed -i 's/antialias:false,alpha:false}/antialias:false,alpha:true}/' /usr/share/nginx/html/app/raw.js
-	sed -i 's/backgroundColor="black"}/backgroundColor="rgba(0,0,0,0)"}/' /usr/share/nginx/html/app/raw.js
+	sed -i 's/alpha:\s*false/alpha:true/g' /usr/share/nginx/html/app/raw.js
+	sed -i 's/backgroundColor\s*=\s*"black"/backgroundColor="rgba(0,0,0,0)"/g' /usr/share/nginx/html/app/raw.js
 
 main.bc: main.cpp
 	$(COMPILER) $(OPTIMIZE) main.cpp -o main.bc
