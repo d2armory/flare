@@ -163,7 +163,7 @@ void Draw ( ESContext *esContext )
 	{
 		Scene::currentStep = RS_SHADOW;
 		glBindFramebuffer(GL_FRAMEBUFFER, Scene::shadowFrameBuffer);
-		glColorMask(false, false, false, false);
+		//glColorMask(false, false, false, false);
 		glClearColor (1.0f, 1.0f, 1.0f, 1.0f );
 		glClear ( GL_COLOR_BUFFER_BIT );
 		glClear ( GL_DEPTH_BUFFER_BIT );

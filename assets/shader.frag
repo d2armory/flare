@@ -107,7 +107,7 @@ void main()
 	for(int i=0;i<4;i++)
 	{
 		shadow = texture2D( texture[4], fShadowCoord.xy + poissonDisk[i]/700.0);
-		if ( shadow.z  <  fShadowCoord.z - bias){
+		if ( shadow.x  <  fShadowCoord.z - bias){
 			visibility -= 0.25;
 		}
 	}
@@ -160,5 +160,5 @@ void main()
 	//gl_FragColor = vec4((txtNworld) * 0.25,1) + vec4(0.25,0.25,0.25,0) + (vec4(0.5,0.5,0.5,0) * ((fTangent.a / 2.0) + 0.5));
 	//gl_FragColor = (vec4(fTangent.aaa,1) / 4.0) + vec4(0.5,0.5,0.5,0);
 	//gl_FragColor = vec4(texture2D( texture[3], fUV ).rrr,1);
-	//gl_FragColor = vec4(shadow.zzz,1);
+	//gl_FragColor = vec4(shadow.xxx,1);
 }

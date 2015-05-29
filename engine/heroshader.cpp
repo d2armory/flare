@@ -107,15 +107,19 @@ void HeroShader::Populate(Model* m)
 	//glm::mat4 m1 = glm::rotate(glm::mat4(1),userData->deg,glm::vec3(0,1,0));
 	//glm::mat4 m2 = glm::translate(m1, glm::vec3(0,0,0));
 	
+	bool renderInLightSpace = false;
+	
 	glUniformMatrix4fv(locModelTransform, 1, GL_FALSE, &m->modelTransform[0][0]);
 	
 	glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,-100,-250));
 	glm::mat4 p = glm::perspective (45.0f, 1.5f, 0.01f, 1000.0f);
+	if(!renderInLightSpace) glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &v[0][0]);
+	if(!renderInLightSpace) glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &p[0][0]);
 	
 	// shadow map
 	glm::vec3 lightDir = glm::normalize(Scene::lightDir);//glm::vec3(-1.0,-10.0,-1.0);
 	lightDir = glm::mat3(v) * lightDir;
-	glUniform3fv(locLightDir, 1, &lightDir[0] );
+	if(!renderInLightSpace) glUniform3fv(locLightDir, 1, &lightDir[0] );
 	glm::vec3 lightInvDir = lightDir * -1.0f;
 	
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-200,200,-200,200,-200,200);
@@ -132,10 +136,10 @@ void HeroShader::Populate(Model* m)
 	// get these from camera
 	
 	//lightDir = glm::normalize(Scene::lightDir);//glm::vec3(-1.0,-10.0,-1.0);
-	//lightDir = glm::vec3(0,0,-1);//glm::mat3(v) * lightDir;
-	//glUniform3fv(locLightDir, 1, &lightDir[0] );
-	glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &v[0][0]);
-	glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &p[0][0]);
+	lightDir = glm::vec3(0,0,-1);//glm::mat3(v) * lightDir;
+	if(renderInLightSpace) glUniform3fv(locLightDir, 1, &lightDir[0] );
+	if(renderInLightSpace) glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &depthViewMatrix[0][0]);
+	if(renderInLightSpace) glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &depthProjectionMatrix[0][0]);
 	
 	if(m->material != 0)
 	{
