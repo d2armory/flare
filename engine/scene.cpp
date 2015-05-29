@@ -4,7 +4,7 @@ RenderStep Scene::currentStep = RS_SCENE;
 GLuint Scene::shadowFrameBuffer = 0;
 GLuint Scene::shadowDepthTexture = 0;
 
-glm::vec3 Scene::lightDir = glm::vec3(1.0,-1.0,-1.0);
+glm::vec3 Scene::lightDir = glm::vec3(-1.0,-1.0,-1.0);
 
 void Scene::InitShadowmap()
 {

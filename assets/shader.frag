@@ -55,7 +55,8 @@ void main()
 	vec4 mask1 = texture2D( texture[2], fUV);
 	vec4 mask2 = texture2D( texture[3], fUV);
 	
-	vec4 shadow = texture2D( texture[4], fShadowCoord.xy);
+	// sampling on demand
+	//vec4 shadow = texture2D( texture[4], fShadowCoord.xy);
 	
 	//vec3 L = vec3(-1.0,-10.0,-1.0);
 	//L = v3normalize(L);
@@ -92,13 +93,25 @@ void main()
 	vec3 specular = vec3(0,0,0);
 	
 	// shadow mapping
-	float visibility = 1.0;
-	float bias = 0.005*tan(acos(dot(N,L))); // cosTheta is dot( n,l ), clamped between 0 and 1
-	bias = fclamp(bias, 0.0,0.01);
-	if ( shadow.z  <  fShadowCoord.z - bias){
-		visibility = 0.0;
-	}
 	
+	vec2 poissonDisk[4];
+	poissonDisk[0] = vec2( -0.94201624, -0.39906216 );
+	poissonDisk[1] = vec2( 0.94558609, -0.76890725 );
+	poissonDisk[2] = vec2( -0.094184101, -0.92938870 );
+	poissonDisk[3] = vec2( 0.34495938, 0.29387760 );
+	
+	float visibility = 1.0;
+	float bias = 0.005*tan(acos(NdotL)); // cosTheta is dot( n,l ), clamped between 0 and 1
+	bias = fclamp(bias, 0.0,0.01);
+	vec4 shadow = vec4(0,0,0,0);
+	for(int i=0;i<4;i++)
+	{
+		shadow = texture2D( texture[4], fShadowCoord.xy + poissonDisk[i]/700.0);
+		if ( shadow.z  <  fShadowCoord.z - bias){
+			visibility -= 0.25;
+		}
+	}
+
 	float diffuseLight = mask1.a;
 	if(NdotL > 1e-6)
 	{

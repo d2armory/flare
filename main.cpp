@@ -85,7 +85,7 @@ bool bounty_data = false;
 
 float total = 0;
 
-int modelCount = 5;
+int modelCount = 6;
 
 Model** mx = 0;
 
@@ -97,17 +97,19 @@ void Update ( ESContext *esContext, float deltaTime )
 	UserData *userData = (UserData*) esContext->userData;
 	userData->deg += M_PI/90 / 10;
 	
+	Scene::lightDir = glm::vec3(-1.0,-2.0,-1.0);
+	
 	// data loading
 	if(totaltime > 0.1f && !bounty_data)
 	{
 		bounty_data = true;
 
-		const char* modelName[5] = {
+		const char* modelName[6] = {
 			"models/heroes/axe/axe.mdl",
 			"models/heroes/axe/axe_armor.mdl",
 			"models/heroes/axe/axe_belt.mdl",
 			"models/heroes/axe/axe_ponytail.mdl",
-			"models/heroes/axe/axe_weapon.mdl"
+			"models/heroes/axe/axe_weapon.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter_backpack.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter_bandana.mdl",
@@ -123,6 +125,7 @@ void Update ( ESContext *esContext, float deltaTime )
 			//"models/heroes/tidehunter/tidehunter_fish.mdl"
 			////"models/heroes/tidehunter/tidehunter_hook.mdl"
 			//"models/heroes/enigma/enigma.mdl"
+			"models/heroes/pedestal/pedestal_1_small.mdl"
 		};
 
 		mx = new Model*[modelCount];
@@ -134,6 +137,10 @@ void Update ( ESContext *esContext, float deltaTime )
 			mx[i]->shaderShadow = userData->shadowShader;
 			Manager::add(mx[i]);
 		}
+		
+		Model* pedes = mx[modelCount-1];
+		pedes->rotation[0] = - M_PI / 2.0f;
+		//pedes->position[1] = -10.0f;
 	}
 	
 	if(bounty_data)

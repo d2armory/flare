@@ -109,7 +109,7 @@ void HeroShader::Populate(Model* m)
 	
 	glUniformMatrix4fv(locModelTransform, 1, GL_FALSE, &m->modelTransform[0][0]);
 	
-	glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,-100,-200));
+	glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,-100,-250));
 	glm::mat4 p = glm::perspective (45.0f, 1.5f, 0.01f, 1000.0f);
 	
 	// shadow map
