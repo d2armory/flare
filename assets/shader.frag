@@ -45,7 +45,7 @@ void main()
 	vec4 mask1 = texture2D( texture[2], fUV);
 	vec4 mask2 = texture2D( texture[3], fUV);
 	
-	vec3 L = vec3(0.5,0.5,-1.0);
+	vec3 L = vec3(-1.0,-10.0,-1.0);
 	L = v3normalize(L);
 	
 	// TODO: move to uniform

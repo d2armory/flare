@@ -44,7 +44,7 @@ int Init ( ESContext *esContext )
 	hShader->Load();
 	userData->heroShader = hShader;
 	
-	userData->deg = M_PI;
+	//userData->deg = M_PI;
 	
 	//printf("%d\n",userData->rotateLocation);
 
@@ -81,7 +81,7 @@ float total = 0;
 
 int modelCount = 5;
 
-Model** mx;
+Model** mx = 0;
 
 void Update ( ESContext *esContext, float deltaTime )
 {
@@ -96,7 +96,7 @@ void Update ( ESContext *esContext, float deltaTime )
 	{
 		bounty_data = true;
 
-		char* modelName[5] = {
+		const char* modelName[5] = {
 			"models/heroes/axe/axe.mdl",
 			"models/heroes/axe/axe_armor.mdl",
 			"models/heroes/axe/axe_belt.mdl",
@@ -127,7 +127,14 @@ void Update ( ESContext *esContext, float deltaTime )
 			mx[i]->shader = userData->heroShader;
 			Manager::add(mx[i]);
 		}
-		
+	}
+	
+	if(bounty_data)
+	{
+		for(int i=0;i<modelCount;i++)
+		{
+			mx[i]->rotation[1] = userData->deg;
+		}
 	}
 }
 
@@ -143,10 +150,13 @@ void Draw ( ESContext *esContext )
 	// Clear the depth buffer
 	glClear ( GL_DEPTH_BUFFER_BIT );
 
-	// TODO: use scene graph
-	for(int m=0;m<modelCount;m++)
+	if(mx!=0)
 	{
-		mx[m]->Draw(esContext);
+		// TODO: use scene graph
+		for(int m=0;m<modelCount;m++)
+		{
+			mx[m]->Draw(esContext);
+		}
 	}
 }
 
@@ -162,7 +172,7 @@ void mainloop()
 	totaltime += deltatime;
 	frames++;
 	
-	const float fpsRefresh = 15.0f;
+	const float fpsRefresh = 2.0f;
 	
 	if (totaltime >  fpsRefresh)
 	{
@@ -171,36 +181,14 @@ void mainloop()
 		frames = 0;
 	}
 	
-	/* if(!axe_data) 
-	{
-		bool ex = FileLoader::FileExist("models/heroes/axe/axe.mdl");
-		if(ex)
-		{
-			axe_data = true;
-			char* fileData = FileLoader::ReadFile("models/heroes/axe/axe.mdl");
-
-			printf("Apply header on data\n");
-
-			mdlHeader* mh = (mdlHeader*) fileData;
-			
-			char* mhId = (char*) &mh->id;
-			
-			printf("- ID: %c%c%c%c (0x%X)\n",*mhId,*(mhId+1),*(mhId+2),*(mhId+3),mh->id);
-			printf("- Version: %d\n",mh->version);
-			printf("- Checksum: 0x%X\n",mh->checksum);
-			printf("- Name: %s\n",mh->name);
-			printf("- Length: %d\n",mh->length);
-			
-			free(fileData);
-		}
-	} */
-	
 }
 
 int main ( int argc, char *argv[] )
 {
 	 
-	 glm::vec4 v(1,2,3,4);
+	 printf("Starting Flare DotA Model Viewer Engine ..\n");
+	 
+	 /* glm::vec4 v(1,2,3,4);
 	 v += glm::vec4(-10,10,100,-100);
 	 
 	 printf("%f %f %f %f\n",v.x,v.y,v.z,v.w); 
@@ -209,12 +197,12 @@ int main ( int argc, char *argv[] )
 	 
 	 v = v * m;
 	 
-	 printf("%f %f %f %f\n",v.x,v.y,v.z,v.w); 
+	 printf("%f %f %f %f\n",v.x,v.y,v.z,v.w);  */
 
 	esInitContext ( &esContext );
 	esContext.userData = &userData;
 
-	esCreateWindow ( &esContext, "Hello Triangle", 960, 640, ES_WINDOW_RGB | ES_WINDOW_DEPTH );
+	esCreateWindow ( &esContext, "Flare", 960, 640, ES_WINDOW_RGB | ES_WINDOW_DEPTH );
 
 	if ( !Init ( &esContext ) )
 		return 0;

@@ -30,6 +30,11 @@ public:
 
 	// TODO: move to private and make accessor
 	
+	glm::vec4 position;
+	glm::vec4 rotation;
+	
+	glm::mat4 modelTransform;
+	
 	FILE_STATE state;
 	
 	// data

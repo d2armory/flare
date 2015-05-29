@@ -298,98 +298,88 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			
 		}
 	}
+	
 }
 
 void Model::Draw(ESContext *esContext)
 {
+	
+	// transform calculation
+	glm::mat4 m = glm::mat4(1);
+	m = glm::rotate(m,rotation[0],glm::vec3(1,0,0));
+	m = glm::rotate(m,rotation[1],glm::vec3(0,1,0));
+	m = glm::rotate(m,rotation[2],glm::vec3(0,0,1));
+	m = glm::translate(m, glm::vec3(position));
+	
+	modelTransform = m;
+	
 	if(state == FS_READY)
 	{
 		// Load the vertex data
 		for(int i=0;i<numStrip;i++) 
 		{
+			//printf("%X\n",shader);
 			
-			shader->Bind(this);
-			
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVBO[i]);
-			SetVAO();
-			
-			// TODO: move all of these into shader
-			// -- start of todo
-			UserData *userData = (UserData*) esContext->userData;
-			glm::mat4 m0 = glm::rotate(glm::mat4(1),(float) M_PI,glm::vec3(1,0,0));
-			glm::mat4 m1 = glm::rotate(m0,userData->deg,glm::vec3(0,1,0));
-			glm::mat4 m2 = glm::translate(m1, glm::vec3(0,0,0));
-			glUniformMatrix4fv(shader->locModelTransform, 1, GL_FALSE, &m2[0][0]);
-			
-			glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,100,-150));
-			glUniformMatrix4fv(shader->locViewTransform, 1, GL_FALSE, &v[0][0]);
-			
-			glm::mat4 p = glm::perspective (30.0f, 1.5f, 0.01f, 1000.0f);
-			glUniformMatrix4fv(shader->locProjTransform, 1, GL_FALSE, &p[0][0]);
-			
-			//printf("%f \n",userData->deg);
-			
-			// TODO:
-			// bind material specific value
-			// e.g. specular scale, rim light color
-			
-			if(material != 0)
+			if(meshVBO[i]!=0 && shader!=0)
 			{
-				material->Bind();
-			}
-			
-			const GLint samplers[4] = {0,1,2,3}; // we've bound our textures in textures 0 and 1.
-			glUniform1iv( shader->locTexture, 4, samplers );
-			// end of todo 1
-			
-			// real drawing code, just 3 lines lol
-			glDrawElements(GL_TRIANGLES, elementLength[i], GL_UNSIGNED_SHORT, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
+				
+				shader->Bind(this);
+				
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVBO[i]);
+				SetVAO();
+				
+				shader->Populate(this);
 	
-			if(material != 0)
-			{
-				material->Unbind();
+				// real drawing code, just 3 lines lol
+				glDrawElements(GL_TRIANGLES, elementLength[i], GL_UNSIGNED_SHORT, 0);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
+				shader->Unbind(this);
 			}
-			
-			shader->Unbind(this);
-			
+
 		}
 	}
 }
 
 void Model::SetVAO()
 {
-	glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[0]);
-	// XYZ pos
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 16);
-	glEnableVertexAttribArray(0);
-	// Normal
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 28);
-	glEnableVertexAttribArray(1);
-	// UV
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 40);
-	glEnableVertexAttribArray(2);
-	// num bones
-	glVertexAttribPointer(3, 1, GL_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 15);
-	glEnableVertexAttribArray(3);
-	// bone id
-	glVertexAttribPointer(4, 1, GL_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 12);
-	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(5, 1, GL_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 13);
-	glEnableVertexAttribArray(5);
-	glVertexAttribPointer(6, 1, GL_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 14);
-	glEnableVertexAttribArray(6);
-	// bone weight
-	glVertexAttribPointer(7, 1, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 0);
-	glEnableVertexAttribArray(7);
-	glVertexAttribPointer(8, 1, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 4);
-	glEnableVertexAttribArray(8);
-	glVertexAttribPointer(9, 1, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 8);
-	glEnableVertexAttribArray(9);
+	if(this->vertexVBO[0]!=0)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[0]);
+		// XYZ pos
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 16);
+		glEnableVertexAttribArray(0);
+		// Normal
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 28);
+		glEnableVertexAttribArray(1);
+		// UV
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 40);
+		glEnableVertexAttribArray(2);
+		// num bones
+		glVertexAttribPointer(3, 1, GL_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 15);
+		glEnableVertexAttribArray(3);
+		// bone id
+		glVertexAttribPointer(4, 1, GL_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 12);
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(5, 1, GL_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 13);
+		glEnableVertexAttribArray(5);
+		glVertexAttribPointer(6, 1, GL_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 14);
+		glEnableVertexAttribArray(6);
+		// bone weight
+		glVertexAttribPointer(7, 1, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 0);
+		glEnableVertexAttribArray(7);
+		glVertexAttribPointer(8, 1, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 4);
+		glEnableVertexAttribArray(8);
+		glVertexAttribPointer(9, 1, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 8);
+		glEnableVertexAttribArray(9);
+	}
 	
-	glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[1]);
-	// tangent
-	glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*) 0);
-	glEnableVertexAttribArray(10);
+	if(this->vertexVBO[1]!=0)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[1]);
+		// tangent
+		glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*) 0);
+		glEnableVertexAttribArray(10);
+	}
 }

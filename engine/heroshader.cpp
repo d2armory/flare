@@ -24,8 +24,8 @@ void HeroShader::Load()
 	GLint linked;
 
 	// Load the vertex/fragment shaders
-	vertexShader = LoadShader ( GL_VERTEX_SHADER, (const char*) vShaderStr );
-	fragmentShader = LoadShader ( GL_FRAGMENT_SHADER, (const char*) fShaderStr );
+	vertexShader = Shader::LoadShader ( GL_VERTEX_SHADER, (const char*) vShaderStr );
+	fragmentShader = Shader::LoadShader ( GL_FRAGMENT_SHADER, (const char*) fShaderStr );
 	
 	free(vShaderStr);
 	free(fShaderStr);
@@ -92,10 +92,42 @@ void HeroShader::Bind(Model* m)
 	// Use the program object
 	glUseProgram ( programLocation );
 	//printf("Shader at %d binded\n",programLocation);
+	
+}
+
+void HeroShader::Populate(Model* m)
+{
+	
+	//UserData *userData = (UserData*) esContext->userData;
+	//glm::mat4 m0 = glm::rotate(glm::mat4(1),(float) M_PI,glm::vec3(1,0,0));
+	//glm::mat4 m1 = glm::rotate(glm::mat4(1),userData->deg,glm::vec3(0,1,0));
+	//glm::mat4 m2 = glm::translate(m1, glm::vec3(0,0,0));
+	
+	glUniformMatrix4fv(locModelTransform, 1, GL_FALSE, &m->modelTransform[0][0]);
+	
+	// get these from camera
+	glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,-100,-200));
+	glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &v[0][0]);
+	glm::mat4 p = glm::perspective (45.0f, 1.5f, 0.01f, 1000.0f);
+	glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &p[0][0]);
+	
+	if(m->material != 0)
+	{
+		m->material->Bind();
+	}
+	
+	const GLint samplers[4] = {0,1,2,3}; // we've bound our textures in textures 0 and 1.
+	glUniform1iv( locTexture, 4, samplers );
 }
 
 void HeroShader::Unbind(Model* m)
 {
+	
+	if(m->material != 0)
+	{
+		m->material->Unbind();
+	}
+	
 	// Use the program object
 	glUseProgram ( 0 );
 }

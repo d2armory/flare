@@ -2,7 +2,8 @@ SHELL := /bin/bash
 PATH  := /root/emsdk_portable:/root/emsdk_portable/clang/fastcomp/build_master_64/bin:/root/emsdk_portable/emscripten/master:$(PATH)
 
 COMPILER = emcc
-OPTIMIZE = 
+#OPTIMIZE = -s DEMANGLE_SUPPORT=1 -Werror -s ASSERTIONS=2
+OPTIMIZE = -Werror
 
 all: flare
 

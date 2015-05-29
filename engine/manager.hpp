@@ -2,6 +2,7 @@
 
 #include <string>
 #include <functional>
+#include <sys/time.h>
 
 // forward dec
 class Model;

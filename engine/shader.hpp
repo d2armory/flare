@@ -3,18 +3,11 @@
 //#include "model.hpp"
 #include "../es/esUtil.h"
 #include <stdlib.h>
-
-// forward dec
-class Model;
+#include <stdio.h>
 
 class Shader
 {
 	
 public:
-	
-	virtual void Load() {};
-	virtual void Bind(Model* model) {};
-	virtual void Unbind(Model* model) {};
-	
-	GLuint LoadShader ( GLenum type, const char *shaderSrc );
+	static GLuint LoadShader ( GLenum type, const char *shaderSrc );
 };

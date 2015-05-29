@@ -7,7 +7,7 @@
 class Shader;
 class Model;
 
-class HeroShader : public Shader
+class HeroShader
 {
 	
 public:
@@ -16,6 +16,7 @@ public:
 
 	void Load();
 	void Bind(Model* model);
+	void Populate(Model* model);
 	void Unbind(Model* model);
 	
 	GLuint programLocation;

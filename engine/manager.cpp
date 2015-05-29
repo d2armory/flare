@@ -123,24 +123,57 @@ void Manager::Init()
 
 void Manager::Update(ESContext *esContext, float deltaTime)
 {
+	
+	// prevent frame from hanging too long when load finished simultaneously
+	const float maxUpdateTime = 0.1f;
+	
+	// this algo always process 1 update of loading of each type
+	
+	struct timeval before;
+	struct timeval after;
+	
+	bool isLoading;
+	float total = 0;
+	
 	Texture* t = headTexture;
 	while(t!=0)
 	{
+		gettimeofday(&before,0);
+		isLoading = t->state == FS_LOADING;
+		/* */
 		t->Update();
 		t = t->nextTexture;
+		/* */
+		gettimeofday(&after,0);
+		total += (float)(after.tv_sec - before.tv_sec + (after.tv_usec - before.tv_usec) * 1e-6);
+		if(total > maxUpdateTime) break;
 	}
 	Material* mt = headMaterial;
 	while(mt!=0)
 	{
+		gettimeofday(&before,0);
+		isLoading = t->state == FS_LOADING;
+		/* */
 		//TODO: material update too, for detail map animation
 		mt->Update();
 		mt = mt->nextMaterial;
+		/* */
+		gettimeofday(&after,0);
+		total += (float)(after.tv_sec - before.tv_sec + (after.tv_usec - before.tv_usec) * 1e-6);
+		if(total > maxUpdateTime) break;
 	}
 	Model* m = headModel;
 	while(m!=0)
 	{
+		gettimeofday(&before,0);
+		isLoading = t->state == FS_LOADING;
+		/* */
 		m->Update(esContext, deltaTime);
 		m = m->nextModel;
+		/* */
+		gettimeofday(&after,0);
+		total += (float)(after.tv_sec - before.tv_sec + (after.tv_usec - before.tv_usec) * 1e-6);
+		if(total > maxUpdateTime) break;
 	}
 }
 

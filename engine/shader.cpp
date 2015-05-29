@@ -31,7 +31,8 @@ GLuint Shader::LoadShader( GLenum type, const char *shaderSrc )
 			char* infoLog = (char*) malloc (sizeof(char) * infoLen );
 
 			glGetShaderInfoLog ( shader, infoLen, 0, infoLog );
-			esLogMessage ( "Error compiling shader %s :\n%s\n",shaderSrc, infoLog );            
+			//esLogMessage ( "Error compiling shader %s :\n%s\n",shaderSrc, infoLog );            
+			printf("Error compiling shader %s :\n%s\n",shaderSrc, infoLog);
 			
 			free ( infoLog );
 		}
