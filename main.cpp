@@ -44,6 +44,10 @@ int Init ( ESContext *esContext )
 	hShader->Load();
 	userData->heroShader = hShader;
 	
+	ShadowShader* sShader = new ShadowShader();
+	sShader->Load();
+	userData->shadowShader = sShader;
+	
 	//userData->deg = M_PI;
 	
 	//printf("%d\n",userData->rotateLocation);
@@ -57,6 +61,8 @@ int Init ( ESContext *esContext )
 	
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+	
+	Scene::InitShadowmap();
 	
 	return GL_TRUE;
 }
@@ -125,6 +131,7 @@ void Update ( ESContext *esContext, float deltaTime )
 		{
 			mx[i] = new Model(modelName[i]);
 			mx[i]->shader = userData->heroShader;
+			mx[i]->shaderShadow = userData->shadowShader;
 			Manager::add(mx[i]);
 		}
 	}
@@ -143,19 +150,55 @@ void Draw ( ESContext *esContext )
 
 	// Set the viewport
 	glViewport ( 0, 0, esContext->width, esContext->height );
-	
-	// Clear the color buffer
-	glClearColor (0, 0, 0, 0.0f );
-	glClear ( GL_COLOR_BUFFER_BIT );
-	// Clear the depth buffer
-	glClear ( GL_DEPTH_BUFFER_BIT );
 
-	if(mx!=0)
+	bool showShadowmap = false;
+	if(!showShadowmap)
 	{
-		// TODO: use scene graph
-		for(int m=0;m<modelCount;m++)
+		Scene::currentStep = RS_SHADOW;
+		glBindFramebuffer(GL_FRAMEBUFFER, Scene::shadowFrameBuffer);
+		glColorMask(false, false, false, false);
+		glClearColor (1.0f, 1.0f, 1.0f, 1.0f );
+		glClear ( GL_COLOR_BUFFER_BIT );
+		glClear ( GL_DEPTH_BUFFER_BIT );
+		if(mx!=0)
 		{
-			mx[m]->Draw(esContext);
+			// TODO: use scene graph
+			for(int m=0;m<modelCount;m++)
+			{
+				mx[m]->Draw(esContext);
+			}
+		}
+		
+		Scene::currentStep = RS_SCENE;
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glColorMask(true, true, true, true);
+		glClearColor (0, 0, 0, 0.0f );
+		glClear ( GL_COLOR_BUFFER_BIT );
+		glClear ( GL_DEPTH_BUFFER_BIT );
+		if(mx!=0)
+		{
+			// TODO: use scene graph
+			for(int m=0;m<modelCount;m++)
+			{
+				mx[m]->Draw(esContext);
+			}
+		}
+	}
+	else
+	{
+		Scene::currentStep = RS_SHADOW;
+		//glBindFramebuffer(GL_FRAMEBUFFER, Scene::shadowFrameBuffer);
+		//glColorMask(false, false, false, false);
+		glClearColor (1.0f, 1.0f, 1.0f, 1.0f );
+		glClear ( GL_COLOR_BUFFER_BIT );
+		glClear ( GL_DEPTH_BUFFER_BIT );
+		if(mx!=0)
+		{
+			// TODO: use scene graph
+			for(int m=0;m<modelCount;m++)
+			{
+				mx[m]->Draw(esContext);
+			}
 		}
 	}
 }

@@ -7,10 +7,12 @@
 
 // user data to pass around
 class HeroShader;
+class ShadowShader;
 typedef struct
 {
 	// Handle to a program object
 	HeroShader* heroShader;
+	ShadowShader* shadowShader;
 	float deg;
 
 } UserData;

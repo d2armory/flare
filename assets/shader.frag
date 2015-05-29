@@ -11,12 +11,15 @@ varying vec4 fTangent;
 varying vec3 fT;
 varying vec3 fB;
 varying vec3 fN;
+varying vec3 fShadowCoord;
 
 // uniform
 uniform mat4 modelTransform;
 uniform mat4 viewTransform;
 uniform mat4 projTransform;
-uniform sampler2D texture[4];
+uniform sampler2D texture[5];
+
+uniform vec3 lightDir;
 
 /*
 vec3 v3cross(vec3 a, vec3 b)
@@ -35,6 +38,13 @@ mat3 m3transpose(mat3 m)
 	return mat3(m[0].x,m[1].x,m[2].x,m[0].y,m[1].y,m[2].y,m[0].z,m[1].z,m[2].z);
 }
 
+float fclamp(float v, float min, float max)
+{
+	if(v<min) return min;
+	if(v>max) return max;
+	return v;
+}
+
 // main
 void main()
 {
@@ -45,14 +55,18 @@ void main()
 	vec4 mask1 = texture2D( texture[2], fUV);
 	vec4 mask2 = texture2D( texture[3], fUV);
 	
-	vec3 L = vec3(-1.0,-10.0,-1.0);
-	L = v3normalize(L);
+	vec4 shadow = texture2D( texture[4], fShadowCoord.xy);
+	
+	//vec3 L = vec3(-1.0,-10.0,-1.0);
+	//L = v3normalize(L);
 	
 	// TODO: move to uniform
 	// mat3 normalTransform = mat3(viewTransform) * mat3(modelTransform);
 	
 	// TODO: precomputed L in camera coord
-	L = mat3(viewTransform) * L;
+	//L = mat3(viewTransform) * L;
+	
+	vec3 L = lightDir;
 	
 	vec3 N = fN;//normalTransform * v3normalize(fNormal);
 	vec3 T = fT;//normalTransform * v3normalize(fTangent.xyz);
@@ -72,17 +86,25 @@ void main()
 	
 	vec3 lColor = vec3(0.8,0.8,0.8);
 	vec3 sColor = vec3(0.9,0.8,1.0);
-	vec3 ambient = vec3(0.4,0.4,0.4);
+	vec3 ambient = vec3(0.35,0.35,0.35);
 	
 	vec3 diffuse = vec3(0,0,0);
 	vec3 specular = vec3(0,0,0);
+	
+	// shadow mapping
+	float visibility = 1.0;
+	float bias = 0.005*tan(acos(dot(N,L))); // cosTheta is dot( n,l ), clamped between 0 and 1
+	bias = fclamp(bias, 0.0,0.01);
+	if ( shadow.z  <  fShadowCoord.z - bias){
+		visibility = 0.0;
+	}
 	
 	float diffuseLight = mask1.a;
 	if(NdotL > 1e-6)
 	{
 		diffuseLight  = diffuseLight + NdotL;
 	}
-	diffuse = lColor * max(diffuseLight, 1e-6);
+	diffuse = lColor * max(diffuseLight, 1e-6) * visibility;
 	
 	vec3 V = v3normalize(-fPos);
 	vec3 tangentV = TBN * V;
@@ -101,7 +123,7 @@ void main()
 		
 		if(RdotV > 1e-6)
 		{
-			specular = sColor * (pow(max(1e-6, RdotV ), specExp * mask2.a) * mask2.r * specScale);
+			specular = sColor * (pow(max(1e-6, RdotV ), specExp * mask2.a) * mask2.r * specScale * visibility);
 		}
 	}
 	
@@ -119,9 +141,11 @@ void main()
 	
 	vec3 light = ambient + diffuse; 
 	vec3 finalcolor = (color.rgb) * (1.0 - mask1.b);
+	//finalcolor = vec3(0.7,0.7,0.7);
 	
 	gl_FragColor = vec4((light * finalcolor) + specular + rimLight,1);
 	//gl_FragColor = vec4((txtNworld) * 0.25,1) + vec4(0.25,0.25,0.25,0) + (vec4(0.5,0.5,0.5,0) * ((fTangent.a / 2.0) + 0.5));
 	//gl_FragColor = (vec4(fTangent.aaa,1) / 4.0) + vec4(0.5,0.5,0.5,0);
 	//gl_FragColor = vec4(texture2D( texture[3], fUV ).rrr,1);
+	//gl_FragColor = vec4(shadow.zzz,1);
 }

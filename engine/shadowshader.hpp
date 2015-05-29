@@ -2,18 +2,17 @@
 
 #include "model.hpp"
 #include "shader.hpp"
-#include "scene.hpp"
 
 // forward dec
 class Shader;
 class Model;
 
-class HeroShader
+class ShadowShader
 {
 	
 public:
 
-	HeroShader();
+	ShadowShader();
 
 	void Load();
 	void Bind(Model* model);
@@ -22,12 +21,6 @@ public:
 	
 	GLuint programLocation;
 	
-	GLuint locModelTransform;
-	GLuint locViewTransform;
-	GLuint locProjTransform;
-	GLuint locDepthBiasMvpTransform;
-	
-	GLuint locLightDir;
-	GLuint locTexture;
+	GLuint locMvpTransform;
 	
 };

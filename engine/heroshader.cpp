@@ -13,8 +13,10 @@ void HeroShader::Load()
 	char vShaderFilename[] = "assets/shader.vert";
 	char fShaderFilename[] = "assets/shader.frag";
 	
-	char* vShaderStr = FileLoader::ReadFile(vShaderFilename);
-	char* fShaderStr = FileLoader::ReadFile(fShaderFilename);
+	unsigned int vShaderLength = 0;
+	unsigned int fShaderLength = 0;
+	char* vShaderStr = FileLoader::ReadFile(vShaderFilename, vShaderLength);
+	char* fShaderStr = FileLoader::ReadFile(fShaderFilename, fShaderLength);
 	
 	//printf("%s\n",vShaderStr);
 
@@ -24,8 +26,8 @@ void HeroShader::Load()
 	GLint linked;
 
 	// Load the vertex/fragment shaders
-	vertexShader = Shader::LoadShader ( GL_VERTEX_SHADER, (const char*) vShaderStr );
-	fragmentShader = Shader::LoadShader ( GL_FRAGMENT_SHADER, (const char*) fShaderStr );
+	vertexShader = Shader::LoadShader ( GL_VERTEX_SHADER, (const char*) vShaderStr, vShaderLength);
+	fragmentShader = Shader::LoadShader ( GL_FRAGMENT_SHADER, (const char*) fShaderStr, fShaderLength);
 	
 	free(vShaderStr);
 	free(fShaderStr);
@@ -84,6 +86,8 @@ void HeroShader::Load()
 	locModelTransform = glGetUniformLocation(programObject, "modelTransform");
 	locViewTransform = glGetUniformLocation(programObject, "viewTransform");
 	locProjTransform = glGetUniformLocation(programObject, "projTransform");
+	locDepthBiasMvpTransform = glGetUniformLocation(programLocation, "depthBiasMvpTransform");
+	locLightDir = glGetUniformLocation(programObject, "lightDir");
 	locTexture = glGetUniformLocation(programObject, "texture");
 }
 
@@ -105,10 +109,32 @@ void HeroShader::Populate(Model* m)
 	
 	glUniformMatrix4fv(locModelTransform, 1, GL_FALSE, &m->modelTransform[0][0]);
 	
-	// get these from camera
 	glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,-100,-200));
-	glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &v[0][0]);
 	glm::mat4 p = glm::perspective (45.0f, 1.5f, 0.01f, 1000.0f);
+	
+	// shadow map
+	glm::vec3 lightDir = glm::normalize(Scene::lightDir);//glm::vec3(-1.0,-10.0,-1.0);
+	lightDir = glm::mat3(v) * lightDir;
+	glUniform3fv(locLightDir, 1, &lightDir[0] );
+	glm::vec3 lightInvDir = lightDir * -1.0f;
+	
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-200,200,-200,200,-200,200);
+	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
+	glm::mat4 depthMvp = depthProjectionMatrix * depthViewMatrix * m->modelTransform;
+	glm::mat4 biasMatrix(1);
+	// use screen size here?
+	biasMatrix = glm::scale(biasMatrix,glm::vec3(960.0f/1024.0f,640.0f/1024.0f,1.0f));
+	biasMatrix = glm::translate(biasMatrix,glm::vec3(0.5f,0.5f,0.5f));
+	biasMatrix = glm::scale(biasMatrix,glm::vec3(0.5f,0.5f,0.5f));
+	glm::mat4 depthBiasMvp = biasMatrix * depthMvp;
+	glUniformMatrix4fv(locDepthBiasMvpTransform, 1, GL_FALSE, &depthBiasMvp[0][0]);
+	
+	// get these from camera
+	
+	//lightDir = glm::normalize(Scene::lightDir);//glm::vec3(-1.0,-10.0,-1.0);
+	//lightDir = glm::vec3(0,0,-1);//glm::mat3(v) * lightDir;
+	//glUniform3fv(locLightDir, 1, &lightDir[0] );
+	glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &v[0][0]);
 	glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &p[0][0]);
 	
 	if(m->material != 0)
@@ -116,8 +142,12 @@ void HeroShader::Populate(Model* m)
 		m->material->Bind();
 	}
 	
-	const GLint samplers[4] = {0,1,2,3}; // we've bound our textures in textures 0 and 1.
-	glUniform1iv( locTexture, 4, samplers );
+	// bind shadowmap
+	glActiveTexture(GL_TEXTURE0 + 4);
+	glBindTexture(GL_TEXTURE_2D, Scene::shadowDepthTexture);
+	
+	const GLint samplers[5] = {0,1,2,3,4}; // we've bound our textures in textures 0 and 1.
+	glUniform1iv( locTexture, 5, samplers );
 }
 
 void HeroShader::Unbind(Model* m)
@@ -127,6 +157,10 @@ void HeroShader::Unbind(Model* m)
 	{
 		m->material->Unbind();
 	}
+	
+	//unbind shadow map
+	glActiveTexture(GL_TEXTURE0 + 4);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	
 	// Use the program object
 	glUseProgram ( 0 );

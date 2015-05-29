@@ -283,6 +283,14 @@ GLboolean ESUTIL_API esCreateWindow ( ESContext *esContext, const char* title, G
         printf("DXT is not supported on this browser\n");
     }
 
+    char depthsupport = emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(0),"WEBGL_depth_texture");
+
+    if(!depthsupport)
+    {
+        printf("Depth texture is not supported on this browser\n");
+    }
+    
+
    return GL_TRUE;
 }
 

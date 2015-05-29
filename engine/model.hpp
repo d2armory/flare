@@ -7,6 +7,8 @@
 #include "manager.hpp"
 #include "material.hpp"
 #include "heroshader.hpp"
+#include "shadowshader.hpp"
+#include "scene.hpp"
 #include <string>
 
 
@@ -59,6 +61,7 @@ public:
 	int tangentOffset;
 	
 	HeroShader* shader;
+	ShadowShader* shaderShadow;
 	Material* material;
 	
 	// manager

@@ -19,6 +19,7 @@ Model::Model(const char* fileName)
 	nextModel = 0;
 	material = 0;
 	shader = 0;
+	shaderShadow = 0;
 }
 
 Model::~Model()
@@ -305,11 +306,12 @@ void Model::Draw(ESContext *esContext)
 {
 	
 	// transform calculation
+	// not sure why it use left-to-right calculation though
 	glm::mat4 m = glm::mat4(1);
-	m = glm::rotate(m,rotation[0],glm::vec3(1,0,0));
-	m = glm::rotate(m,rotation[1],glm::vec3(0,1,0));
-	m = glm::rotate(m,rotation[2],glm::vec3(0,0,1));
 	m = glm::translate(m, glm::vec3(position));
+	m = glm::rotate(m,rotation[2],glm::vec3(0,0,1));
+	m = glm::rotate(m,rotation[1],glm::vec3(0,1,0));
+	m = glm::rotate(m,rotation[0],glm::vec3(1,0,0));
 	
 	modelTransform = m;
 	
@@ -320,22 +322,29 @@ void Model::Draw(ESContext *esContext)
 		{
 			//printf("%X\n",shader);
 			
-			if(meshVBO[i]!=0 && shader!=0)
+			bool shaderActive = 
+				(Scene::currentStep == RS_SCENE && shader != 0) || 
+				(Scene::currentStep == RS_SHADOW && shaderShadow != 0);
+			
+			if(meshVBO[i]!=0 && shaderActive)
 			{
 				
-				shader->Bind(this);
+				if(Scene::currentStep==RS_SCENE) shader->Bind(this);
+				else if(Scene::currentStep==RS_SHADOW) shaderShadow->Bind(this);
 				
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVBO[i]);
 				SetVAO();
 				
-				shader->Populate(this);
+				if(Scene::currentStep==RS_SCENE) shader->Populate(this);
+				else if(Scene::currentStep==RS_SHADOW) shaderShadow->Populate(this);
 	
 				// real drawing code, just 3 lines lol
 				glDrawElements(GL_TRIANGLES, elementLength[i], GL_UNSIGNED_SHORT, 0);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
-				shader->Unbind(this);
+				if(Scene::currentStep==RS_SCENE) shader->Unbind(this);
+				else if(Scene::currentStep==RS_SHADOW) shaderShadow->Unbind(this);
 			}
 
 		}

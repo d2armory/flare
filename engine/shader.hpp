@@ -9,5 +9,5 @@ class Shader
 {
 	
 public:
-	static GLuint LoadShader ( GLenum type, const char *shaderSrc );
+	static GLuint LoadShader ( GLenum type, const char *shaderSrc, unsigned int length );
 };

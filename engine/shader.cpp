@@ -1,6 +1,6 @@
 #include "shader.hpp"
 
-GLuint Shader::LoadShader( GLenum type, const char *shaderSrc )
+GLuint Shader::LoadShader( GLenum type, const char *shaderSrc, unsigned int length )
 {
 	GLuint shader;
 	GLint compiled;
@@ -12,7 +12,8 @@ GLuint Shader::LoadShader( GLenum type, const char *shaderSrc )
 		return 0;
 
 	// Load the shader source
-	glShaderSource ( shader, 1, &shaderSrc, 0 );
+	GLint srcLen = (GLint) length;
+	glShaderSource ( shader, 1, &shaderSrc, &srcLen );
 	
 	// Compile the shader
 	glCompileShader ( shader );
