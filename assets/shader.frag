@@ -20,6 +20,7 @@ uniform mat4 projTransform;
 uniform sampler2D texture[5];
 
 uniform vec3 lightDir;
+uniform int drawShadow;
 
 /*
 vec3 v3cross(vec3 a, vec3 b)
@@ -104,11 +105,14 @@ void main()
 	float bias = 0.005*tan(acos(NdotL)); // cosTheta is dot( n,l ), clamped between 0 and 1
 	bias = fclamp(bias, 0.0,0.01);
 	vec4 shadow = vec4(0,0,0,0);
-	for(int i=0;i<4;i++)
+	if(drawShadow==1)
 	{
-		shadow = texture2D( texture[4], fShadowCoord.xy + poissonDisk[i]/700.0);
-		if ( shadow.x  <  fShadowCoord.z - bias){
-			visibility -= 0.25;
+		for(int i=0;i<4;i++)
+		{
+			shadow = texture2D( texture[4], fShadowCoord.xy + poissonDisk[i]/700.0);
+			if ( shadow.x  <  fShadowCoord.z - bias){
+				visibility -= 0.25;
+			}
 		}
 	}
 
@@ -160,5 +164,5 @@ void main()
 	//gl_FragColor = vec4((txtNworld) * 0.25,1) + vec4(0.25,0.25,0.25,0) + (vec4(0.5,0.5,0.5,0) * ((fTangent.a / 2.0) + 0.5));
 	//gl_FragColor = (vec4(fTangent.aaa,1) / 4.0) + vec4(0.5,0.5,0.5,0);
 	//gl_FragColor = vec4(texture2D( texture[3], fUV ).rrr,1);
-	//gl_FragColor = vec4(shadow.xxx,1);
+	//gl_FragColor = vec4(mask1.rgb,1);
 }

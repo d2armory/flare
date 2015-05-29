@@ -4,10 +4,29 @@ RenderStep Scene::currentStep = RS_SCENE;
 GLuint Scene::shadowFrameBuffer = 0;
 GLuint Scene::shadowDepthTexture = 0;
 
+int Scene::drawShadow = 1;
+float Scene::shadowMapCoverage = 200.0f;
+
+glm::vec3 Scene::camPosition = glm::vec3(0.0f,100.0f,250.0f);
+glm::vec3 Scene::camTarget = glm::vec3(0.0f,100.0f,0.0f);
+float Scene::fov = 45.0f;
+float Scene::screenHeight = 640.0f;
+float Scene::screenWidth = 960.0f;
+float Scene::nearZ = 0.01f;
+float Scene::farZ = 1000.0f;
+
 glm::vec3 Scene::lightDir = glm::vec3(-1.0,-1.0,-1.0);
 
 void Scene::InitShadowmap()
 {
+	
+	char depthsupport = emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(),"WEBGL_depth_texture");
+	if(!depthsupport)
+	{
+		Scene::drawShadow = 0;
+		return;
+	}
+	
 	shadowFrameBuffer = 0;
 	glGenFramebuffers(1, &shadowFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFrameBuffer);

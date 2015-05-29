@@ -26,8 +26,12 @@ public:
 	GLuint locViewTransform;
 	GLuint locProjTransform;
 	GLuint locDepthBiasMvpTransform;
+	GLuint locMvTransform;
+	GLuint locMvpTransform;
+	GLuint locNTransform;
 	
 	GLuint locLightDir;
 	GLuint locTexture;
+	GLuint locDrawShadow;
 	
 };

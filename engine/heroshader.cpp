@@ -86,9 +86,15 @@ void HeroShader::Load()
 	locModelTransform = glGetUniformLocation(programObject, "modelTransform");
 	locViewTransform = glGetUniformLocation(programObject, "viewTransform");
 	locProjTransform = glGetUniformLocation(programObject, "projTransform");
+	
+	locMvTransform = glGetUniformLocation(programObject, "mvTransform");
+	locMvpTransform = glGetUniformLocation(programObject, "mvpTransform");
+	locNTransform = glGetUniformLocation(programObject, "nTransform");
+	
 	locDepthBiasMvpTransform = glGetUniformLocation(programLocation, "depthBiasMvpTransform");
 	locLightDir = glGetUniformLocation(programObject, "lightDir");
 	locTexture = glGetUniformLocation(programObject, "texture");
+	locDrawShadow = glGetUniformLocation(programObject, "drawShadow");
 }
 
 void HeroShader::Bind(Model* m)
@@ -102,32 +108,39 @@ void HeroShader::Bind(Model* m)
 void HeroShader::Populate(Model* m)
 {
 	
-	//UserData *userData = (UserData*) esContext->userData;
-	//glm::mat4 m0 = glm::rotate(glm::mat4(1),(float) M_PI,glm::vec3(1,0,0));
-	//glm::mat4 m1 = glm::rotate(glm::mat4(1),userData->deg,glm::vec3(0,1,0));
-	//glm::mat4 m2 = glm::translate(m1, glm::vec3(0,0,0));
-	
 	bool renderInLightSpace = false;
 	
 	glUniformMatrix4fv(locModelTransform, 1, GL_FALSE, &m->modelTransform[0][0]);
 	
-	glm::mat4 v = glm::translate(glm::mat4(1), glm::vec3(0,-100,-250));
-	glm::mat4 p = glm::perspective (45.0f, 1.5f, 0.01f, 1000.0f);
-	if(!renderInLightSpace) glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &v[0][0]);
-	if(!renderInLightSpace) glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &p[0][0]);
+	glm::mat4 v = glm::lookAt(Scene::camPosition, Scene::camTarget, glm::vec3(0,1,0));
+	glm::mat4 p = glm::perspective (Scene::fov, Scene::screenWidth/Scene::screenHeight, Scene::nearZ, Scene::farZ);
+	if(!renderInLightSpace) 
+	{
+		glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &v[0][0]);
+		glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &p[0][0]);
+		glm::mat4 mv = v * m->modelTransform;
+		glm::mat4 mvp = p * mv;
+		glm::mat3 nt = glm::mat3(mv);
+		glUniformMatrix4fv(locMvTransform, 1, GL_FALSE, &mv[0][0]);
+		glUniformMatrix4fv(locMvpTransform, 1, GL_FALSE, &mvp[0][0]);
+		glUniformMatrix3fv(locNTransform, 1, GL_FALSE, &nt[0][0]);
+	}
 	
 	// shadow map
+	
+	glUniform1iv(locDrawShadow, 1, &Scene::drawShadow);
+	
 	glm::vec3 lightDir = glm::normalize(Scene::lightDir);//glm::vec3(-1.0,-10.0,-1.0);
 	lightDir = glm::mat3(v) * lightDir;
 	if(!renderInLightSpace) glUniform3fv(locLightDir, 1, &lightDir[0] );
 	glm::vec3 lightInvDir = lightDir * -1.0f;
 	
-	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-200,200,-200,200,-200,200);
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-Scene::shadowMapCoverage,Scene::shadowMapCoverage,-Scene::shadowMapCoverage,Scene::shadowMapCoverage,-Scene::shadowMapCoverage,Scene::shadowMapCoverage);
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
 	glm::mat4 depthMvp = depthProjectionMatrix * depthViewMatrix * m->modelTransform;
 	glm::mat4 biasMatrix(1);
 	// use screen size here?
-	biasMatrix = glm::scale(biasMatrix,glm::vec3(960.0f/1024.0f,640.0f/1024.0f,1.0f));
+	biasMatrix = glm::scale(biasMatrix,glm::vec3(Scene::screenWidth/1024.0f,Scene::screenHeight/1024.0f,1.0f));
 	biasMatrix = glm::translate(biasMatrix,glm::vec3(0.5f,0.5f,0.5f));
 	biasMatrix = glm::scale(biasMatrix,glm::vec3(0.5f,0.5f,0.5f));
 	glm::mat4 depthBiasMvp = biasMatrix * depthMvp;
@@ -137,9 +150,18 @@ void HeroShader::Populate(Model* m)
 	
 	//lightDir = glm::normalize(Scene::lightDir);//glm::vec3(-1.0,-10.0,-1.0);
 	lightDir = glm::vec3(0,0,-1);//glm::mat3(v) * lightDir;
-	if(renderInLightSpace) glUniform3fv(locLightDir, 1, &lightDir[0] );
-	if(renderInLightSpace) glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &depthViewMatrix[0][0]);
-	if(renderInLightSpace) glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &depthProjectionMatrix[0][0]);
+	if(renderInLightSpace) 
+	{
+		glUniform3fv(locLightDir, 1, &lightDir[0] );
+		glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &depthViewMatrix[0][0]);
+		glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &depthProjectionMatrix[0][0]);
+		glm::mat4 mv = depthViewMatrix * m->modelTransform;
+		glm::mat4 mvp = depthProjectionMatrix * mv;
+		glm::mat3 nt = glm::mat3(mv);
+		glUniformMatrix4fv(locMvTransform, 1, GL_FALSE, &mv[0][0]);
+		glUniformMatrix4fv(locMvpTransform, 1, GL_FALSE, &mvp[0][0]);
+		glUniformMatrix3fv(locNTransform, 1, GL_FALSE, &nt[0][0]);
+	}
 	
 	if(m->material != 0)
 	{
@@ -147,8 +169,11 @@ void HeroShader::Populate(Model* m)
 	}
 	
 	// bind shadowmap
-	glActiveTexture(GL_TEXTURE0 + 4);
-	glBindTexture(GL_TEXTURE_2D, Scene::shadowDepthTexture);
+	if(Scene::drawShadow)
+	{
+		glActiveTexture(GL_TEXTURE0 + 4);
+		glBindTexture(GL_TEXTURE_2D, Scene::shadowDepthTexture);
+	}
 	
 	const GLint samplers[5] = {0,1,2,3,4}; // we've bound our textures in textures 0 and 1.
 	glUniform1iv( locTexture, 5, samplers );
@@ -163,8 +188,11 @@ void HeroShader::Unbind(Model* m)
 	}
 	
 	//unbind shadow map
-	glActiveTexture(GL_TEXTURE0 + 4);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	if(Scene::drawShadow)
+	{
+		glActiveTexture(GL_TEXTURE0 + 4);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 	
 	// Use the program object
 	glUseProgram ( 0 );

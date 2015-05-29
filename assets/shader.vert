@@ -13,6 +13,10 @@ uniform mat4 viewTransform;
 uniform mat4 projTransform;
 uniform mat4 depthBiasMvpTransform;
 
+uniform mat4 mvTransform;
+uniform mat4 mvpTransform;
+uniform mat3 nTransform;
+
 // fs output
 varying vec2 fUV;
 varying vec3 fPos;
@@ -36,17 +40,14 @@ vec3 v3normalize(vec3 a)
 void main()
 {
 	// TODO: move MV and MVP to uniform
-	gl_Position = projTransform * viewTransform * modelTransform * vec4(vPosition,1);
+	gl_Position = mvpTransform * vec4(vPosition,1);
 	fUV = vUV;
-	fPos = (viewTransform * modelTransform * vec4(vPosition,1)).xyz;
+	fPos = (mvTransform * vec4(vPosition,1)).xyz;
 	fNormal = vNormal;
 	fTangent = vTangent;//normalTransform * vTangent;
 	
-	// TODO: move to uniform
-	mat3 normalTransform = mat3(viewTransform) * mat3(modelTransform);
-	
-	fN = normalTransform * v3normalize(fNormal);
-	fT = normalTransform * v3normalize(fTangent.xyz);
+	fN = nTransform * v3normalize(fNormal);
+	fT = nTransform * v3normalize(fTangent.xyz);
 	fB = cross(fT, fN);
 	
 	fShadowCoord = (depthBiasMvpTransform * vec4(vPosition,1)).xyz;
