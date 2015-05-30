@@ -43,10 +43,12 @@ int Init ( ESContext *esContext )
 	// Init
 	Manager::Init();
 	Scene::InitFeatures();
+	Scene::InitDefaultTextures();
 	
 	// Passable data
 	esContext->userData = (char*) malloc(sizeof(UserData));
 	UserData *userData = (UserData*) esContext->userData;
+	userData->deg = 0;
 	
 	// Shader Init
 	// - For hero
@@ -70,6 +72,9 @@ int Init ( ESContext *esContext )
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+	
+	// Final Render map
+	Scene::InitFinalRender();
 	
 	// Create shadowmap buffer and texture
 	Scene::InitShadowmap();
@@ -169,7 +174,7 @@ void Draw ( ESContext *esContext )
 		}
 		// Draw real scene
 		Scene::currentStep = RS_SCENE;
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, Scene::finalRenderFrameBuffer);
 		glColorMask(true, true, true, true);
 		glClearColor (0, 0, 0, 0.0f );
 		glClear ( GL_COLOR_BUFFER_BIT );
@@ -182,13 +187,19 @@ void Draw ( ESContext *esContext )
 				mx[m]->Draw(esContext);
 			}
 		}
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glColorMask(true, true, true, true);
+		glClearColor (0, 0, 0, 0.0f );
+		glClear ( GL_COLOR_BUFFER_BIT );
+		glClear ( GL_DEPTH_BUFFER_BIT );
+		Scene::FinalRender();
 	}
 	else
 	{
 		// Shadow map only mode
 		Scene::currentStep = RS_SHADOW;
-		//glBindFramebuffer(GL_FRAMEBUFFER, Scene::shadowFrameBuffer);
-		//glColorMask(false, false, false, false);
+		glBindFramebuffer(GL_FRAMEBUFFER, Scene::finalRenderFrameBuffer);
+		glColorMask(true, true, true, true);
 		glClearColor (1.0f, 1.0f, 1.0f, 1.0f );
 		glClear ( GL_COLOR_BUFFER_BIT );
 		glClear ( GL_DEPTH_BUFFER_BIT );
@@ -200,6 +211,12 @@ void Draw ( ESContext *esContext )
 				mx[m]->Draw(esContext);
 			}
 		}
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glColorMask(true, true, true, true);
+		glClearColor (0, 0, 0, 0.0f );
+		glClear ( GL_COLOR_BUFFER_BIT );
+		glClear ( GL_DEPTH_BUFFER_BIT );
+		Scene::FinalRender();
 	}
 }
 

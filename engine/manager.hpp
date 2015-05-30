@@ -7,6 +7,7 @@
 // forward dec
 class Model;
 class Material;
+class Texture;
 
 #include "model.hpp"
 #include "material.hpp"

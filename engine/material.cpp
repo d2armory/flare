@@ -100,10 +100,21 @@ void Material::Bind()
 	if(state == FS_READY)
 	{
 		//printf("Binding mat %X %X %X %X\n",textureDiffuse,textureNormal,textureMask1,textureMask2);
-		if(textureDiffuse) textureDiffuse->Bind(0);
-		if(textureNormal) textureNormal->Bind(1);
-		if(textureMask1) textureMask1->Bind(2);
-		if(textureMask2) textureMask2->Bind(3);
+		if(textureDiffuse && textureDiffuse->state == FS_READY) textureDiffuse->Bind(0);
+		else Scene::defaultDiffuse->Bind(0);
+		if(textureNormal && textureNormal->state == FS_READY) textureNormal->Bind(1);
+		else Scene::defaultNormal->Bind(1);
+		if(textureMask1 && textureMask1->state == FS_READY) textureMask1->Bind(2);
+		else Scene::defaultMask1->Bind(2);
+		if(textureMask2 && textureMask2->state == FS_READY) textureMask2->Bind(3);
+		else Scene::defaultMask2->Bind(3);
+	}
+	else
+	{
+		Scene::defaultDiffuse->Bind(0);
+		Scene::defaultNormal->Bind(1);
+		Scene::defaultMask1->Bind(2);
+		Scene::defaultMask2->Bind(3);
 	}
 }
 
@@ -111,9 +122,20 @@ void Material::Unbind()
 {
 	if(state == FS_READY)
 	{
-		if(textureDiffuse) textureDiffuse->Unbind(0);
-		if(textureNormal) textureNormal->Unbind(1);
-		if(textureMask1) textureMask1->Unbind(2);
-		if(textureMask2) textureMask2->Unbind(3);
+		if(textureDiffuse && textureDiffuse->state == FS_READY) textureDiffuse->Unbind(0);
+		else Scene::defaultDiffuse->Unbind(0);
+		if(textureNormal && textureNormal->state == FS_READY) textureNormal->Unbind(1);
+		else Scene::defaultNormal->Unbind(1);
+		if(textureMask1 && textureMask1->state == FS_READY) textureMask1->Unbind(2);
+		else Scene::defaultMask1->Unbind(2);
+		if(textureMask2 && textureMask2->state == FS_READY) textureMask2->Unbind(3);
+		else Scene::defaultMask2->Unbind(3);
+	}
+	else
+	{
+		Scene::defaultDiffuse->Unbind(0);
+		Scene::defaultNormal->Unbind(1);
+		Scene::defaultMask1->Unbind(2);
+		Scene::defaultMask2->Unbind(3);
 	}
 }

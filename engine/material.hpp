@@ -5,6 +5,8 @@
 #include "manager.hpp"
 #include "kvreader.hpp"
 
+class Texture;
+
 #define MATERIAL_NAME_LENGTH 128
 
 class Material
