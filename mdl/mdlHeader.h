@@ -3,6 +3,7 @@
 #include "../glm/glm.hpp"
 #include "mdlBone.h"
 #include "mdlTexture.h"
+#include "mdlAnimDesc.h"
 
 // code straight from https://github.com/ValveSoftware/source-sdk-2013/blob/master/sp/src/public/studio.h
 
@@ -95,7 +96,7 @@ struct mdlHeader
 //private:
 	int					numlocalanim;			// animations/poses
 	int					localanimindex;		// animation descriptions
-  	//inline mstudioanimdesc_t *pLocalAnimdesc( int i ) const { if (i < 0 || i >= numlocalanim) i = 0; return (mstudioanimdesc_t *)(((byte *)this) + localanimindex) + i; };
+  	inline mdlAnimDesc *pLocalAnimdesc( int i ) const { if (i < 0 || i >= numlocalanim) i = 0; return (mdlAnimDesc *)(((byte *)this) + localanimindex) + i; };
 
 	int					numlocalseq;				// sequences
 	int					localseqindex;
@@ -231,7 +232,7 @@ struct mdlHeader
 
 	// for demand loaded animation blocks
 	int					szanimblocknameindex;	
-	//inline char * const pszAnimBlockName( void ) const { return ((char *)this) + szanimblocknameindex; }
+	inline char * const pszAnimBlockName( void ) const { return ((char *)this) + szanimblocknameindex; }
 	int					numanimblocks;
 	int					animblockindex;
 	//inline mstudioanimblock_t *pAnimBlock( int i ) const { Assert( i > 0 && i < numanimblocks); return (mstudioanimblock_t *)(((byte *)this) + animblockindex) + i; };

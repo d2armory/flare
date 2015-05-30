@@ -44,29 +44,42 @@ void Material::Update()
 			{
 				if(node->key != 0)
 				{
-					// assume mat name for most part
-					std::string txtFilename = std::string(node->value);
-					txtFilename = "materials/" + txtFilename + ".vtf";
-					const char* txtFNC = txtFilename.c_str();
-						
+		
 					if(strcmp(node->key,"$basetexture") == 0)
 					{
+						// might want to make function of preparing txt filename
+						std::string txtFilename = std::string(node->value);
+						txtFilename = "materials/" + txtFilename;
+						if(txtFilename.find(".vtf")==std::string::npos) txtFilename = txtFilename + ".vtf";
+						const char* txtFNC = txtFilename.c_str();
 						printf("Use %s as diffuse\n",txtFNC);
 						if((textureDiffuse = Manager::find(txtFNC))==0) Manager::add(textureDiffuse = new Texture(txtFNC));
 						//printf("mat %X %X %X %X\n",textureDiffuse,textureNormal,textureMask1,textureMask2);
 					}
 					else if(strcmp(node->key,"$normalmap") == 0)
 					{
+						std::string txtFilename = std::string(node->value);
+						txtFilename = "materials/" + txtFilename;
+						if(txtFilename.find(".vtf")==std::string::npos) txtFilename = txtFilename + ".vtf";
+						const char* txtFNC = txtFilename.c_str();
 						printf("Use %s as normal\n",txtFNC);
 						if((textureNormal = Manager::find(txtFNC))==0) Manager::add(textureNormal = new Texture(txtFNC));
 					}
 					else if(strcmp(node->key,"$maskmap1") == 0)
 					{
+						std::string txtFilename = std::string(node->value);
+						txtFilename = "materials/" + txtFilename;
+						if(txtFilename.find(".vtf")==std::string::npos) txtFilename = txtFilename + ".vtf";
+						const char* txtFNC = txtFilename.c_str();
 						printf("Use %s as mask 1\n",txtFNC);
 						if((textureMask1 = Manager::find(txtFNC))==0) Manager::add(textureMask1 = new Texture(txtFNC));
 					}
 					else if(strcmp(node->key,"$maskmap2") == 0)
 					{
+						std::string txtFilename = std::string(node->value);
+						txtFilename = "materials/" + txtFilename;
+						if(txtFilename.find(".vtf")==std::string::npos) txtFilename = txtFilename + ".vtf";
+						const char* txtFNC = txtFilename.c_str();
 						printf("Use %s as mask 2\n",txtFNC);
 						if((textureMask2 = Manager::find(txtFNC))==0) Manager::add(textureMask2 = new Texture(txtFNC));
 					}

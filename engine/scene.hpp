@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../es/esUtil.h"
+#include "../common.h"
 #include <stdio.h>
 #include "../glm/glm.hpp"
 #include <html5.h>
@@ -14,13 +14,23 @@ enum RenderStep
 class Scene
 {
 public:
+
+	static void InitFeatures();
+	static void InitShadowmap();
+
 	static RenderStep currentStep;
+	
+	static bool enableShadow;
+	static bool enableTextureCompression;
+	static bool enableVAO;
+	
+	static bool supportShadow;
+	static bool supportTextureCompression;
+	static bool supportVAO;
 	
 	static GLuint shadowFrameBuffer;
 	static GLuint shadowDepthTexture;
-	static void InitShadowmap();
 	
-	static int drawShadow;
 	static glm::vec3 lightDir;
 	static float shadowMapCoverage;
 	

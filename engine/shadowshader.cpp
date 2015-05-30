@@ -58,7 +58,7 @@ void ShadowShader::Load()
 			char* infoLog = (char*) malloc (sizeof(char) * infoLen );
 
 			glGetProgramInfoLog ( programObject, infoLen, NULL, infoLog );
-			esLogMessage ( "Error linking program:\n%s\n", infoLog );            
+			printf("Error linking program:\n%s\n",infoLog);           
 			
 			free ( infoLog );
 		}

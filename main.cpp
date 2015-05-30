@@ -1,93 +1,81 @@
-//
-// Book:      OpenGL(R) ES 2.0 Programming Guide
-// Authors:   Aaftab Munshi, Dan Ginsburg, Dave Shreiner
-// ISBN-10:   0321502795
-// ISBN-13:   9780321502797
-// Publisher: Addison-Wesley Professional
-// URLs:      http://safari.informit.com/9780321563835
-//            http://www.opengles-book.com
-//
 
-// Hello_Triangle.c
-//
-//    This is a simple example that draws a single triangle with
-//    a minimal vertex/fragment shader.  The purpose of this 
-//    example is to demonstrate the basic concepts of 
-//    OpenGL ES 2.0 rendering.
+/*
+
+	Flare DotA Viewer Engine
+	
+	Author: KennyZero (@bongikairu)
+
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
+#include <sys/time.h>
 #include <emscripten.h>
 
-#include "es/esUtil.h"
-#include <sys/time.h>
-
+#include "gl.h"
+#include "common.h"
 #include "engine/common.hpp"
 
-#include "common.h"
+// Application Context
+ESContext* context;
 
-///
-// Initialize the shader and program object
-//
-
-int Init ( ESContext *esContext )
-{
-	
-	Manager::Init();
-	
-	esContext->userData = (char*) malloc(sizeof(UserData));
-
-	UserData *userData = (UserData*) esContext->userData;
-	
-	HeroShader* hShader = new HeroShader();
-	hShader->Load();
-	userData->heroShader = hShader;
-	
-	ShadowShader* sShader = new ShadowShader();
-	sShader->Load();
-	userData->shadowShader = sShader;
-	
-	//userData->deg = M_PI;
-	
-	//printf("%d\n",userData->rotateLocation);
-
-	glClearColor (0, 0, 0, 0.0f );
-	glEnable(GL_BLEND);
-	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CW);
-	
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	
-	Scene::InitShadowmap();
-	
-	return GL_TRUE;
-}
-
-///
-// Draw a triangle using the shader pair created in Init()
-//
-
-ESContext esContext;
-UserData  userData;
-
+// Time
 struct timeval t1, t2;
 struct timezone tz;
 float deltatime;
 float totaltime = 0.0f;
 unsigned int frames = 0;
 
+// App data (move to userdata later)
 bool axe_data = false;
 bool bounty_data = false;
-
 float total = 0;
-
 int modelCount = 6;
-
 Model** mx = 0;
+
+int Init ( ESContext *esContext )
+{
+	
+	// Start time reference
+	gettimeofday ( &t1 , &tz );
+	
+	// Init
+	Manager::Init();
+	Scene::InitFeatures();
+	
+	// Passable data
+	esContext->userData = (char*) malloc(sizeof(UserData));
+	UserData *userData = (UserData*) esContext->userData;
+	
+	// Shader Init
+	// - For hero
+	HeroShader* hShader = new HeroShader();
+	hShader->Load();
+	userData->heroShader = hShader;
+	// - For shadowmap
+	ShadowShader* sShader = new ShadowShader();
+	sShader->Load();
+	userData->shadowShader = sShader;
+	
+	// Canvas transparency
+	glClearColor (0, 0, 0, 0.0f );
+	glEnable(GL_BLEND);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	
+	// Back Face Culling
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CW);
+	
+	// Enable depth test
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	
+	// Create shadowmap buffer and texture
+	Scene::InitShadowmap();
+	
+	return GL_TRUE;
+}
 
 void Update ( ESContext *esContext, float deltaTime )
 {
@@ -155,12 +143,16 @@ void Update ( ESContext *esContext, float deltaTime )
 void Draw ( ESContext *esContext )
 {
 
-	// Set the viewport
-	glViewport ( 0, 0, esContext->width, esContext->height );
+	// Reset the viewport
+	glViewport(0, 0, floor(Scene::screenWidth), floor(Scene::screenHeight));
 
+	// if set to true, draw shadowmap
 	bool showShadowmap = false;
+	
 	if(!showShadowmap)
 	{
+		// Normal draw mode
+		// Generate shadowmap
 		Scene::currentStep = RS_SHADOW;
 		glBindFramebuffer(GL_FRAMEBUFFER, Scene::shadowFrameBuffer);
 		//glColorMask(false, false, false, false);
@@ -175,7 +167,7 @@ void Draw ( ESContext *esContext )
 				mx[m]->Draw(esContext);
 			}
 		}
-		
+		// Draw real scene
 		Scene::currentStep = RS_SCENE;
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glColorMask(true, true, true, true);
@@ -193,6 +185,7 @@ void Draw ( ESContext *esContext )
 	}
 	else
 	{
+		// Shadow map only mode
 		Scene::currentStep = RS_SHADOW;
 		//glBindFramebuffer(GL_FRAMEBUFFER, Scene::shadowFrameBuffer);
 		//glColorMask(false, false, false, false);
@@ -217,12 +210,19 @@ void mainloop()
 	deltatime = (float)(t2.tv_sec - t1.tv_sec + (t2.tv_usec - t1.tv_usec) * 1e-6);
 	t1 = t2;
 
-	esMainLoop(&esContext);
+	if (context->updateFunc != NULL)
+	{
+		context->updateFunc(context, deltatime);
+	}
+	if (context->drawFunc != NULL)
+	{
+		context->drawFunc(context);
+	}
 
 	totaltime += deltatime;
 	frames++;
 	
-	const float fpsRefresh = 2.0f;
+	const float fpsRefresh = 5.0f;
 	
 	if (totaltime >  fpsRefresh)
 	{
@@ -231,43 +231,69 @@ void mainloop()
 		frames = 0;
 	}
 	
+	glfwSwapBuffers(context->m_window);
+	glfwPollEvents();
+	
+}
+
+void errorCallback(int error, const char *description) {
+	printf("GLFW Error %d: %s\n",error,description);
 }
 
 int main ( int argc, char *argv[] )
 {
-	 
-	 printf("Starting Flare DotA Model Viewer Engine ..\n");
-	 
-	 /* glm::vec4 v(1,2,3,4);
-	 v += glm::vec4(-10,10,100,-100);
-	 
-	 printf("%f %f %f %f\n",v.x,v.y,v.z,v.w); 
-	 
-	 glm::mat4 m = glm::rotate( glm::mat4(1.0f), (float) M_PI / 2 , glm::vec3(-1.0f, 0.0f, 0.0f));
-	 
-	 v = v * m;
-	 
-	 printf("%f %f %f %f\n",v.x,v.y,v.z,v.w);  */
-
-	esInitContext ( &esContext );
-	esContext.userData = &userData;
-
-	esCreateWindow ( &esContext, "Flare", 960, 640, ES_WINDOW_RGB | ES_WINDOW_DEPTH );
-
-	if ( !Init ( &esContext ) )
-		return 0;
-
-	esRegisterUpdateFunc ( &esContext, Update );
-
-	esRegisterDrawFunc ( &esContext, Draw );
-
-	//esMainLoop ( &esContext );
 	
-	gettimeofday ( &t1 , &tz );
+	printf("Starting Flare DotA Model Viewer Engine ..\n");
 	
-	//FileLoader::Load("models/heroes/axe/axe.mdl");
+	// don't change it after you set it here
+	Scene::screenWidth = 960.0f;
+	Scene::screenHeight = 640.0f;
 	
+	context = new ESContext();
+	context->userData = new UserData();
+	
+	glfwSetErrorCallback(errorCallback);
+	
+	if( !glfwInit() )
+	{
+		printf("Unable to initialize GLFW (%s,%d)\n",__FILE__,__LINE__);
+		return 1;
+	}
+
+	context->m_window = glfwCreateWindow(floor(Scene::screenWidth), floor(Scene::screenHeight), "Flare", 0, 0);
+	//context->m_window = glfwOpenWindow(floor(Scene::screenWidth), floor(Scene::screenHeight), 0,0,0,0,16,0, GLFW_WINDOW);
+
+	if(!context->m_window )
+	{
+		glfwTerminate();
+		printf("Unable to create GLFW window (%s,%d)\n",__FILE__,__LINE__);
+		return 1;
+	}
+
+	glfwMakeContextCurrent(context->m_window);
+
+	if ( glewInit() != GLEW_OK )
+	{
+		printf("Unable to initialize GLeW (%s,%d)\n",__FILE__,__LINE__);
+		return 1;
+	}
+
+	// HID Callback
+	//glfwSetKeyCallback(m_window,key_callback);
+	//glfwSetCursorPosCallback(m_window, cursor_pos_callback);
+	//glfwSetFramebufferSizeCallback(m_window,framebuffer_size_callback);
+
+	glViewport(0, 0, floor(Scene::screenWidth), floor(Scene::screenHeight));
+
+	// bind draw and update
+	context->updateFunc = Update;
+	context->drawFunc = Draw;
+	
+	Init(context);
+	
+	// set main loop function
 	emscripten_set_main_loop(mainloop, -1,0);
 	
+	return 0;
 	
 }

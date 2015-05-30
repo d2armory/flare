@@ -71,7 +71,7 @@ void HeroShader::Load()
 			char* infoLog = (char*) malloc (sizeof(char) * infoLen );
 
 			glGetProgramInfoLog ( programObject, infoLen, NULL, infoLog );
-			esLogMessage ( "Error linking program:\n%s\n", infoLog );            
+			printf("Error linking program:\n%s\n",infoLog);
 			
 			free ( infoLog );
 		}
@@ -108,10 +108,11 @@ void HeroShader::Bind(Model* m)
 void HeroShader::Populate(Model* m)
 {
 	
+	// debug flag: draw scene in light PoV
 	bool renderInLightSpace = false;
 	
+	// normal MVP and related matrix binding
 	glUniformMatrix4fv(locModelTransform, 1, GL_FALSE, &m->modelTransform[0][0]);
-	
 	glm::mat4 v = glm::lookAt(Scene::camPosition, Scene::camTarget, glm::vec3(0,1,0));
 	glm::mat4 p = glm::perspective (Scene::fov, Scene::screenWidth/Scene::screenHeight, Scene::nearZ, Scene::farZ);
 	if(!renderInLightSpace) 
@@ -126,29 +127,27 @@ void HeroShader::Populate(Model* m)
 		glUniformMatrix3fv(locNTransform, 1, GL_FALSE, &nt[0][0]);
 	}
 	
-	// shadow map
-	
-	glUniform1iv(locDrawShadow, 1, &Scene::drawShadow);
-	
+	// Light
 	glm::vec3 lightDir = glm::normalize(Scene::lightDir);//glm::vec3(-1.0,-10.0,-1.0);
 	lightDir = glm::mat3(v) * lightDir;
 	if(!renderInLightSpace) glUniform3fv(locLightDir, 1, &lightDir[0] );
-	glm::vec3 lightInvDir = lightDir * -1.0f;
 	
+	// Shadowmap Transform
+	glm::vec3 lightInvDir = lightDir * -1.0f;
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-Scene::shadowMapCoverage,Scene::shadowMapCoverage,-Scene::shadowMapCoverage,Scene::shadowMapCoverage,-Scene::shadowMapCoverage,Scene::shadowMapCoverage);
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
 	glm::mat4 depthMvp = depthProjectionMatrix * depthViewMatrix * m->modelTransform;
 	glm::mat4 biasMatrix(1);
-	// use screen size here?
+	// glm matrix is left to right
 	biasMatrix = glm::scale(biasMatrix,glm::vec3(Scene::screenWidth/1024.0f,Scene::screenHeight/1024.0f,1.0f));
 	biasMatrix = glm::translate(biasMatrix,glm::vec3(0.5f,0.5f,0.5f));
 	biasMatrix = glm::scale(biasMatrix,glm::vec3(0.5f,0.5f,0.5f));
 	glm::mat4 depthBiasMvp = biasMatrix * depthMvp;
 	glUniformMatrix4fv(locDepthBiasMvpTransform, 1, GL_FALSE, &depthBiasMvp[0][0]);
+	int drawShadow = Scene::enableShadow;
+	glUniform1iv(locDrawShadow, 1, &drawShadow);
 	
-	// get these from camera
-	
-	//lightDir = glm::normalize(Scene::lightDir);//glm::vec3(-1.0,-10.0,-1.0);
+	// debug mode code
 	lightDir = glm::vec3(0,0,-1);//glm::mat3(v) * lightDir;
 	if(renderInLightSpace) 
 	{
@@ -163,18 +162,17 @@ void HeroShader::Populate(Model* m)
 		glUniformMatrix3fv(locNTransform, 1, GL_FALSE, &nt[0][0]);
 	}
 	
+	// texture binding
 	if(m->material != 0)
 	{
 		m->material->Bind();
 	}
-	
 	// bind shadowmap
-	if(Scene::drawShadow)
+	if(Scene::enableShadow)
 	{
 		glActiveTexture(GL_TEXTURE0 + 4);
 		glBindTexture(GL_TEXTURE_2D, Scene::shadowDepthTexture);
 	}
-	
 	const GLint samplers[5] = {0,1,2,3,4}; // we've bound our textures in textures 0 and 1.
 	glUniform1iv( locTexture, 5, samplers );
 }
@@ -182,18 +180,17 @@ void HeroShader::Populate(Model* m)
 void HeroShader::Unbind(Model* m)
 {
 	
+	// unbind texture
 	if(m->material != 0)
 	{
 		m->material->Unbind();
 	}
-	
 	//unbind shadow map
-	if(Scene::drawShadow)
+	if(Scene::enableShadow)
 	{
 		glActiveTexture(GL_TEXTURE0 + 4);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-	
-	// Use the program object
+	// unbind shader
 	glUseProgram ( 0 );
 }

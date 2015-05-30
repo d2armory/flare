@@ -1,7 +1,8 @@
 #pragma once
 
 #include "enum.hpp"
-#include "../es/esUtil.h"
+#include "scene.hpp"
+#include "../common.h"
 #include "fileLoader.hpp"
 #include "../mdl/common.h"
 #include <cstring>

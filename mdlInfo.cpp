@@ -52,7 +52,7 @@ int main(void)
 	
 	if(mdlHeaderSize!=mdlHeaderSizeExpected) return 1;
 	
-	/* printf("Openning mdl file\n");
+	printf("Openning mdl file\n");
 	
 	const char* fileName = "testbin/axe.mdl";
 	
@@ -88,9 +88,9 @@ int main(void)
 	printf("- Length: %d\n",mh->length);
 	
 	
-	const bool dumpBones = true;
+	const bool dumpBones = false;
 	const bool dumpAnim = true;
-	const bool dumpTextures = true;
+	const bool dumpTextures = false;
 	
 	
 	if(dumpBones)
@@ -124,8 +124,70 @@ int main(void)
 		}
 	}
 	
+	
+	if(dumpAnim)
+	{
+		printf("Retrieving animation list\n");
+		
+		printf("- Num anims: %d\n",mh->numlocalanim);
+		
+		for(int i=0;i<mh->numlocalanim;i++)
+		{
+			mdlAnimDesc* animDesc = mh->pLocalAnimdesc(i);
+			printf("--- %i: %s\n",i,animDesc->pszName());
+			printf("----- frames: %i\n",animDesc->numframes);
+			printf("----- fps: %i\n",animDesc->numframes);
+			printf("----- flags: %X\n",animDesc->flags);
+			printf("----- animblock: %i\n",animDesc->animblock);
+			printf("----- animindex: %i\n",animDesc->animindex);
+			mdlAnim* anim = 0;
+			int ac = 0;
+			if(i==3)
+			{
+				anim = (mdlAnim*) (((char*) animDesc) + animDesc->animindex);
+				ac = 0;
+				while(anim!=0)
+				{
+					printf("------- anim %i\n",ac++);
+					printf("--------- bone: %i\n",anim->bone);
+					printf("--------- flag: %i\n",anim->flags);
+					printf("--------- offset: %i\n",anim->nextoffset);
+					anim = anim->pNext();
+				}
+				
+			}
+			printf("----- nummovements: %i\n",animDesc->nummovements);
+			printf("----- movementindex: %i\n",animDesc->movementindex);
+			printf("----- sectionindex: %i\n",animDesc->sectionindex);
+			printf("----- sectionframes: %i\n",animDesc->sectionframes);
+			if(i==3)
+			{
+				for(int s=0;s<animDesc->sectionframes;s++)
+				{
+					mdlAnimSection* section = animDesc->pSection(s);
+					printf("------- section %i\n",s);
+					printf("--------- animblock: %i\n",section->animblock);
+					printf("--------- animindex: %i\n",section->animindex);
+					//anim = (mdlAnim*) (((char*) section) + section->animindex);
+					//ac = 0;
+					//while(anim!=0)
+					//{
+					//	printf("----------- anim %i\n",ac++);
+					//	printf("------------- bone: %i\n",anim->bone);
+					//	printf("------------- flag: %i\n",anim->flags);
+					//	printf("------------- offset: %i\n",anim->nextoffset);
+					//	anim = anim->pNext();
+					//}
+				}
+			}
+		}
+		
+		printf("- External animblock num: %d\n",mh->numanimblocks);
+		printf("- Animblock filename: %s\n",mh->pszAnimBlockName());
+	}
+	
 	free(fileData);
-	*/
+	
 	
 	/* printf("Openning vtx file\n");
 	
@@ -277,7 +339,7 @@ int main(void)
 	free(fileData);
 	*/
 	
-	printf("Openning vtm file\n");
+	/*printf("Openning vtm file\n");
 	
 	const char* fileName = "testbin/axe_armor_color.vmt";
 	
@@ -306,7 +368,7 @@ int main(void)
 	
 	KVReader::Clean(root);
 	
-	free(fileData);
+	free(fileData);*/
 	
 	return 0;
 }

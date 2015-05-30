@@ -44,7 +44,7 @@ void FileLoader::Load(const char* fileName)
 	
 	FileLoader::PrepareDirectory(fileName);
 	
-	printf("Fetching: %s\n",fileUrl.c_str());
+	printf("[Loader] Fetching: %s\n",fileUrl.c_str());
 	
 	emscripten_async_wget2(fileUrl.c_str(),fileName,"GET","",0,&FileLoader::LoadCallbackSuccess,&FileLoader::LoadCallbackFail,0);
 	
@@ -52,7 +52,7 @@ void FileLoader::Load(const char* fileName)
 
 void FileLoader::LoadCallbackSuccess(unsigned int num, void* some, const char* fileName)
 {
-	printf("Fetched: %s\n",fileName);
+	printf("[Loader] Fetched: %s\n",fileName);
 }
 
 void FileLoader::LoadCallbackFail(unsigned int num, void* some, int num2)

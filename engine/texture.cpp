@@ -39,17 +39,16 @@ void Texture::Update()
 			vtfHeader* txtHeader = (vtfHeader*) txtData;
 			
 			printf("texture: %s\n",fileName);
-			printf("- signature: 0x%X\n",(unsigned int) txtHeader->signature);
-			printf("- version: %d.%d\n",txtHeader->version[0],txtHeader->version[1]);
-			printf("- header size: %d\n",txtHeader->headerSize);
+			//printf("- signature: 0x%X\n",(unsigned int) txtHeader->signature);
+			//printf("- version: %d.%d\n",txtHeader->version[0],txtHeader->version[1]);
+			//printf("- header size: %d\n",txtHeader->headerSize);
 			printf("- size: WxH =  %dx%d\n",txtHeader->width,txtHeader->height);
-			printf("- num frame: %d\n",txtHeader->frames);
-			printf("- high res format: %d\n",txtHeader->highResImageFormat);
-			printf("- mipmap count: %d\n",txtHeader->mipmapCount);
-			//printf("- high res format: %d\n",*((int*) (((char*) (&txtHeader->highResImageFormat)) + 5)));
-			printf("- low res format: %d\n",txtHeader->lowResImageFormat);
-			printf("- depth: %d\n",txtHeader->depth);
-			printf("- num resources: %d\n",txtHeader->numResources);
+			//printf("- num frame: %d\n",txtHeader->frames);
+			//printf("- high res format: %d\n",txtHeader->highResImageFormat);
+			//printf("- mipmap count: %d\n",txtHeader->mipmapCount);
+			//printf("- low res format: %d\n",txtHeader->lowResImageFormat);
+			//printf("- depth: %d\n",txtHeader->depth);
+			//printf("- num resources: %d\n",txtHeader->numResources);
 			
 			unsigned int reiPad = 80;	// entry start at 80 from file pointer
 			
@@ -60,26 +59,22 @@ void Texture::Update()
 			
 			int numFaces = (isCubemap)?6:1;
 			
-			char dxtsupport = emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(),"WEBGL_compressed_texture_s3tc");
-			
-			if(dxtsupport) printf("- using webgl compressed texture\n");
-			
 			for(int r=0;r<txtHeader->numResources;r++)
 			{
 				vtfResouceEntryInfo* rei = (vtfResouceEntryInfo*) (txtData + reiPad + (sizeof(vtfResouceEntryInfo) * r));
-				printf("--- res #%d: 0x%X (%c%c%c)\n",r,rei->eType,rei->chTypeBytes[0],rei->chTypeBytes[1],rei->chTypeBytes[2]);
+				//printf("--- res #%d: 0x%X (%c%c%c)\n",r,rei->eType,rei->chTypeBytes[0],rei->chTypeBytes[1],rei->chTypeBytes[2]);
 				if((rei->chTypeBytes[3] & 0x02) != 0)
 				{
-					printf("----- data: 0x%X\n",rei->offset);
+				//	printf("----- data: 0x%X\n",rei->offset);
 				}
 				if(rei->eType==0x30)
 				{
 					char* entry = txtData + rei->offset;
 					
 					// disable for now
-					if(false && txtHeader->highResImageFormat != IMAGE_FORMAT_DXT5)
+					if(!(txtHeader->highResImageFormat == IMAGE_FORMAT_DXT1 || txtHeader->highResImageFormat == IMAGE_FORMAT_DXT5))
 					{
-						printf("----- image not in dxt5 format, abort\n");
+						printf("----- Texture not in dxt1/dxt5 format, abort!\n");
 					}
 					else
 					{
@@ -112,7 +107,7 @@ void Texture::Update()
 								break;
 							default:
 								sqImageType = 1 << 31;
-								printf("----- unspoorted image format %d\n",txtHeader->highResImageFormat);
+								printf("----- unsupported image format %d\n",txtHeader->highResImageFormat);
 								break;
 						}
 						
@@ -171,22 +166,17 @@ void Texture::Update()
 									}
 								}
 								
-								if(dxtsupport && txtHeader->highResImageFormat == IMAGE_FORMAT_DXT1)
+								if(Scene::enableTextureCompression)
 								{
-									glCompressedTexImage2D(	txtTypeFS, m, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
-								
-									//printf("----- mm #%d : %dx%d , dxtSize: %d (webgl dxt1)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2]);
-									
-								}
-								else if(dxtsupport && txtHeader->highResImageFormat == IMAGE_FORMAT_DXT5)
-								{
-									
 									const GLenum COMPRESSED_RGBA_S3TC_DXT5_EXT = 0x83F3;
-
-									glCompressedTexImage2D(	txtTypeFS, m, COMPRESSED_RGBA_S3TC_DXT5_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
-								
-									//printf("----- mm #%d : %dx%d , dxtSize: %d (webgl dxt5 extension)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2]);
-									
+									if(txtHeader->highResImageFormat == IMAGE_FORMAT_DXT1)
+									{
+										glCompressedTexImage2D(	txtTypeFS, m, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
+									}
+									else if(txtHeader->highResImageFormat == IMAGE_FORMAT_DXT5)
+									{
+										glCompressedTexImage2D(	txtTypeFS, m, COMPRESSED_RGBA_S3TC_DXT5_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
+									}
 								}
 								else
 								{

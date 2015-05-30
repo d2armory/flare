@@ -20,6 +20,7 @@ Model::Model(const char* fileName)
 	material = 0;
 	shader = 0;
 	shaderShadow = 0;
+	vao = 0;
 }
 
 Model::~Model()
@@ -64,11 +65,11 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			char* mhId = (char*) &mh->id;
 			
 			printf("model: %s\n",fileName);
-			printf("- ID: %c%c%c%c (0x%X)\n",*mhId,*(mhId+1),*(mhId+2),*(mhId+3),mh->id);
-			printf("- Version: %d\n",mh->version);
-			printf("- Checksum: 0x%X\n",mh->checksum);
-			printf("- Name: %s\n",mh->name);
-			printf("- Length: %d\n",mh->length);
+			//printf("- ID: %c%c%c%c (0x%X)\n",*mhId,*(mhId+1),*(mhId+2),*(mhId+3),mh->id);
+			//printf("- Version: %d\n",mh->version);
+			//printf("- Checksum: 0x%X\n",mh->checksum);
+			//printf("- Name: %s\n",mh->name);
+			//printf("- Length: %d\n",mh->length);
 			
 			// assume 1 material per model
 			mdlTexture* texture = mh->pTexture(0);
@@ -80,10 +81,8 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			material = new Material(txtFilename.c_str());
 			Manager::add(material);
 			
-			// NO VAO for us :(
-			// VAO gen
-			//glGenVertexArrays(1, &this->vao);
-			//glBindVertexArray(this->vao);
+			// Try to set VAO
+			SetVAO();
 			
 			// VBO gen
 			glGenBuffers(2, (GLuint*) &this->vertexVBO);
@@ -99,16 +98,16 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			
 			vData = (vvdHeader*) FileLoader::ReadFile(vertexFileName);
 			
-			printf("vertices: %s\n",vertexFileName);
-			printf("- id: %d\n",vData->id);
-			printf("- version: %d\n",vData->version);
-			printf("- checksum: %ld\n",vData->checksum);
-			printf("- num lods: %d\n",vData->numLODs);
+			//printf("vertices: %s\n",vertexFileName);
+			//printf("- id: %d\n",vData->id);
+			//printf("- version: %d\n",vData->version);
+			//printf("- checksum: %ld\n",vData->checksum);
+			//printf("- num lods: %d\n",vData->numLODs);
 			vertexCount = 0;
 			for(int l=0;l<vData->numLODs;l++)
 			{
 				vertexCount += vData->numLODVertexes[l];
-				printf("--- lod %d: %d verts\n",l,vData->numLODVertexes[l]);
+				//printf("--- lod %d: %d verts\n",l,vData->numLODVertexes[l]);
 			}
 			// ignore fixup
 			//printf("- num fixup: %d\n",vData->numFixups);
@@ -121,7 +120,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			unsigned int vertexBufferSize = (sizeof(vvdVertexFormat)) * vertexCount;
 			glBufferData(GL_ARRAY_BUFFER, vertexBufferSize , vertexData, GL_STATIC_DRAW);
 			
-			printf("err = %d\n",glGetError());
+			//printf("err = %d\n",glGetError());
 			
 			//tangentOffset = vData->tangentDataStart - vData->vertexDataStart;
 			
@@ -135,14 +134,20 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			unsigned int tangentBufferSize = sizeof(glm::vec4) * vertexCount;
 			glBufferData(GL_ARRAY_BUFFER, tangentBufferSize , tangentData, GL_STATIC_DRAW);
 			
-			//this->SetVAO();
+			if(Scene::enableVAO)
+			{
+				glGenVertexArrays(1, &this->vao);
+				glBindVertexArray(this->vao);
+				this->SetVAO();
+				glBindVertexArray(0);
+			}
 			
 			// bind mesh
 			mData = (vtxHeader*) FileLoader::ReadFile(meshFileName);
-			printf("meshes: %s\n",meshFileName);
-			printf("- version: %d\n",mData->version);
-			printf("- num lods: %d\n",mData->numLODs);
-			printf("- num bodyparts: %d\n",mData->numBodyParts);
+			//printf("meshes: %s\n",meshFileName);
+			//printf("- version: %d\n",mData->version);
+			//printf("- num lods: %d\n",mData->numLODs);
+			//printf("- num bodyparts: %d\n",mData->numBodyParts);
 			
 			//elementLength = 0;
 			
@@ -150,7 +155,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			if(mData->numBodyParts==1)
 			{
 				vtxBodyPart* bp = (vtxBodyPart*) (((char*)(mData)) + mData->bodyPartOffset);
-				printf("- num models: %d\n",bp->numModels);
+				//printf("- num models: %d\n",bp->numModels);
 				// assume 1 models
 				if(bp->numModels==1)
 				{
@@ -158,22 +163,22 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					for(int l=0;l<mh->numLODs;l++)
 					{
 						vtxModelLOD* mlod = ((vtxModelLOD*) (((char*)(mh)) + mh->lodOffset)) + l;
-						printf("--- lod %d: mesh = %d\n",l,mlod->numMeshes);
+						//printf("--- lod %d: mesh = %d\n",l,mlod->numMeshes);
 						if(l==0)
 						{
 							for(int m=0;m<mlod->numMeshes;m++)
 							{
 								vtxMesh* msh = ((vtxMesh*) (((char*)(mlod)) + mlod->meshOffset)) + m;
-								printf("----- mesh %d: strip group = %d\n",m,msh->numStripGroups);
+								//printf("----- mesh %d: strip group = %d\n",m,msh->numStripGroups);
 								for(int sg=0;sg<msh->numStripGroups;sg++)
 								{
 									vtxStripGroup* stripgr = ((vtxStripGroup*) (((char*)(msh)) + msh->stripGroupHeaderOffset)) + sg;
 									
-									printf("------- strip group %d\n",sg);
-									printf("--------- verts: %d\n",stripgr->numVerts);
-									printf("--------- indices: %d\n",stripgr->numIndices);
-									printf("--------- strips: %d\n",stripgr->numStrips);
-									printf("--------- flag: 0x%X\n",stripgr->flags);
+									//printf("------- strip group %d\n",sg);
+									//printf("--------- verts: %d\n",stripgr->numVerts);
+									//printf("--------- indices: %d\n",stripgr->numIndices);
+									//printf("--------- strips: %d\n",stripgr->numStrips);
+									//printf("--------- flag: 0x%X\n",stripgr->flags);
 									
 									if((stripgr->flags & 0x02) != 0)
 									{
@@ -259,7 +264,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 										}
 										printf("\n"); */
 										
-										printf("--------- put stripgroup %d to vbo %d : %d unsigned short transfered\n",sg,this->meshVBO[numStrip],stripgr->numIndices);
+										//printf("--------- put stripgroup %d to vbo %d : %d unsigned short transfered\n",sg,this->meshVBO[numStrip],stripgr->numIndices);
 										
 										glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->meshVBO[numStrip]);
 										glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * stripgr->numIndices, elementBuffer, GL_STATIC_DRAW);
@@ -271,7 +276,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 									}
 									else
 									{
-										printf("----------- non-hw skin grp, skip\n");
+										//printf("----------- non-hw skin grp, skip\n");
 									}
 									
 								}
@@ -279,7 +284,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 						}
 						else
 						{
-							printf("----- skipping non-0 lod\n");
+							//printf("----- skipping non-0 lod\n");
 						}
 					}
 				}
@@ -317,36 +322,48 @@ void Model::Draw(ESContext *esContext)
 	
 	if(state == FS_READY)
 	{
-		// Load the vertex data
-		for(int i=0;i<numStrip;i++) 
+		// vao
+		if(Scene::enableVAO)
 		{
-			//printf("%X\n",shader);
-			
-			bool shaderActive = 
+			glBindVertexArray(this->vao);
+		}
+		else
+		{
+			this->SetVAO();
+		}
+		// shader check
+		bool shaderActive = 
 				(Scene::currentStep == RS_SCENE && shader != 0) || 
 				(Scene::currentStep == RS_SHADOW && shaderShadow != 0);
-			
-			if(meshVBO[i]!=0 && shaderActive)
+		if(shaderActive)
+		{
+			// draw each strip
+			for(int i=0;i<numStrip;i++) 
 			{
-				
-				if(Scene::currentStep==RS_SCENE) shader->Bind(this);
-				else if(Scene::currentStep==RS_SHADOW) shaderShadow->Bind(this);
-				
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVBO[i]);
-				SetVAO();
-				
-				if(Scene::currentStep==RS_SCENE) shader->Populate(this);
-				else if(Scene::currentStep==RS_SHADOW) shaderShadow->Populate(this);
-	
-				// real drawing code, just 3 lines lol
-				glDrawElements(GL_TRIANGLES, elementLength[i], GL_UNSIGNED_SHORT, 0);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-	
-				if(Scene::currentStep==RS_SCENE) shader->Unbind(this);
-				else if(Scene::currentStep==RS_SHADOW) shaderShadow->Unbind(this);
+				if(meshVBO[i]!=0)
+				{
+					
+					if(Scene::currentStep==RS_SCENE) shader->Bind(this);
+					else if(Scene::currentStep==RS_SHADOW) shaderShadow->Bind(this);
+					
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVBO[i]);
+					
+					if(Scene::currentStep==RS_SCENE) shader->Populate(this);
+					else if(Scene::currentStep==RS_SHADOW) shaderShadow->Populate(this);
+		
+					// real drawing code, just 3 lines lol
+					glDrawElements(GL_TRIANGLES, elementLength[i], GL_UNSIGNED_SHORT, 0);
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+					glBindBuffer(GL_ARRAY_BUFFER, 0);
+		
+					if(Scene::currentStep==RS_SCENE) shader->Unbind(this);
+					else if(Scene::currentStep==RS_SHADOW) shaderShadow->Unbind(this);
+				}
 			}
-
+		}
+		if(Scene::enableVAO)
+		{
+			glBindVertexArray(0);
 		}
 	}
 }
@@ -354,7 +371,7 @@ void Model::Draw(ESContext *esContext)
 void Model::SetVAO()
 {
 	if(this->vertexVBO[0]!=0)
-	{
+	{ 
 		glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[0]);
 		// XYZ pos
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 16);

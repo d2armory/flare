@@ -2,7 +2,6 @@
 
 #include "../common.h"
 #include "../mdl/common.h"
-#include "../es/esUtil.h"
 #include "enum.hpp"
 #include "manager.hpp"
 #include "material.hpp"
@@ -52,8 +51,8 @@ public:
 	vtxHeader* mData;
 	
 	int vertexCount;
-	// no vao in es2.0 :(
-	//GLuint vao;
+	
+	GLuint vao;
 	GLuint vertexVBO[2];
 	int numStrip;
 	GLuint meshVBO[MODEL_STRIP_COUNT];

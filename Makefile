@@ -2,13 +2,14 @@ SHELL := /bin/bash
 PATH  := /root/emsdk_portable:/root/emsdk_portable/clang/fastcomp/build_master_64/bin:/root/emsdk_portable/emscripten/master:$(PATH)
 
 COMPILER = emcc
-#OPTIMIZE = -s DEMANGLE_SUPPORT=1 -Werror -s ASSERTIONS=2
-OPTIMIZE = -Werror
+#OPTIMIZE = -s DEMANGLE_SUPPORT=1 -Werror -s ASSERTIONS=2 -s FULL_ES2=1 -lglfw
+OPTIMIZE = -Werror -s FULL_ES2=1 -s USE_GLFW=3
+LDLIBS = 
 
 all: flare
 
-flare: main.bc es/esUtil.bc glm.bc assets.bc engine.bc squish.bc
-	$(COMPILER) $(OPTIMIZE) main.bc es/esUtil.bc engine.bc squish.bc -o /usr/share/nginx/html/app/raw.html --preload-file assets
+flare: main.bc glm.bc assets.bc engine.bc squish.bc
+	$(COMPILER) $(OPTIMIZE) main.bc engine.bc squish.bc -o /usr/share/nginx/html/app/raw.html --preload-file assets $(LDLIBS)
 	sed -i 's/div\.emscripten_border { border: 1px solid black;/div\.emscripten_border { border: 1px solid black; background: url(http:\/\/104\.236\.208\.106\/app\/Black_Texture___Ray_by_Ethenyl\.jpg) center bottom;/' /usr/share/nginx/html/app/raw.html
 	sed -i 's/alpha:\s*false/alpha:true/g' /usr/share/nginx/html/app/raw.js
 	sed -i 's/backgroundColor\s*=\s*"black"/backgroundColor="rgba(0,0,0,0)"/g' /usr/share/nginx/html/app/raw.js
@@ -16,8 +17,8 @@ flare: main.bc es/esUtil.bc glm.bc assets.bc engine.bc squish.bc
 main.bc: main.cpp
 	$(COMPILER) $(OPTIMIZE) main.cpp -o main.bc
 	
-es/esUtil.bc: es/esUtil.h es/esUtil.c
-	$(COMPILER) $(OPTIMIZE) es/esUtil.c -o es/esUtil.bc
+#es/esUtil.bc: es/esUtil.h es/esUtil.c
+#	$(COMPILER) $(OPTIMIZE) es/esUtil.c -o es/esUtil.bc
 	
 engine.bc: engine/fileLoader.cpp engine/fileLoader.hpp engine/material.cpp engine/material.hpp engine/model.cpp engine/model.hpp engine/texture.cpp engine/texture.hpp engine/manager.cpp engine/manager.hpp engine/shader.cpp engine/shader.hpp engine/heroshader.cpp engine/heroshader.hpp engine/shadowshader.cpp engine/shadowshader.hpp engine/kvreader.hpp engine/kvreader.cpp engine/scene.hpp engine/scene.cpp
 	$(COMPILER) $(OPTIMIZE) engine/manager.cpp -o engine/manager.bc
