@@ -4,6 +4,7 @@
 #include "mdlBone.h"
 #include "mdlTexture.h"
 #include "mdlAnimDesc.h"
+#include "mdlSeqDesc.h"
 
 // code straight from https://github.com/ValveSoftware/source-sdk-2013/blob/master/sp/src/public/studio.h
 
@@ -100,7 +101,7 @@ struct mdlHeader
 
 	int					numlocalseq;				// sequences
 	int					localseqindex;
-  	//inline mstudioseqdesc_t *pLocalSeqdesc( int i ) const { if (i < 0 || i >= numlocalseq) i = 0; return (mstudioseqdesc_t *)(((byte *)this) + localseqindex) + i; };
+  	inline mdlSeqDesc *pLocalSeqdesc( int i ) const { if (i < 0 || i >= numlocalseq) i = 0; return (mdlSeqDesc *)(((byte *)this) + localseqindex) + i; };
 
 //public:
 //	bool				SequencesAvailable() const;

@@ -6,6 +6,7 @@ typedef unsigned char byte;
 #include "mdlTexture.h"
 #include "mdlBone.h"
 #include "mdlAnimDesc.h"
+#include "mdlSeqDesc.h"
 #include "vtfHeader.h"
 #include "vvdHeader.h"
 #include "vtxHeader.h"

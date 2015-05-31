@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include "mdl/common.h"
 #include "glm/glm.hpp"
+#include "glm/gtc/quaternion.hpp"
+#include "glm/gtx/quaternion.hpp"
 #include "engine/kvreader.hpp"
 
 void PrintNode(PCST* cur)
@@ -29,6 +31,87 @@ void PrintNode(PCST* cur)
 	
 	PrintNode(cur->child);
 	PrintNode(cur->sibling);
+}
+
+void ExtractAnimValue( int frame, mdlAnimValue *panimvalue, float scale, float &v1)//, float &v2 )
+{
+
+	if ( !panimvalue )
+	{
+		v1 = 0;
+		return;
+	}
+
+	int k = frame;
+
+	while (panimvalue->num.total <= k)
+	{
+		k -= panimvalue->num.total;
+		panimvalue += panimvalue->num.valid + 1;
+		if ( panimvalue->num.total == 0 )
+		{
+			//Assert( 0 ); // running off the end of the animation stream is bad
+			v1 = 0;
+			return;
+		}
+	}
+	if (panimvalue->num.valid > k)
+	{
+		v1 = panimvalue[k+1].value * scale;
+	}
+	else
+	{
+		// get last valid data block
+		v1 = panimvalue[panimvalue->num.valid].value * scale;
+	}
+
+	/* int k = frame;
+
+	// find the data list that has the frame
+	while (panimvalue->num.total <= k)
+	{
+		k -= panimvalue->num.total;
+		panimvalue += panimvalue->num.valid + 1;
+	}
+	if (panimvalue->num.valid > k)
+	{
+		// has valid animation data
+		v1 = panimvalue[k+1].value * scale;
+
+		if (panimvalue->num.valid > k + 1)
+		{
+			// has valid animation blend data
+			v2 = panimvalue[k+2].value * scale;
+		}
+		else
+		{
+			if (panimvalue->num.total > k + 1)
+			{
+				// data repeats, no blend
+				v2 = v1;
+			}
+			else
+			{
+				// pull blend from first data block in next list
+				v2 = panimvalue[panimvalue->num.valid+2].value * scale;
+			}
+		}
+	}
+	else
+	{
+		// get last valid data block
+		v1 = panimvalue[panimvalue->num.valid].value * scale;
+		if (panimvalue->num.total > k + 1)
+		{
+			// data repeats, no blend
+			v2 = v1;
+		}
+		else
+		{
+			// pull blend from first data block in next list
+			v2 = panimvalue[panimvalue->num.valid + 2].value * scale;
+		}
+	} */
 }
 
 int main(void)
@@ -63,7 +146,8 @@ int main(void)
 	
 	printf("File size: %d bytes\n",fileSize);
 	
-	char* fileData = (char*) malloc(fileSize);
+	char* origFileData = (char*) malloc(fileSize+4);
+	char* fileData = (char*) ((((unsigned int) origFileData) + 3) & (~0x3));
 	int frrt = fread(fileData,fileSize,fileSize,fp);
 	
 	if(frrt==0) {
@@ -129,7 +213,7 @@ int main(void)
 	{
 		printf("Retrieving animation list\n");
 		
-		printf("- Num anims: %d\n",mh->numlocalanim);
+		/* printf("- Num anims: %d\n",mh->numlocalanim);
 		
 		for(int i=0;i<mh->numlocalanim;i++)
 		{
@@ -181,12 +265,146 @@ int main(void)
 				}
 			}
 		}
+		*/
 		
-		printf("- External animblock num: %d\n",mh->numanimblocks);
-		printf("- Animblock filename: %s\n",mh->pszAnimBlockName());
+		//printf("- External animblock num: %d\n",mh->numanimblocks);
+		//printf("- Animblock filename: %s\n",mh->pszAnimBlockName());
+		
+		printf("- Num seq: %d\n",mh->numlocalseq);
+		
+		//for(int i=0;i<mh->numlocalseq;i++)
+		//{
+		int i=3;
+			mdlSeqDesc* seqDesc = mh->pLocalSeqdesc(i);
+			printf("--- %i: %s\n",i,seqDesc->pszLabel());
+			//printf("----- grp0: %i\n",seqDesc->groupsize[0]);
+			//printf("----- grp1: %i\n",seqDesc->groupsize[1]);
+			//printf("----- frames: %i\n",seqDesc->numframes);
+			//printf("----- fps: %i\n",seqDesc->numframes);
+			//printf("----- flags: %X\n",seqDesc->flags);
+			//printf("----- animblock: %i\n",seqDesc->animblock);
+			//printf("----- animindex: %i\n",seqDesc->animindex);
+			if(seqDesc->groupsize[0]==1 && seqDesc->groupsize[1]==1)
+			{
+				mdlAnimDesc* animDesc = mh->pLocalAnimdesc(seqDesc->anim(0,0));
+				printf("----- anim %s\n",animDesc->pszName());
+				printf("------- frames: %i\n",animDesc->numframes);
+				printf("------- fps: %i\n",animDesc->numframes);
+				printf("------- flags: %X\n",animDesc->flags);
+				for(int f=0;f<animDesc->numframes&&f<=3;f++)
+				{
+					if((animDesc->flags & 0x0020) == 0)
+					{
+						
+						printf("--------- frame %d\n",f);
+						
+						int frame = f;
+						int* piFrame = &frame;
+						
+						mdlAnim* anim = 0;
+						
+						int block = animDesc->animblock;
+						int index = animDesc->animindex;
+						int section = 0;
+					
+						if (animDesc->sectionframes != 0)
+						{
+							if (animDesc->numframes > animDesc->sectionframes && *piFrame == animDesc->numframes - 1)
+							{
+								// last frame on long anims is stored separately
+								*piFrame = 0;
+								section = (animDesc->numframes / animDesc->sectionframes) + 1;
+							}
+							else
+							{
+								section = *piFrame / animDesc->sectionframes;
+								*piFrame -= section * animDesc->sectionframes;
+							}
+					
+							block = animDesc->pSection( section )->animblock;
+							index = animDesc->pSection( section )->animindex;
+						}
+					
+						if(block==0)
+						{
+							anim = (mdlAnim*) (((char*) animDesc) + index);
+						}
+						else
+						{
+							printf("what?\n");
+						}
+						
+						//for(int b=0;b<mh->numbones;b++)
+						//{
+						//	mdlBone* bone = mh->pBone(b);
+						//	float boneWeight = seqDesc->weight(b);
+						//}
+						for(int b=0;b<100&&anim!=0;b++)
+						{
+							mdlBone* bone = mh->pBone(b);
+							printf("----------- anim %d: bone %d, flag 0x%2X\n",b,anim->bone,anim->flags);
+							if(anim->flags & STUDIO_ANIM_RAWPOS) printf("------------- RAW_POS: %f, %f, %f\n",anim->pPos()->data[0].unpack(),anim->pPos()->data[1].unpack(),anim->pPos()->data[2].unpack());
+							if(anim->flags & STUDIO_ANIM_RAWROT)
+							{
+								Quaternion48* q48 = anim->pQuat48();
+								glm::quat q = q48->unpack();
+								glm::vec3 euler = glm::eulerAngles(q);
+								printf("------------- RAW_ROT: %f, %f, %f\n",euler[0],euler[1],euler[2]);
+							}
+							if(anim->flags & STUDIO_ANIM_ANIMPOS)
+							{
+								printf("------------- ANM_POS: %hu, %hu, %hu\n",anim->pPosV()->pAnimvalue(0)->value,anim->pPosV()->pAnimvalue(1)->value,anim->pPosV()->pAnimvalue(2)->value);
+							}
+							if(anim->flags & STUDIO_ANIM_ANIMROT)
+							{
+								printf("------------- ANM_ROT: %hu, %hu, %hu\n",anim->pRotV()->pAnimvalue(0)->value,anim->pRotV()->pAnimvalue(1)->value,anim->pRotV()->pAnimvalue(2)->value);
+								glm::vec3 baseRotScale = bone->rotscale;
+								glm::vec3 angle1(0,0,0);	// euler angle
+								//glm::vec3 angle2(0,0,0);
+								ExtractAnimValue( frame, anim->pRotV()->pAnimvalue( 0 ), baseRotScale[0], angle1[0]);//, angle2[0] );
+								ExtractAnimValue( frame, anim->pRotV()->pAnimvalue( 1 ), baseRotScale[1], angle1[1]);//, angle2[1] );
+								ExtractAnimValue( frame, anim->pRotV()->pAnimvalue( 2 ), baseRotScale[2], angle1[2]);//, angle2[2] );
+								// add base rotation here here
+								
+								//angle1[0] = angle1[0] * bone->rotscale[0] + bone->rot[0];
+								//angle1[1] = angle1[1] * bone->rotscale[1] + bone->rot[1];
+								//angle1[2] = angle1[2] * bone->rotscale[2] + bone->rot[2];
+								
+								//angle2[0] = angle2[0] * bone->rotscale[0] + bone->rot[0];
+								//angle2[1] = angle2[1] * bone->rotscale[1] + bone->rot[1];
+								//angle2[2] = angle2[2] * bone->rotscale[2] + bone->rot[2];
+								
+								angle1 += bone->rot;
+								//angle2 += bone->rot;
+								
+								//if(glm::all(glm::equal(angle1,angle2)))
+								//{
+									printf("--------------- EULERS: %f, %f, %f\n",angle1[0],angle1[1],angle1[2]);
+								//}
+								//else
+								//{
+								//	printf("--------------- EULERS1: %f, %f, %f\n",angle1[0],angle1[1],angle1[2]);
+								//	printf("--------------- EULERS2: %f, %f, %f\n",angle2[0],angle2[1],angle2[2]);
+								//}
+							}
+							if(anim->flags & STUDIO_ANIM_RAWROT2)
+							{
+								Quaternion64* q64 = anim->pQuat64();
+								glm::quat q = q64->unpack();
+								glm::vec3 euler = glm::eulerAngles(q);
+								printf("------------- RAW_ROT: %f, %f, %f\n",euler[0],euler[1],euler[2]);
+							}
+							anim = anim->pNext();
+						}
+					}
+					
+				}
+				
+			}
+		//}
 	}
 	
-	free(fileData);
+	free(origFileData);
 	
 	
 	/* printf("Openning vtx file\n");

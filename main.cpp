@@ -40,6 +40,9 @@ int Init ( ESContext *esContext )
 	// Start time reference
 	gettimeofday ( &t1 , &tz );
 	
+	// Scene setting
+	Scene::shadowMapCoverage = 250;
+	
 	// Init
 	Manager::Init();
 	Scene::InitFeatures();
@@ -174,7 +177,8 @@ void Draw ( ESContext *esContext )
 		}
 		// Draw real scene
 		Scene::currentStep = RS_SCENE;
-		glBindFramebuffer(GL_FRAMEBUFFER, Scene::finalRenderFrameBuffer);
+		//glBindFramebuffer(GL_FRAMEBUFFER, Scene::finalRenderFrameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glColorMask(true, true, true, true);
 		glClearColor (0, 0, 0, 0.0f );
 		glClear ( GL_COLOR_BUFFER_BIT );
@@ -187,18 +191,19 @@ void Draw ( ESContext *esContext )
 				mx[m]->Draw(esContext);
 			}
 		}
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		/* glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glColorMask(true, true, true, true);
 		glClearColor (0, 0, 0, 0.0f );
 		glClear ( GL_COLOR_BUFFER_BIT );
 		glClear ( GL_DEPTH_BUFFER_BIT );
-		Scene::FinalRender();
+		Scene::FinalRender(); */
 	}
 	else
 	{
 		// Shadow map only mode
 		Scene::currentStep = RS_SHADOW;
-		glBindFramebuffer(GL_FRAMEBUFFER, Scene::finalRenderFrameBuffer);
+		//glBindFramebuffer(GL_FRAMEBUFFER, Scene::finalRenderFrameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glColorMask(true, true, true, true);
 		glClearColor (1.0f, 1.0f, 1.0f, 1.0f );
 		glClear ( GL_COLOR_BUFFER_BIT );
@@ -211,12 +216,12 @@ void Draw ( ESContext *esContext )
 				mx[m]->Draw(esContext);
 			}
 		}
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		/* glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glColorMask(true, true, true, true);
 		glClearColor (0, 0, 0, 0.0f );
 		glClear ( GL_COLOR_BUFFER_BIT );
 		glClear ( GL_DEPTH_BUFFER_BIT );
-		Scene::FinalRender();
+		Scene::FinalRender(); */
 	}
 }
 
