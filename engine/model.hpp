@@ -9,6 +9,7 @@
 #include "shadowshader.hpp"
 #include "scene.hpp"
 #include <string>
+#include <math.h>
 
 
 #define MODEL_NAME_LENGTH 128
@@ -32,7 +33,7 @@ public:
 	// TODO: move to private and make accessor
 	
 	glm::vec4 position;
-	glm::vec4 rotation;
+	glm::vec4 rotation;	// euler
 	
 	glm::mat4 modelTransform;
 	
@@ -46,7 +47,7 @@ public:
 	FILE_STATE meshState;
 	FILE_STATE vertexState;
 	
-	mdlHeader* data;
+	mdlHeader* data;	// kept for animation data
 	vvdHeader* vData;
 	vtxHeader* mData;
 	
@@ -54,10 +55,26 @@ public:
 	
 	GLuint vao;
 	GLuint vertexVBO[2];
+	int tangentOffset;
+	
 	int numStrip;
 	GLuint meshVBO[MODEL_STRIP_COUNT];
 	int elementLength[MODEL_STRIP_COUNT];
-	int tangentOffset;
+	int meshBoneCount[MODEL_STRIP_COUNT];
+	unsigned int* meshBoneList[MODEL_STRIP_COUNT];	// to use in data preparation, 53 int for each strip (map to bonePos/boneRot)
+	unsigned int* meshBoneIndex[MODEL_STRIP_COUNT]; // to use in vert shader, 128 int for each strip
+	
+	int numBone;
+	glm::vec3* bonePos;	// array of position and rotation (in quat)
+	glm::quat* boneRot;
+	glm::mat4* boneTransform;
+	
+	// animation
+	bool posePrepared;
+	bool useAnimation;
+	
+	int curFrame;
+	float frameTime;
 	
 	HeroShader* shader;
 	ShadowShader* shaderShadow;
@@ -68,6 +85,6 @@ public:
 
 private:
 
-	
+	static void ExtractAnimValue( int frame, mdlAnimValue *panimvalue, float scale, float &v1);
 	
 };

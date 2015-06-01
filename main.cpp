@@ -37,6 +37,8 @@ Model** mx = 0;
 int Init ( ESContext *esContext )
 {
 	
+	bool engineSuccess = true;
+	
 	// Start time reference
 	gettimeofday ( &t1 , &tz );
 	
@@ -56,7 +58,7 @@ int Init ( ESContext *esContext )
 	// Shader Init
 	// - For hero
 	HeroShader* hShader = new HeroShader();
-	hShader->Load();
+	engineSuccess &= hShader->Load();
 	userData->heroShader = hShader;
 	// - For shadowmap
 	ShadowShader* sShader = new ShadowShader();
@@ -82,7 +84,7 @@ int Init ( ESContext *esContext )
 	// Create shadowmap buffer and texture
 	Scene::InitShadowmap();
 	
-	return GL_TRUE;
+	return engineSuccess;
 }
 
 void Update ( ESContext *esContext, float deltaTime )
@@ -133,6 +135,8 @@ void Update ( ESContext *esContext, float deltaTime )
 			mx[i]->shaderShadow = userData->shadowShader;
 			Manager::add(mx[i]);
 		}
+		
+		//mx[0]->useAnimation = true; // enable animation for model in index 0
 		
 		Model* pedes = mx[modelCount-1];
 		pedes->rotation[0] = - M_PI / 2.0f;
@@ -311,8 +315,13 @@ int main ( int argc, char *argv[] )
 	context->updateFunc = Update;
 	context->drawFunc = Draw;
 	
-	Init(context);
+	bool engineSuccess = Init(context);
 	
+	if(!engineSuccess) 
+	{
+		printf("Engine failed to start\n");
+		exit(1);
+	}
 	// set main loop function
 	emscripten_set_main_loop(mainloop, -1,0);
 	

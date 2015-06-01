@@ -36,7 +36,7 @@ void FileLoader::Load(const char* fileName)
 	if(FileLoader::FileExist(fileName)) return;
 	// add check for file loading in progress here?
 	
-	std::string baseUrl = "http://104.236.208.106/dota2/";
+	std::string baseUrl = "http://dota2-assets.yearbeast.com/dota2/";
 	//std::string baseUrl = "http://104.236.208.106:8080/";
 	std::string fName(fileName);
 	

@@ -4,6 +4,8 @@
 #include "../glm/gtc/quaternion.hpp"
 #include "../glm/gtx/quaternion.hpp"
 #include <inttypes.h>
+#include <emscripten.h>
+#include <stdio.h>
 
 #define STUDIO_ANIM_RAWPOS	0x01 // Vector48
 #define STUDIO_ANIM_RAWROT	0x02 // Quaternion48
@@ -100,19 +102,32 @@ struct Quaternion48
 };
 struct Quaternion64
 {
-	uint64_t x:21;
-	uint64_t y:21;
-	uint64_t z:21;
-	uint64_t wneg:1;
+	/* emscripten_align1_int x:21;
+	emscripten_align1_int y:21;
+	emscripten_align1_int z:21;
+	emscripten_align1_int wneg:1; */
+	unsigned char data[64];
 	inline glm::quat unpack(void) const
 	{
 		glm::quat tmp;
+		
+		unsigned char* p = (unsigned char*) this;
+		unsigned int nx = ((p[0]&0xFF)<<0) + ((p[1]&0xFF)<<8) + ((p[2]&0x1F)<<16);
+		unsigned int ny = ((p[2]&0xE0)>>5) + ((p[3]&0xFF)<<3) + ((p[4]&0xFF)<<11) + ((p[5]&0x03)<<19);
+		unsigned int nz = ((p[5]&0xFC)>>2) + ((p[6]&0xFF)<<6) + ((p[7]&0x7F)<<14);
+		unsigned int nw = ((p[7]&0x80)>>7);
+		
+		//int nw = ((int) *(((char*) this) + 63));
 		// shift to -1048576, + 1048575, then round down slightly to -1.0 < x < 1.0
-		tmp[0] = ((int)x - 1048576) * (1 / 1048576.5f);
-		tmp[1] = ((int)y - 1048576) * (1 / 1048576.5f);
-		tmp[2] = ((int)z - 1048576) * (1 / 1048576.5f);
+		tmp[0] = ((int)nx - 1048576) * (1 / 1048576.5f);
+		tmp[1] = ((int)ny - 1048576) * (1 / 1048576.5f);
+		tmp[2] = ((int)nz - 1048576) * (1 / 1048576.5f);
 		tmp[3] = sqrt( 1 - tmp[0] * tmp[0] - tmp[1] * tmp[1] - tmp[2] * tmp[2] );
-		if (wneg)
+		//if(tmp[0] * tmp[0] + tmp[1] * tmp[1] + tmp[2] * tmp[2] >= 1.0f)
+		//{
+		//	printf("quaternion error, w > 1 (%f, %f, %f)\n",tmp[0],tmp[1],tmp[2]);
+		//}
+		if (nw)
 			tmp[3] = -tmp[3];
 		return tmp; 
 	}
@@ -147,61 +162,61 @@ struct mdlAnim
 	inline Quaternion64		*pQuat64( void ) const { return (Quaternion64 *)(pData()); };
 	inline Vector48			*pPos( void ) const { return (Vector48 *)(pData() + ((flags & STUDIO_ANIM_RAWROT) != 0) * sizeof( *pQuat48() ) + ((flags & STUDIO_ANIM_RAWROT2) != 0) * sizeof( *pQuat64() ) ); };
 
-	short				nextoffset;
+	emscripten_align1_short				nextoffset;
 	inline mdlAnim	*pNext( void ) const { if (nextoffset != 0) return  (mdlAnim *)(((byte *)this) + nextoffset); else return NULL; };
 };
 
 struct mdlAnimSection
 {
-	int					animblock;
-	int					animindex;
+	emscripten_align1_int					animblock;
+	emscripten_align1_int					animindex;
 };
 
 struct mdlAnimDesc
 {
 
-	int					baseptr;
+	emscripten_align1_int					baseptr;
 	//inline studiohdr_t	*pStudiohdr( void ) const { return (studiohdr_t *)(((byte *)this) + baseptr); }
 
-	int					sznameindex;
+	emscripten_align1_int					sznameindex;
 	inline char * const pszName( void ) const { return ((char *)this) + sznameindex; }
 
-	float				fps;		// frames per second	
-	int					flags;		// looping/non-looping flags
+	emscripten_align1_float				fps;		// frames per second	
+	emscripten_align1_int					flags;		// looping/non-looping flags
 
-	int					numframes;
+	emscripten_align1_int					numframes;
 
 	// piecewise movement
-	int					nummovements;
-	int					movementindex;
+	emscripten_align1_int					nummovements;
+	emscripten_align1_int					movementindex;
 	//inline mstudiomovement_t * const pMovement( int i ) const { return (mstudiomovement_t *)(((byte *)this) + movementindex) + i; };
 
-	int					unused1[6];			// remove as appropriate (and zero if loading older versions)	
+	emscripten_align1_int					unused1[6];			// remove as appropriate (and zero if loading older versions)	
 
-	int					animblock;
-	int					animindex;	 // non-zero when anim data isn't in sections
+	emscripten_align1_int					animblock;
+	emscripten_align1_int					animindex;	 // non-zero when anim data isn't in sections
 	//mstudioanim_t *pAnimBlock( int block, int index ) const; // returns pointer to a specific anim block (local or external)
 	//mstudioanim_t *pAnim( int *piFrame, float &flStall ) const; // returns pointer to data and new frame index
 	//mstudioanim_t *pAnim( int *piFrame ) const; // returns pointer to data and new frame index
 
-	int					numikrules;
-	int					ikruleindex;	// non-zero when IK data is stored in the mdl
-	int					animblockikruleindex; // non-zero when IK data is stored in animblock file
+	emscripten_align1_int					numikrules;
+	emscripten_align1_int					ikruleindex;	// non-zero when IK data is stored in the mdl
+	emscripten_align1_int					animblockikruleindex; // non-zero when IK data is stored in animblock file
 	//mstudioikrule_t *pIKRule( int i ) const;
 
-	int					numlocalhierarchy;
-	int					localhierarchyindex;
+	emscripten_align1_int					numlocalhierarchy;
+	emscripten_align1_int					localhierarchyindex;
 	//mstudiolocalhierarchy_t *pHierarchy( int i ) const;
 
-	int					sectionindex;
-	int					sectionframes; // number of frames used in each fast lookup section, zero if not used
+	emscripten_align1_int					sectionindex;
+	emscripten_align1_int					sectionframes; // number of frames used in each fast lookup section, zero if not used
 	inline mdlAnimSection * const pSection( int i ) const { return (mdlAnimSection *)(((byte *)this) + sectionindex) + i; }
 
-	short				zeroframespan;	// frames per span
-	short				zeroframecount; // number of spans
-	int					zeroframeindex;
+	emscripten_align1_short				zeroframespan;	// frames per span
+	emscripten_align1_short				zeroframecount; // number of spans
+	emscripten_align1_int					zeroframeindex;
 	byte				*pZeroFrameData( ) const { if (zeroframeindex) return (((byte *)this) + zeroframeindex); else return NULL; };
-	mutable float		zeroframestalltime;		// saved during read stalls
+	mutable emscripten_align1_float		zeroframestalltime;		// saved during read stalls
 
 
 };

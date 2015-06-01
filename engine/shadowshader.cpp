@@ -81,8 +81,10 @@ void ShadowShader::Bind(Model* m)
 	
 }
 
-void ShadowShader::Populate(Model* m)
+void ShadowShader::Populate(Model* m, int stripGroupIdx)
 {
+	
+	// TODO: send bone data
 	
 	// get these from camera
 	glm::mat4 v = glm::lookAt(Scene::camPosition, Scene::camTarget, glm::vec3(0,1,0));

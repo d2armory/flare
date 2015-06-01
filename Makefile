@@ -3,14 +3,14 @@ PATH  := /root/emsdk_portable:/root/emsdk_portable/clang/fastcomp/build_master_6
 
 COMPILER = emcc
 #OPTIMIZE = -s DEMANGLE_SUPPORT=1 -Werror -s ASSERTIONS=2 -s FULL_ES2=1 -lglfw
-OPTIMIZE = -Werror -s FULL_ES2=1 -s USE_GLFW=3
+OPTIMIZE = -Werror -s FULL_ES2=1 -s USE_GLFW=3 -O2
 LDLIBS = 
 
 all: flare
 
 flare: main.bc glm.bc assets.bc engine.bc squish.bc
 	$(COMPILER) $(OPTIMIZE) main.bc engine.bc squish.bc -o /usr/share/nginx/html/app/raw.html --preload-file assets $(LDLIBS)
-	sed -i 's/div\.emscripten_border { border: 1px solid black;/div\.emscripten_border { border: 1px solid black; background: url(http:\/\/104\.236\.208\.106\/app\/Black_Texture___Ray_by_Ethenyl\.jpg) center bottom;/' /usr/share/nginx/html/app/raw.html
+	sed -i 's/div\.emscripten_border { border: 1px solid black;/div\.emscripten_border { border: 1px solid black; background: white; background: url(Black_Texture___Ray_by_Ethenyl\.jpg) center bottom;/' /usr/share/nginx/html/app/raw.html
 	sed -i 's/alpha:\s*false/alpha:true/g' /usr/share/nginx/html/app/raw.js
 	sed -i 's/backgroundColor\s*=\s*"black"/backgroundColor="rgba(0,0,0,0)"/g' /usr/share/nginx/html/app/raw.js
 

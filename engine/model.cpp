@@ -21,6 +21,24 @@ Model::Model(const char* fileName)
 	shader = 0;
 	shaderShadow = 0;
 	vao = 0;
+	
+	//meshBoneCount[0] = 0;
+	//meshBoneList[MODEL_STRIP_COUNT];
+	for(int i=0;i<MODEL_STRIP_COUNT;i++)
+	{
+		meshBoneCount[i] = 0;
+		meshBoneList[i] = 0;	// to be filled whend data came
+		meshBoneIndex[i] = 0;
+	}
+	
+	numBone = 0;
+	bonePos = 0;	// init after we know exact number
+	boneRot = 0;
+	
+	posePrepared = false;
+	useAnimation = false;
+	curFrame = -1;
+	frameTime = 99999.0f;
 }
 
 Model::~Model()
@@ -28,6 +46,8 @@ Model::~Model()
 	if(data) delete data;
 	if(vData) delete vData;
 	if(mData) delete mData;
+	if(bonePos) delete bonePos;
+	if(boneRot) delete boneRot;
 }
 
 void Model::Update(ESContext *esContext, float deltaTime)
@@ -81,8 +101,24 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			material = new Material(txtFilename.c_str());
 			Manager::add(material);
 			
-			// Try to set VAO
-			SetVAO();
+			//printf("- Num bones: %d\n",mh->numbones);
+			numBone = mh->numbones;
+			bonePos = new glm::vec3[numBone];
+			boneRot = new glm::quat[numBone];
+			boneTransform = new glm::mat4[numBone];
+		
+			for(int i=0;i<mh->numbones;i++)
+			{
+				boneTransform[i] = glm::mat4(1);
+				mdlBone* bone = mh->pBone(i);
+				printf("--- %i: %s",i,bone->pszName());
+				//if(bone->parent != -1)
+				//{
+				//	printf(" - %s (%i)",mh->pBone(bone->parent)->pszName(),bone->parent);
+				//}
+				//printf(" - %x",(unsigned int) &(bone->rot));
+				//printf("\n");
+			}
 			
 			// VBO gen
 			glGenBuffers(2, (GLuint*) &this->vertexVBO);
@@ -148,6 +184,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			//printf("- version: %d\n",mData->version);
 			//printf("- num lods: %d\n",mData->numLODs);
 			//printf("- num bodyparts: %d\n",mData->numBodyParts);
+			printf("max bone per strip = %d\n",mData->maxBonesPerStrip);
 			
 			//elementLength = 0;
 			
@@ -174,7 +211,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 								{
 									vtxStripGroup* stripgr = ((vtxStripGroup*) (((char*)(msh)) + msh->stripGroupHeaderOffset)) + sg;
 									
-									//printf("------- strip group %d\n",sg);
+									printf("------- strip group %d\n",sg);
 									//printf("--------- verts: %d\n",stripgr->numVerts);
 									//printf("--------- indices: %d\n",stripgr->numIndices);
 									//printf("--------- strips: %d\n",stripgr->numStrips);
@@ -219,6 +256,55 @@ void Model::Update(ESContext *esContext, float deltaTime)
 										}
 										printf("\n"); */
 										
+										// bone list for this strip
+										bool boneUsage[128];	// 128 bone per model
+										for(int b=0;b<128;b++)
+										{
+											boneUsage[b] = false;
+										}
+										for(int v=0;v<stripgr->numVerts;v++)
+										{
+											unsigned char* efp = vertexArrC + (v*9) + 4;
+											unsigned char* efp2 = efp + 1;
+											unsigned short evp = *efp;
+											unsigned short evp2 = *efp2;
+											unsigned int vID = (evp2 << 8) + evp;
+											vvdVertexFormat* vert = ((vvdVertexFormat*) (((char*) vData) + vData->vertexDataStart)) + vID;
+											//unsigned char* b1 = vertexArrC + (v*9) + 6;
+											//unsigned char* b2 = b1 + 1;
+											//unsigned char* b3 = b1 + 2;
+											unsigned char b1 = vert->boneid[0];
+											unsigned char b2 = vert->boneid[1];
+											unsigned char b3 = vert->boneid[2];
+											boneUsage[b1] = true;
+											boneUsage[b2] = true;
+											boneUsage[b3] = true;
+										}
+										
+										meshBoneCount[numStrip] = 0;
+										meshBoneList[numStrip] = new unsigned int[53];
+										meshBoneIndex[numStrip] = new unsigned int[128];
+										unsigned char bCounter = 0;
+										printf("Bone usage: ");
+										for(int b=0;b<128;b++)
+										{
+											if(boneUsage[b])
+											{
+												meshBoneCount[numStrip]++;
+												meshBoneList[numStrip][bCounter] = b;
+												meshBoneIndex[numStrip][b] = bCounter;
+												bCounter++;
+												printf("%d ",b);
+											}
+											else
+											{
+												meshBoneIndex[numStrip][b] = 0;	// fallback to root?
+											}
+										}
+										printf("\n");
+										
+										// if this model has parent, map bone id to parent instead
+										
 										for(int v=0;v<elementLength[numStrip];v++)
 										{
 											// need hack to access short correctly on non-aligned byte
@@ -240,6 +326,12 @@ void Model::Update(ESContext *esContext, float deltaTime)
 											unsigned short evp2 = *efp2;
 											elementBuffer[v] = (evp2 << 8) + evp;
 											//printf("%hu %hu ",*fp,*fp2);
+											
+											//unsigned char* b1 = efp2 + 1;
+											//unsigned char* b2 = efp2 + 2;
+											//unsigned char* b3 = efp2 + 3;
+											
+											//printf("bone: %d, %d, %d\n",*b1,*b2,*b3);
 											
 											//if(elementBuffer[idx] >= vertexCount) 
 											//{
@@ -304,6 +396,256 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			
 		}
 	}
+	else if(state==FS_READY)
+	{
+		// handle animation here
+		if(useAnimation)
+		{
+			mdlHeader* mh = data;
+			// 3 for loadout
+			mdlSeqDesc* seqDesc = mh->pLocalSeqdesc(0);
+			mdlAnimDesc* animDesc = mh->pLocalAnimdesc(seqDesc->anim(0,0));
+			
+			frameTime += deltaTime;
+			
+			if(frameTime>1.0f / animDesc->fps)
+			{
+				frameTime = 0.0f;
+				curFrame++;
+				
+				if(curFrame >= animDesc->numframes)
+				{
+					curFrame = 0;
+				}
+
+				if(seqDesc->groupsize[0]==1 && seqDesc->groupsize[1]==1)
+				{
+					//for(int f=0;f<animDesc->numframes&&f<=3;f++)
+					//{
+					// TODO: make it animate
+					// use frame 1
+					int f = curFrame;
+					
+					// check for data
+					if((animDesc->flags & 0x0020) == 0)
+					{
+						int frame = f;
+						int* piFrame = &frame;
+						
+						mdlAnim* anim = 0;
+						
+						int block = animDesc->animblock;
+						int index = animDesc->animindex;
+						int section = 0;
+					
+						if (animDesc->sectionframes != 0)
+						{
+							if (animDesc->numframes > animDesc->sectionframes && *piFrame == animDesc->numframes - 1)
+							{
+								// last frame on long anims is stored separately
+								*piFrame = 0;
+								section = (animDesc->numframes / animDesc->sectionframes) + 1;
+							}
+							else
+							{
+								section = *piFrame / animDesc->sectionframes;
+								*piFrame -= section * animDesc->sectionframes;
+							}
+					
+							block = animDesc->pSection( section )->animblock;
+							index = animDesc->pSection( section )->animindex;
+						}
+					
+						if(block==0)
+						{
+							anim = (mdlAnim*) (((char*) animDesc) + index);
+						}
+						else
+						{
+							printf("what?\n");
+						}
+						
+						// pre populate with bone data
+						for(int b=0;b<mh->numbones;b++)
+						{
+							mdlBone* bone = mh->pBone(b);
+							//float boneWeight = seqDesc->weight(b);
+							bonePos[b] = bone->pos;
+							boneRot[b] = bone->quat;
+						}
+						
+						for(int b=0;b<mh->numbones&&anim!=0;b++)
+						{
+							char boneId = anim->bone;
+							mdlBone* bone = mh->pBone(boneId);
+							
+							//printf("----------- anim %d: bone %d, flag 0x%2X\n",b,anim->bone,anim->flags);
+							if(anim->flags & STUDIO_ANIM_RAWPOS) 
+							{
+								// Raw position data in Vector48 format
+								bonePos[boneId] = anim->pPos()->unpack();
+							}
+							if(anim->flags & STUDIO_ANIM_RAWROT)
+							{
+								// Raw rotation data in Quat48 format
+								Quaternion48* q48 = anim->pQuat48();
+								glm::quat q = q48->unpack();
+								boneRot[boneId] = q;
+								//glm::vec3 euler = glm::eulerAngles(q);
+							}
+							if(anim->flags & STUDIO_ANIM_RAWROT2)
+							{
+								// Raw rotation data in Quat64 format
+								Quaternion64* q64 = anim->pQuat64();
+								glm::quat q = q64->unpack();
+								boneRot[boneId] = q;
+								//glm::vec3 euler = glm::eulerAngles(q);
+							}
+							if(anim->flags & STUDIO_ANIM_ANIMPOS)
+							{
+								glm::vec3 basePosScale = bone->posscale;
+								glm::vec3 trans(0,0,0);	// translation vector
+								ExtractAnimValue( frame, anim->pPosV()->pAnimvalue( 0 ), basePosScale[0], trans[0]);
+								ExtractAnimValue( frame, anim->pPosV()->pAnimvalue( 1 ), basePosScale[1], trans[1]);
+								ExtractAnimValue( frame, anim->pPosV()->pAnimvalue( 2 ), basePosScale[2], trans[2]);
+								trans += bone->pos;
+								bonePos[boneId] = trans;
+							}
+							if(anim->flags & STUDIO_ANIM_ANIMROT)
+							{
+								glm::vec3 baseRotScale = bone->rotscale;
+								glm::vec3 angle1(0,0,0);	// euler angle
+								ExtractAnimValue( frame, anim->pRotV()->pAnimvalue( 0 ), baseRotScale[0], angle1[0]);
+								ExtractAnimValue( frame, anim->pRotV()->pAnimvalue( 1 ), baseRotScale[1], angle1[1]);
+								ExtractAnimValue( frame, anim->pRotV()->pAnimvalue( 2 ), baseRotScale[2], angle1[2]);
+								angle1 += bone->rot;
+								angle1 *= 180.0f / M_PI;
+								boneRot[boneId] = glm::quat(angle1);
+								//if(!posePrepared) printf("--------------- EULERS: %f, %f, %f\n",angle1[0],angle1[1],angle1[2]);
+							}
+							anim = anim->pNext();
+						}
+						
+						// bone hierachy
+						for(int b=0;b<mh->numbones;b++)
+						{
+							mdlBone* bone = mh->pBone(b);
+							//bonePos[b] = bone->pos;
+							//boneRot[b] = bone->quat;
+							
+							//glm::vec3 bOrigPosSw(bone->pos[1],bone->pos[0],bone->pos[2]);
+							//glm::vec3 bAnimPosSw(bonePos[b][1],bonePos[b][0],bonePos[b][2]);
+							
+							glm::vec3 bOrigPosSw(bone->pos);
+							glm::vec3 bAnimPosSw(bonePos[b]);
+							
+							glm::quat bOrigRotSw(bone->quat);
+							glm::quat bAnimRotSw(boneRot[b]);
+							
+							if(b==0)
+							{
+								float tmp = bOrigPosSw[0];
+								bOrigPosSw[0] = bOrigPosSw[1];
+								bOrigPosSw[1] = -tmp;
+								tmp = bAnimPosSw[0];
+								bAnimPosSw[0] = bAnimPosSw[1];
+								bAnimPosSw[1] = -tmp;
+								bOrigRotSw = glm::rotate(bOrigRotSw, -90.0f, glm::vec3(0,0,1));
+								bAnimRotSw = glm::rotate(bAnimRotSw, -90.0f, glm::vec3(0,0,1));
+							}
+							
+							if(!posePrepared)
+							{
+								glm::vec3 euler0 = glm::eulerAngles(bOrigRotSw);
+								glm::vec3 euler = glm::eulerAngles(bAnimRotSw);
+								printf("[%d] %f %f %f %f %f %f (%f %f %f %f)\n",b,bOrigPosSw[0],bOrigPosSw[1],bOrigPosSw[2],euler0[0],euler0[1],euler0[2],bOrigRotSw[0],bOrigRotSw[1],bOrigRotSw[2],bOrigRotSw[3]);
+								printf("[%d] %f %f %f %f %f %f (%f %f %f %f)\n",b,bAnimPosSw[0],bAnimPosSw[1],bAnimPosSw[2],euler[0],euler[1],euler[2],bAnimRotSw[0],bAnimRotSw[1],bAnimRotSw[2],bAnimRotSw[3]);
+							}
+							
+							
+							int p = bone->parent;
+							if(p>b) 
+							{
+								printf("parent bone has higher index than child!\n");
+							}
+							
+							//glm::vec3 jointPos = bOrigPosSw;// glm::vec4(bonePos[b],1);
+							
+							/* if(p>=0)
+							{
+								int curPar = p;
+								mdlBone* par = 0;
+								do
+								{
+									par = mh->pBone(curPar);
+									jointPos -= glm::vec4(bonePos[curPar],0);
+									curPar = par->parent;
+								} while(curPar >= 0);
+								//jointPos = boneTransform[p] * jointPos;
+							} */
+							
+							if(b==0)
+							{
+								//bAnimPosSw = bOrigPosSw;
+								//boneRot[b] = bone->quat;
+								//bAnimRotSw = bOrigRotSw;
+							}
+							
+							//if(b==0)
+							//{
+							//	boneTransform[b] = glm::mat4(1);
+							//}
+							//else //if(b==1)
+							//{
+								/* glm::mat4 toSMD(
+									0.0f,	0.0f,	-1.0f,	0.0f,
+									1.0f,	0.0f,	0.0f,	0.0f,
+									0.0f,	1.0f,	0.0f,	0.0f,
+									0.0f,	0.0f,	0.0f,	1.0f
+								);
+								glm::mat4 fromSMD(
+									0.0f,	1.0f,	0.0f,	0.0f,
+									0.0f,	0.0f,	1.0f,	0.0f,
+									-1.0f,	0.0f,	0.0f,	0.0f,
+									0.0f,	0.0f,	0.0f,	1.0f
+								); */
+								glm::mat4 toSMD(1);/*
+									0.0f,	-1.0f,	0.0f,	0.0f,
+									0.0f,	0.0f,	1.0f,	0.0f,
+									1.0f,	0.0f,	0.0f,	0.0f,
+									0.0f,	0.0f,	0.0f,	1.0f
+								);*/
+								glm::mat4 fromSMD(1);/*
+									0.0f,	0.0f,	1.0f,	0.0f,
+									-1.0f,	0.0f,	0.0f,	0.0f,
+									0.0f,	1.0f,	0.0f,	0.0f,
+									0.0f,	0.0f,	0.0f,	1.0f
+								);*/
+								//toSMD = glm::transpose(toSMD);
+								//fromSMD = glm::transpose(fromSMD);
+								
+								boneTransform[b] = fromSMD * glm::translate(glm::mat4(1), bAnimPosSw) * glm::mat4_cast(bAnimRotSw) * glm::transpose(glm::mat4_cast(bOrigRotSw)) * glm::translate(glm::mat4(1), -1.0f * bOrigPosSw) * toSMD;
+							//} 
+							//else
+							//{
+							//	boneTransform[b] = glm::translate(glm::mat4(1), bAnimPosSw) /* * glm::mat4_cast(boneRot[b]) * glm::transpose(glm::mat4_cast(bone->quat))*/ * glm::translate(glm::mat4(1), -1.0f * jointPos);
+							//}
+							
+							if(p>=0)
+							{
+								boneTransform[b] = boneTransform[p] * boneTransform[b];
+								// calculate new pos/rot with parent pos/rot
+								//bonePos[b] = (boneRot[p] * bonePos[b]) + bonePos[p];
+								//boneRot[b] = boneRot[p] * boneRot[b];
+							}
+						}
+						posePrepared = true;
+					}
+					//}
+				}
+			}
+		}
+	}
 	
 }
 
@@ -348,8 +690,8 @@ void Model::Draw(ESContext *esContext)
 					
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVBO[i]);
 					
-					if(Scene::currentStep==RS_SCENE) shader->Populate(this);
-					else if(Scene::currentStep==RS_SHADOW) shaderShadow->Populate(this);
+					if(Scene::currentStep==RS_SCENE) shader->Populate(this, i);
+					else if(Scene::currentStep==RS_SHADOW) shaderShadow->Populate(this, i);
 		
 					// real drawing code, just 3 lines lol
 					glDrawElements(GL_TRIANGLES, elementLength[i], GL_UNSIGNED_SHORT, 0);
@@ -383,14 +725,14 @@ void Model::SetVAO()
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 40);
 		glEnableVertexAttribArray(2);
 		// num bones
-		glVertexAttribPointer(3, 1, GL_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 15);
+		glVertexAttribPointer(3, 1, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 15);
 		glEnableVertexAttribArray(3);
 		// bone id
-		glVertexAttribPointer(4, 1, GL_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 12);
+		glVertexAttribPointer(4, 1, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 12);
 		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(5, 1, GL_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 13);
+		glVertexAttribPointer(5, 1, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 13);
 		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(6, 1, GL_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 14);
+		glVertexAttribPointer(6, 1, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 14);
 		glEnableVertexAttribArray(6);
 		// bone weight
 		glVertexAttribPointer(7, 1, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 0);
@@ -407,5 +749,37 @@ void Model::SetVAO()
 		// tangent
 		glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*) 0);
 		glEnableVertexAttribArray(10);
+	}
+}
+
+void Model::ExtractAnimValue( int frame, mdlAnimValue *panimvalue, float scale, float &v1)
+{
+	if ( !panimvalue )
+	{
+		v1 = 0;
+		return;
+	}
+
+	int k = frame;
+
+	while (panimvalue->num.total <= k)
+	{
+		k -= panimvalue->num.total;
+		panimvalue += panimvalue->num.valid + 1;
+		if ( panimvalue->num.total == 0 )
+		{
+			//Assert( 0 ); // running off the end of the animation stream is bad
+			v1 = 0;
+			return;
+		}
+	}
+	if (panimvalue->num.valid > k)
+	{
+		v1 = panimvalue[k+1].value * scale;
+	}
+	else
+	{
+		// get last valid data block
+		v1 = panimvalue[panimvalue->num.valid].value * scale;
 	}
 }

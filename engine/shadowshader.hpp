@@ -16,7 +16,7 @@ public:
 
 	void Load();
 	void Bind(Model* model);
-	void Populate(Model* model);
+	void Populate(Model* model, int stripGroupIdx);
 	void Unbind(Model* model);
 	
 	GLuint programLocation;

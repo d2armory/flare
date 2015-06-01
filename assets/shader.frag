@@ -13,14 +13,18 @@ varying vec3 fB;
 varying vec3 fN;
 varying vec3 fShadowCoord;
 
+varying float boneShader;
+
 // uniform
-uniform mat4 modelTransform;
-uniform mat4 viewTransform;
-uniform mat4 projTransform;
+//uniform mat4 modelTransform;
+//uniform mat4 viewTransform;
+//uniform mat4 projTransform;
 uniform sampler2D texture[5];
 
 uniform vec3 lightDir;
 uniform int drawShadow;
+
+// 2 1/4 vec4
 
 /*
 vec3 v3cross(vec3 a, vec3 b)
@@ -182,5 +186,18 @@ void main()
 	//gl_FragColor = vec4((txtNworld) * 0.25,1) + vec4(0.25,0.25,0.25,0) + (vec4(0.5,0.5,0.5,0) * ((fTangent.a / 2.0) + 0.5));
 	//gl_FragColor = (vec4(fTangent.aaa,1) / 4.0) + vec4(0.5,0.5,0.5,0);
 	//gl_FragColor = vec4(texture2D( texture[3], fUV ).rrr,1);
-	//gl_FragColor = vec4(mask1.rgb,1);
+	
+	/* int bshader= int(boneShader);
+	if(bshader&0x10==0 && bshader&0x01==0)
+	{
+		gl_FragColor = vec4(boneShader/3.0,0,0,1);
+	}
+	else if(bshader&0x10==0 && bshader&0x01==1)
+	{
+		gl_FragColor = vec4(0,boneShader/3.0,0,1);
+	}
+	else
+	{
+		gl_FragColor = vec4(0,0,boneShader/3.0 - 2.0,1);
+	} */
 }

@@ -15,16 +15,16 @@ public:
 
 	HeroShader();
 
-	void Load();
+	bool Load();
 	void Bind(Model* model);
-	void Populate(Model* model);
+	void Populate(Model* model, int stripGroupIdx);
 	void Unbind(Model* model);
 	
 	GLuint programLocation;
 	
-	GLuint locModelTransform;
-	GLuint locViewTransform;
-	GLuint locProjTransform;
+//	GLuint locModelTransform;
+//	GLuint locViewTransform;
+//	GLuint locProjTransform;
 	GLuint locDepthBiasMvpTransform;
 	GLuint locMvTransform;
 	GLuint locMvpTransform;
@@ -33,5 +33,10 @@ public:
 	GLuint locLightDir;
 	GLuint locTexture;
 	GLuint locDrawShadow;
+	
+	GLuint locBoneIndex;
+	//GLuint locBonePos;
+	//GLuint locBoneRot;
+	GLuint locBoneTransform;
 	
 };

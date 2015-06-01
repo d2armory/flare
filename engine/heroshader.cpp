@@ -2,13 +2,13 @@
 
 HeroShader::HeroShader()
 {
-	locModelTransform = 0;
-	locViewTransform = 0;
-	locProjTransform = 0;
+	//locModelTransform = 0;
+	//locViewTransform = 0;
+	//locProjTransform = 0;
 	locTexture = 0;
 }
 
-void HeroShader::Load()
+bool HeroShader::Load()
 {
 	char vShaderFilename[] = "assets/shader.vert";
 	char fShaderFilename[] = "assets/shader.frag";
@@ -36,7 +36,7 @@ void HeroShader::Load()
 	programObject = glCreateProgram ( );
 	
 	if ( programObject == 0 )
-		return;
+		return false;
 
 	glAttachShader ( programObject, vertexShader );
 	glAttachShader ( programObject, fragmentShader );
@@ -77,15 +77,15 @@ void HeroShader::Load()
 		}
 
 		glDeleteProgram ( programObject );
-		return;// GL_FALSE;
+		return false;// GL_FALSE;
 	}
 
 	// Store the program object
 	programLocation = programObject;
 	
-	locModelTransform = glGetUniformLocation(programObject, "modelTransform");
-	locViewTransform = glGetUniformLocation(programObject, "viewTransform");
-	locProjTransform = glGetUniformLocation(programObject, "projTransform");
+	//locModelTransform = glGetUniformLocation(programObject, "modelTransform");
+	//locViewTransform = glGetUniformLocation(programObject, "viewTransform");
+	//locProjTransform = glGetUniformLocation(programObject, "projTransform");
 	
 	locMvTransform = glGetUniformLocation(programObject, "mvTransform");
 	locMvpTransform = glGetUniformLocation(programObject, "mvpTransform");
@@ -95,6 +95,13 @@ void HeroShader::Load()
 	locLightDir = glGetUniformLocation(programObject, "lightDir");
 	locTexture = glGetUniformLocation(programObject, "texture");
 	locDrawShadow = glGetUniformLocation(programObject, "drawShadow");
+	
+	locBoneIndex = glGetUniformLocation(programObject, "boneIndex");
+	//locBonePos = glGetUniformLocation(programObject, "bonePos");
+	//locBoneRot = glGetUniformLocation(programObject, "boneRot");
+	locBoneTransform = glGetUniformLocation(programObject, "boneTransform");
+	
+	return true;
 }
 
 void HeroShader::Bind(Model* m)
@@ -105,20 +112,20 @@ void HeroShader::Bind(Model* m)
 	
 }
 
-void HeroShader::Populate(Model* m)
+void HeroShader::Populate(Model* m, int stripGroupIdx)
 {
 	
 	// debug flag: draw scene in light PoV
 	bool renderInLightSpace = false;
 	
 	// normal MVP and related matrix binding
-	glUniformMatrix4fv(locModelTransform, 1, GL_FALSE, &m->modelTransform[0][0]);
+	//glUniformMatrix4fv(locModelTransform, 1, GL_FALSE, &m->modelTransform[0][0]);
 	glm::mat4 v = glm::lookAt(Scene::camPosition, Scene::camTarget, glm::vec3(0,1,0));
 	glm::mat4 p = glm::perspective (Scene::fov, Scene::screenWidth/Scene::screenHeight, Scene::nearZ, Scene::farZ);
 	if(!renderInLightSpace) 
 	{
-		glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &v[0][0]);
-		glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &p[0][0]);
+		//glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &v[0][0]);
+		//glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &p[0][0]);
 		glm::mat4 mv = v * m->modelTransform;
 		glm::mat4 mvp = p * mv;
 		glm::mat3 nt = glm::mat3(mv);
@@ -152,8 +159,8 @@ void HeroShader::Populate(Model* m)
 	if(renderInLightSpace) 
 	{
 		glUniform3fv(locLightDir, 1, &lightDir[0] );
-		glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &depthViewMatrix[0][0]);
-		glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &depthProjectionMatrix[0][0]);
+		//glUniformMatrix4fv(locViewTransform, 1, GL_FALSE, &depthViewMatrix[0][0]);
+		//glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &depthProjectionMatrix[0][0]);
 		glm::mat4 mv = depthViewMatrix * m->modelTransform;
 		glm::mat4 mvp = depthProjectionMatrix * mv;
 		glm::mat3 nt = glm::mat3(mv);
@@ -175,6 +182,27 @@ void HeroShader::Populate(Model* m)
 	}
 	const GLint samplers[5] = {0,1,2,3,4}; // we've bound our textures in textures 0 and 1.
 	glUniform1iv( locTexture, 5, samplers );
+	
+	//unsigned int boneIndex[128];
+	unsigned int* boneIndexP = m->meshBoneIndex[stripGroupIdx];
+	//glm::vec3 bonePos[53];
+	//glm::quat boneRot[53];
+	glm::mat4 boneTransform[53];
+	unsigned int* mBoneList = m->meshBoneList[stripGroupIdx];
+	int bCount = m->meshBoneCount[stripGroupIdx];
+	for(int i=0;i<bCount;i++)
+	{
+		//bonePos[i] = m->bonePos[mBoneList[i]];
+		//boneRot[i] = m->boneRot[mBoneList[i]];
+		boneTransform[i] = m->boneTransform[mBoneList[i]];
+	}
+	
+	//bonePos[0] = glm::vec3(0,50,0);
+	
+	glUniform1iv( locBoneIndex, 128, (GLint*) boneIndexP );
+	//glUniform3fv( locBonePos, 53, (GLfloat*) &bonePos[0] );
+	//glUniform4fv( locBoneRot, 53, (GLfloat*) &boneRot[0] );
+	glUniformMatrix4fv( locBoneTransform, 53, GL_FALSE, &boneTransform[0][0][0]);
 }
 
 void HeroShader::Unbind(Model* m)
