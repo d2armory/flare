@@ -95,9 +95,10 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			mdlTexture* texture = mh->pTexture(0);
 			//printf("----- %i: %s\n",i,texture->pszName());
 			std::string txtFilename = std::string(texture->pszName());
-			txtFilename = "materials/" + txtFilename + ".vmt";
 			
-			// TODO: read actual file
+			// TODO: don't force this on source 1 format
+			txtFilename = "materials/" + txtFilename + ".vmat_c";
+			
 			material = new Material(txtFilename.c_str());
 			Manager::add(material);
 			

@@ -337,9 +337,33 @@ void KVReader2::Dump(KeyValue* cur)
 		{
 			printf(" '%s'",cur->AsHandle());
 		}
+		else if(cur->type==NTRO_DATA_TYPE_INTEGER)
+		{
+			printf(" %d",cur->AsInt());
+		}
+		else if(cur->type==NTRO_DATA_TYPE_UINTEGER)
+		{
+			printf(" %u",cur->AsUint());
+		}
+		else if(cur->type==NTRO_DATA_TYPE_SHORT)
+		{
+			printf(" %d",cur->AsShort());
+		}
+		else if(cur->type==NTRO_DATA_TYPE_USHORT)
+		{
+			printf(" %u",cur->AsUshort());
+		}
+		else if(cur->type==NTRO_DATA_TYPE_BYTE)
+		{
+			printf(" %u",cur->AsByte());
+		}
+		else if(cur->type==10)	// not sure what it is, but it's used as image format
+		{
+			printf(" %u",cur->AsByte());
+		}
 		else
 		{
-			printf(" 0x%X",(unsigned int) cur->value);
+			printf(" 0x%X [t=%d]",(unsigned int) cur->value, cur->type);
 		}
 	}
 	else

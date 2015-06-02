@@ -4,6 +4,7 @@
 #include "texture.hpp"
 #include "manager.hpp"
 #include "kvreader.hpp"
+#include "kvreader2.hpp"
 
 class Texture;
 

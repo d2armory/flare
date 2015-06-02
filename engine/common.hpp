@@ -9,4 +9,5 @@
 #include "shader.hpp"
 #include "heroshader.hpp"
 #include "kvreader.hpp"
+#include "kvreader2.hpp"
 #include "scene.hpp"

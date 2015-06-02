@@ -45,28 +45,28 @@ void Texture::Update()
 				
 				// SOURCE 2 format
 				
-				DmxHeader* dmxHeader = (DmxHeader*) txtData;
-				VtexHeader* vtexHeader = 0;
+				dmxHeader* dmxH = (dmxHeader*) txtData;
+				vtexHeader* vtexH = 0;
 				unsigned int vtexHeaderSize = 0;
 				// Finding data block
-				for(int i=0;i<dmxHeader->blockCount;i++)
+				for(int i=0;i<dmxH->blockCount;i++)
 				{
-					DmxBlockHeader* blockHeader = dmxHeader->block(i);
+					dmxBlockHeader* blockHeader = dmxH->block(i);
 					if(blockHeader->name[0] == 'D')
 					{
-						vtexHeader = blockHeader->vtexData();
+						vtexH = blockHeader->vtexData();
 						vtexHeaderSize = blockHeader->dataSize;
 					}
 				}
-				if(vtexHeader == 0)
+				if(vtexH == 0)
 				{
 					printf("Error locating data block!\n");
 					return;
 				}
 				
-				printf("- size: WxH =  %dx%d\n",vtexHeader->width,vtexHeader->height);
-				//printf("- mipmap count: %d\n",vtexHeader->mipLevel);
-				//printf("- format: %d\n",vtexHeader->format);
+				printf("- size: WxH =  %dx%d\n",vtexH->width,vtexH->height);
+				//printf("- mipmap count: %d\n",vtexH->mipLevel);
+				//printf("- format: %d\n",vtexH->format);
 				
 				// variable preparation
 				isCubemap = false; // TODO: accept cubemap
@@ -74,7 +74,7 @@ void Texture::Update()
 				if(isCubemap) txtType = GL_TEXTURE_CUBE_MAP;
 				int numFaces = (isCubemap)?6:1;
 				unsigned int sqImageType = squish::kDxt1;	// format in squish type
-				switch(vtexHeader->format)
+				switch(vtexH->format)
 				{
 					case IMAGE_FORMAT_DXT1:
 						sqImageType = squish::kDxt1;
@@ -84,7 +84,7 @@ void Texture::Update()
 						break;
 					default:
 						sqImageType = 1 << 31;
-						printf("----- unsupported image format %d\n",vtexHeader->format);
+						printf("----- unsupported image format %d\n",vtexH->format);
 						break;
 				}
 				
@@ -99,13 +99,13 @@ void Texture::Update()
 				glTexParameteri(txtType, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 				
 				// Offset calculation for each mipmap level
-				int numMip = vtexHeader->mipLevel;
+				int numMip = vtexH->mipLevel;
 				// TODO: use struct for this (4x array so ugly)
 				int* imgSize = new int[numMip * 4];
 				
 				// Calculate width, height, size in byte first
-				int tmpH = vtexHeader->height;
-				int tmpW = vtexHeader->width;
+				int tmpH = vtexH->height;
+				int tmpW = vtexH->width;
 				//printf("%dx%d @ %d\n",tmpW,tmpH,sqImageType);
 				for(int i = 0; i < numMip ; i++ )
 				{
@@ -131,14 +131,14 @@ void Texture::Update()
 				}
 				
 				// load data into gpu here
-				char* entry = ((char*) txtData) + dmxHeader->fileSize;
+				char* entry = ((char*) txtData) + dmxH->fileSize;
 				for(int m=0;m<numMip;m++)
 				{
 					for(int f=0;f<numFaces;f++)
 					{
 						// get data pointer
 						char* data = entry + imgSize[m*4+3];
-						//printf("----- mm #%d : %dx%d , dxtSize: %d, startAt: %d (%d from SoF, %d from entry)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],(unsigned int) data,(unsigned int) (data-txtData),imgSize[m*4+3]);
+						printf("----- mm #%d : %dx%d , dxtSize: %d, startAt: %d (%d from SoF, %d from entry)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],(unsigned int) data,(unsigned int) (data-txtData),imgSize[m*4+3]);
 						
 						unsigned int txtTypeFS = txtType;
 						
@@ -148,11 +148,11 @@ void Texture::Update()
 						{
 							// Use compressed texture if possible
 							const GLenum COMPRESSED_RGBA_S3TC_DXT5_EXT = 0x83F3;
-							if(vtexHeader->format == IMAGE_FORMAT_DXT1)
+							if(vtexH->format == IMAGE_FORMAT_DXT1)
 							{
 								glCompressedTexImage2D(	txtTypeFS, m, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
 							}
-							else if(vtexHeader->format == IMAGE_FORMAT_DXT5)
+							else if(vtexH->format == IMAGE_FORMAT_DXT5)
 							{
 								glCompressedTexImage2D(	txtTypeFS, m, COMPRESSED_RGBA_S3TC_DXT5_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
 							}

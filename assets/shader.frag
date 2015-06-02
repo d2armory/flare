@@ -56,22 +56,20 @@ void main()
 	//gl_FragColor = vec4(0.5) + fPosition;
 	
 	vec4 color = texture2D( texture[0], fUV);
-	vec4 normal = texture2D( texture[1], fUV);
+	vec4 normal = texture2D( texture[1], fUV) * 2.0 - 1.0;
 	vec4 mask1 = texture2D( texture[2], fUV);
 	vec4 mask2 = texture2D( texture[3], fUV);
 	
-	// sampling on demand
-	//vec4 shadow = texture2D( texture[4], fShadowCoord.xy);
+	// resconstructing normal for source 2 (dx10)
+	// TODO: need a boolean flag, for backward compat with vtf normal (dxt1)
+	normal.r = normal.a;
+	normal.g = normal.g;
+	normal.b = sqrt(1.0 - fclamp(dot(normal.rg,normal.rg),0.0,1.0));
+	normal.a = 1.0;
 	
-	//vec3 L = vec3(-1.0,-10.0,-1.0);
-	//L = v3normalize(L);
+	// if we want bluish looking normal map, (normal/2.0)-0.5 yield that result
 	
-	// TODO: move to uniform
-	// mat3 normalTransform = mat3(viewTransform) * mat3(modelTransform);
-	
-	// TODO: precomputed L in camera coord
-	//L = mat3(viewTransform) * L;
-	
+	// Light calc
 	vec3 L = lightDir;
 	
 	vec3 N = fN;//normalTransform * v3normalize(fNormal);
@@ -186,6 +184,7 @@ void main()
 	//gl_FragColor = vec4((txtNworld) * 0.25,1) + vec4(0.25,0.25,0.25,0) + (vec4(0.5,0.5,0.5,0) * ((fTangent.a / 2.0) + 0.5));
 	//gl_FragColor = (vec4(fTangent.aaa,1) / 4.0) + vec4(0.5,0.5,0.5,0);
 	//gl_FragColor = vec4(texture2D( texture[3], fUV ).rrr,1);
+	//gl_FragColor = normal;
 	
 	/* int bshader= int(boneShader);
 	if(bshader&0x10==0 && bshader&0x01==0)

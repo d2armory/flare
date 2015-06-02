@@ -20,7 +20,7 @@ main.bc: main.cpp
 #es/esUtil.bc: es/esUtil.h es/esUtil.c
 #	$(COMPILER) $(OPTIMIZE) es/esUtil.c -o es/esUtil.bc
 	
-engine.bc: engine/fileLoader.cpp engine/fileLoader.hpp engine/material.cpp engine/material.hpp engine/model.cpp engine/model.hpp engine/texture.cpp engine/texture.hpp engine/manager.cpp engine/manager.hpp engine/shader.cpp engine/shader.hpp engine/heroshader.cpp engine/heroshader.hpp engine/shadowshader.cpp engine/shadowshader.hpp engine/kvreader.hpp engine/kvreader.cpp engine/scene.hpp engine/scene.cpp
+engine.bc: engine/fileLoader.cpp engine/fileLoader.hpp engine/material.cpp engine/material.hpp engine/model.cpp engine/model.hpp engine/texture.cpp engine/texture.hpp engine/manager.cpp engine/manager.hpp engine/shader.cpp engine/shader.hpp engine/heroshader.cpp engine/heroshader.hpp engine/shadowshader.cpp engine/shadowshader.hpp engine/kvreader.hpp engine/kvreader.cpp engine/kvreader2.hpp engine/kvreader2.cpp engine/scene.hpp engine/scene.cpp
 	$(COMPILER) $(OPTIMIZE) engine/manager.cpp -o engine/manager.bc
 	$(COMPILER) $(OPTIMIZE) engine/texture.cpp -o engine/texture.bc
 	$(COMPILER) $(OPTIMIZE) engine/model.cpp -o engine/model.bc
@@ -30,8 +30,9 @@ engine.bc: engine/fileLoader.cpp engine/fileLoader.hpp engine/material.cpp engin
 	$(COMPILER) $(OPTIMIZE) engine/heroshader.cpp -o engine/heroshader.bc
 	$(COMPILER) $(OPTIMIZE) engine/shadowshader.cpp -o engine/shadowshader.bc
 	$(COMPILER) $(OPTIMIZE) engine/kvreader.cpp -o engine/kvreader.bc
+	$(COMPILER) $(OPTIMIZE) engine/kvreader2.cpp -o engine/kvreader2.bc
 	$(COMPILER) $(OPTIMIZE) engine/scene.cpp -o engine/scene.bc
-	$(COMPILER) $(OPTIMIZE) engine/fileLoader.bc engine/material.bc engine/model.bc engine/texture.bc engine/manager.bc engine/shader.bc engine/heroshader.bc engine/shadowshader.bc engine/kvreader.bc engine/scene.bc -o engine.bc
+	$(COMPILER) $(OPTIMIZE) engine/fileLoader.bc engine/material.bc engine/model.bc engine/texture.bc engine/manager.bc engine/shader.bc engine/heroshader.bc engine/shadowshader.bc engine/kvreader.bc engine/kvreader2.bc engine/scene.bc -o engine.bc
 		
 squish.bc: squish/squish.h
 	$(COMPILER) $(OPTIMIZE) squish/alpha.cpp -o squish/alpha.bc

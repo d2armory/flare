@@ -34,62 +34,121 @@ void Material::Update()
 			unsigned int fSize = 0;
 			char* vmtData = FileLoader::ReadFile(fileName,fSize);
 			
-			PCST* pData = KVReader::Parse(vmtData, fSize);
-			
-			// use data here
-			Texture* tt = 0;
-			// pData->sibling is shader name
-			PCST* node = pData->sibling->child;
-			while(node != 0)
+			std::string fName = std::string(fileName);
+			if(fName.substr(fName.find_last_of(".") + 1).compare("vmat_c") == 0)
 			{
-				if(node->key != 0)
+				
+				// SOURCE 2 format
+				// binary key-value
+				
+				KeyValue* root = KVReader2::Parse(vmtData);
+				Texture* tt = 0;
+				KeyValue* txtParams = root->Find("m_textureParams");
+				for(int i=0;i<txtParams->childCount;i++)
 				{
-		
-					if(strcmp(node->key,"$basetexture") == 0)
+					KeyValue* txt = txtParams->Get(i);
+					if(strcmp("g_tColor",txt->Find("m_name")->AsName())==0)
 					{
-						// might want to make function of preparing txt filename
-						std::string txtFilename = std::string(node->value);
-						txtFilename = "materials/" + txtFilename;
-						if(txtFilename.find(".vtf")==std::string::npos) txtFilename = txtFilename + ".vtf";
+						std::string txtFilename = std::string(txt->Find("m_pValue")->AsHandle());
+						txtFilename = txtFilename + "_c";
 						const char* txtFNC = txtFilename.c_str();
 						printf("Use %s as diffuse\n",txtFNC);
 						if((textureDiffuse = Manager::find(txtFNC))==0) Manager::add(textureDiffuse = new Texture(txtFNC));
-						//printf("mat %X %X %X %X\n",textureDiffuse,textureNormal,textureMask1,textureMask2);
 					}
-					else if(strcmp(node->key,"$normalmap") == 0)
+					else if(strcmp("g_tNormal",txt->Find("m_name")->AsName())==0)
 					{
-						std::string txtFilename = std::string(node->value);
-						txtFilename = "materials/" + txtFilename;
-						if(txtFilename.find(".vtf")==std::string::npos) txtFilename = txtFilename + ".vtf";
+						std::string txtFilename = std::string(txt->Find("m_pValue")->AsHandle());
+						txtFilename = txtFilename + "_c";
 						const char* txtFNC = txtFilename.c_str();
 						printf("Use %s as normal\n",txtFNC);
 						if((textureNormal = Manager::find(txtFNC))==0) Manager::add(textureNormal = new Texture(txtFNC));
 					}
-					else if(strcmp(node->key,"$maskmap1") == 0)
+					else if(strcmp("g_tMasks1",txt->Find("m_name")->AsName())==0)
 					{
-						std::string txtFilename = std::string(node->value);
-						txtFilename = "materials/" + txtFilename;
-						if(txtFilename.find(".vtf")==std::string::npos) txtFilename = txtFilename + ".vtf";
+						std::string txtFilename = std::string(txt->Find("m_pValue")->AsHandle());
+						txtFilename = txtFilename + "_c";
 						const char* txtFNC = txtFilename.c_str();
 						printf("Use %s as mask 1\n",txtFNC);
 						if((textureMask1 = Manager::find(txtFNC))==0) Manager::add(textureMask1 = new Texture(txtFNC));
 					}
-					else if(strcmp(node->key,"$maskmap2") == 0)
+					else if(strcmp("g_tMasks2",txt->Find("m_name")->AsName())==0)
 					{
-						std::string txtFilename = std::string(node->value);
-						txtFilename = "materials/" + txtFilename;
-						if(txtFilename.find(".vtf")==std::string::npos) txtFilename = txtFilename + ".vtf";
+						std::string txtFilename = std::string(txt->Find("m_pValue")->AsHandle());
+						txtFilename = txtFilename + "_c";
 						const char* txtFNC = txtFilename.c_str();
 						printf("Use %s as mask 2\n",txtFNC);
 						if((textureMask2 = Manager::find(txtFNC))==0) Manager::add(textureMask2 = new Texture(txtFNC));
 					}
 				}
-				node = node->sibling;
+				
+				KVReader2::Clean(root);
+				
+				free(vmtData);
+				
 			}
+			else
+			{
+				
+				// SOURCE 1 FORMAT
+				// plain text key-value
+				
+				PCST* pData = KVReader::Parse(vmtData, fSize);
+				
+				// use data here
+				Texture* tt = 0;
+				// pData->sibling is shader name
+				PCST* node = pData->sibling->child;
+				while(node != 0)
+				{
+					if(node->key != 0)
+					{
 			
-			KVReader::Clean(pData);
-			
-			free(vmtData);
+						if(strcmp(node->key,"$basetexture") == 0)
+						{
+							// might want to make function of preparing txt filename
+							std::string txtFilename = std::string(node->value);
+							txtFilename = "materials/" + txtFilename;
+							if(txtFilename.find(".vtf")==std::string::npos) txtFilename = txtFilename + ".vtf";
+							const char* txtFNC = txtFilename.c_str();
+							printf("Use %s as diffuse\n",txtFNC);
+							if((textureDiffuse = Manager::find(txtFNC))==0) Manager::add(textureDiffuse = new Texture(txtFNC));
+							//printf("mat %X %X %X %X\n",textureDiffuse,textureNormal,textureMask1,textureMask2);
+						}
+						else if(strcmp(node->key,"$normalmap") == 0)
+						{
+							std::string txtFilename = std::string(node->value);
+							txtFilename = "materials/" + txtFilename;
+							if(txtFilename.find(".vtf")==std::string::npos) txtFilename = txtFilename + ".vtf";
+							const char* txtFNC = txtFilename.c_str();
+							printf("Use %s as normal\n",txtFNC);
+							if((textureNormal = Manager::find(txtFNC))==0) Manager::add(textureNormal = new Texture(txtFNC));
+						}
+						else if(strcmp(node->key,"$maskmap1") == 0)
+						{
+							std::string txtFilename = std::string(node->value);
+							txtFilename = "materials/" + txtFilename;
+							if(txtFilename.find(".vtf")==std::string::npos) txtFilename = txtFilename + ".vtf";
+							const char* txtFNC = txtFilename.c_str();
+							printf("Use %s as mask 1\n",txtFNC);
+							if((textureMask1 = Manager::find(txtFNC))==0) Manager::add(textureMask1 = new Texture(txtFNC));
+						}
+						else if(strcmp(node->key,"$maskmap2") == 0)
+						{
+							std::string txtFilename = std::string(node->value);
+							txtFilename = "materials/" + txtFilename;
+							if(txtFilename.find(".vtf")==std::string::npos) txtFilename = txtFilename + ".vtf";
+							const char* txtFNC = txtFilename.c_str();
+							printf("Use %s as mask 2\n",txtFNC);
+							if((textureMask2 = Manager::find(txtFNC))==0) Manager::add(textureMask2 = new Texture(txtFNC));
+						}
+					}
+					node = node->sibling;
+				}
+				
+				KVReader::Clean(pData);
+				
+				free(vmtData);
+			}
 			
 		}
 	}

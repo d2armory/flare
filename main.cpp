@@ -145,7 +145,7 @@ void Update ( ESContext *esContext, float deltaTime )
 		Texture* testVtex = new Texture("custom/axe_body_color_psd_63afddb2.vtex_c");
 		Manager::add(testVtex);
 		
-		Texture* testVtf = new Texture("materials/models/heroes/axe/axe_body_color.vtf");
+		Texture* testVtf = new Texture("materials/models/heroes/axe/axe_body_normal.vtf");
 		Manager::add(testVtf);
 	}
 	
@@ -155,8 +155,10 @@ void Update ( ESContext *esContext, float deltaTime )
 		if(mx[0]->material!=0)
 		{
 			Texture* t = Manager::find("custom/axe_body_color_psd_63afddb2.vtex_c");
+			Texture* t2 = Manager::find("materials/models/heroes/axe/axe_body_normal.vtf");
 			//printf("%X\n",(unsigned int) t);
 			mx[0]->material->textureDiffuse = t;
+			//mx[0]->material->textureNormal = t2;
 		}
 		
 		for(int i=0;i<modelCount;i++)
