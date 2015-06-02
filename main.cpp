@@ -31,7 +31,7 @@ unsigned int frames = 0;
 bool axe_data = false;
 bool bounty_data = false;
 float total = 0;
-int modelCount = 6;
+int modelCount = 3;
 Model** mx = 0;
 
 int Init ( ESContext *esContext )
@@ -102,12 +102,12 @@ void Update ( ESContext *esContext, float deltaTime )
 	{
 		bounty_data = true;
 
-		const char* modelName[6] = {
+		const char* modelName[3] = {
 			"models/heroes/axe/axe.mdl",
 			"models/heroes/axe/axe_armor.mdl",
-			"models/heroes/axe/axe_belt.mdl",
-			"models/heroes/axe/axe_ponytail.mdl",
-			"models/heroes/axe/axe_weapon.mdl",
+			//"models/heroes/axe/axe_belt.mdl",
+			//"models/heroes/axe/axe_ponytail.mdl",
+			//"models/heroes/axe/axe_weapon.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter_backpack.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter_bandana.mdl",
@@ -141,10 +141,24 @@ void Update ( ESContext *esContext, float deltaTime )
 		Model* pedes = mx[modelCount-1];
 		pedes->rotation[0] = - M_PI / 2.0f;
 		//pedes->position[1] = -10.0f;
+		
+		Texture* testVtex = new Texture("custom/axe_body_color_psd_63afddb2.vtex_c");
+		Manager::add(testVtex);
+		
+		Texture* testVtf = new Texture("materials/models/heroes/axe/axe_body_color.vtf");
+		Manager::add(testVtf);
 	}
 	
 	if(bounty_data)
 	{
+		
+		if(mx[0]->material!=0)
+		{
+			Texture* t = Manager::find("custom/axe_body_color_psd_63afddb2.vtex_c");
+			//printf("%X\n",(unsigned int) t);
+			mx[0]->material->textureDiffuse = t;
+		}
+		
 		for(int i=0;i<modelCount;i++)
 		{
 			mx[i]->rotation[1] = userData->deg;
@@ -252,7 +266,7 @@ void mainloop()
 	
 	if (totaltime >  fpsRefresh)
 	{
-		printf("%4d frames rendered in %1.4f seconds -> FPS=%3.4f\n", frames, totaltime, frames/totaltime);
+		//printf("%4d frames rendered in %1.4f seconds -> FPS=%3.4f\n", frames, totaltime, frames/totaltime);
 		totaltime -= fpsRefresh;
 		frames = 0;
 	}

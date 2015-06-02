@@ -35,7 +35,7 @@ public:
 	unsigned int txtType;
 	GLuint textureId;
 	
-	// might considering remove/ replace with only header
+	// might considering remove/replace with only header
 	char* textureData;
 	
 	// manager

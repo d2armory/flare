@@ -2,6 +2,7 @@
 
 typedef unsigned char byte;
 
+// source 1 format
 #include "mdlHeader.h"
 #include "mdlTexture.h"
 #include "mdlBone.h"
@@ -10,3 +11,6 @@ typedef unsigned char byte;
 #include "vtfHeader.h"
 #include "vvdHeader.h"
 #include "vtxHeader.h"
+
+// source 2 format
+#include "dmxHeader.h"
