@@ -7,6 +7,7 @@
 #include "glm/gtx/quaternion.hpp"
 
 #include "mdl/dmxHeader.h"
+#include "engine/kvreader2.hpp"
 
 int main()
 {
@@ -24,33 +25,59 @@ int main()
 	
 	
 	// main code is here
-	
 	printf("Openning vmat_c file\n");
-	
 	const char* fileName = "testbin/axe_body_color.vmat_c";
-	
 	FILE* fp = fopen(fileName,"rb");
 	fseek(fp, 0, SEEK_END);
 	int fileSize = ftell(fp);
 	fseek(fp, 0, SEEK_SET);
-	
 	printf("File size: %d bytes\n",fileSize);
-	
 	char* origFileData = (char*) malloc(fileSize+4);
 	char* fileData = (char*) ((((unsigned int) origFileData) + 3) & (~0x3));	// safe align pad, might not needed
 	int frrt = fread(fileData,fileSize,fileSize,fp);
-	
 	if(frrt==0) {
 		printf("File read failed!\n");
 		return 1;
 	}
-	
 	printf("File data read into memory (0x%X)\n",(unsigned int) fileData);
-	
 	fclose(fp);
 	
+	// Parsing
+	KeyValue* root = KVReader2::Parse(fileData);
 	
-	dmxHeader* fileHeader = (dmxHeader*) fileData;
+	// Dump all
+	KVReader2::Dump(root);
+	
+	// Sample Usage
+	KeyValue* txtParams = root->Find("m_textureParams");
+	for(int i=0;i<txtParams->childCount;i++)
+	{
+		KeyValue* txt = txtParams->Get(i);
+		if(strcmp("g_tColor",txt->Find("m_name")->AsName())==0)
+		{
+			printf("Diffuse material: %s\n",txt->Find("m_pValue")->AsHandle());
+		}
+		else if(strcmp("g_tNormal",txt->Find("m_name")->AsName())==0)
+		{
+			printf("Normal material: %s\n",txt->Find("m_pValue")->AsHandle());
+		}
+		else if(strcmp("g_tMasks1",txt->Find("m_name")->AsName())==0)
+		{
+			printf("Mask 1 material: %s\n",txt->Find("m_pValue")->AsHandle());
+		}
+		else if(strcmp("g_tMasks2",txt->Find("m_name")->AsName())==0)
+		{
+			printf("Mask 2 material: %s\n",txt->Find("m_pValue")->AsHandle());
+		}
+	}
+	
+	// Clean up
+	KVReader2::Clean(root);
+	
+	
+	// Old Code
+	
+	/* dmxHeader* fileHeader = (dmxHeader*) fileData;
 	
 	printf("File: %s\n",fileName);
 	printf("- size: %d\n",fileHeader->fileSize);
@@ -119,7 +146,7 @@ int main()
 				printf("------- name: %s\n",name);
 				printf("------- resource count: %d\n",e->resourceCount);
 				
-				/* ntroField* fEntry = (ntroField*) (((char*) &s->fieldOffset) + s->fieldOffset);
+				ntroField* fEntry = (ntroField*) (((char*) &s->fieldOffset) + s->fieldOffset);
 				for(int k=0;k<s->fieldCount;k++)
 				{
 					ntroField* f = fEntry + k;
@@ -136,7 +163,7 @@ int main()
 					{
 						printf("----------- %s\n",indirect);
 					}
-				} */
+				}
 			}
 		}
 		else if(blockHeader->name[0] == 'D')
@@ -162,7 +189,7 @@ int main()
 		// TODO: work on full parser
 	}
 //	
-	
+	*/
 	
 	free(origFileData);
 	

@@ -108,6 +108,19 @@ struct vtexHeader
 	// judging from how https://github.com/tranek/vtex_c2tga/blob/master/vtex_c2tga.cpp did it)
 };
 
+struct rerlRecord
+{
+	emscripten_align1_int id[2];
+	emscripten_align1_int nameOffset;
+	emscripten_align1_int pad;
+};
+
+struct rerlHeader
+{
+	emscripten_align1_int recordOffset;
+	emscripten_align1_int recordCount;
+};
+
 struct dmxBlockHeader
 {
 
@@ -130,6 +143,11 @@ struct dmxBlockHeader
 		return (ntroHeader*) data();	
 	};
 	
+	inline rerlHeader* rerlData()
+	{
+		return (rerlHeader*) data();	
+	};
+	
 };
 
 struct dmxHeader
@@ -143,7 +161,7 @@ struct dmxHeader
 	inline dmxBlockHeader* block(int b)
 	{
 		// add assert?
-		return ((dmxBlockHeader*) (((char*) this) + 8 + blockOffset)) + b;	
+		return ((dmxBlockHeader*) (((char*) &this->blockOffset) + this->blockOffset)) + b;	
 	};
 	
 };
