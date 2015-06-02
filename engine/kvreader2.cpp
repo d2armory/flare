@@ -178,7 +178,6 @@ KeyValue* KVReader2::Parse(char* data)
 	
 	// Apply struct 0 to data
 	ntroStruct* str = (ntroStruct*) (((char*) &ntroH->structOffset) + ntroH->structOffset);
-	
 	ApplyStruct(root, str, dataH, rerlH, ntroH);
 	
 	return root;
@@ -188,6 +187,7 @@ KeyValue* KVReader2::Parse(char* data)
 void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerlHeader* rerlH, ntroHeader* ntroH)
 {
 	
+	// variable prepare
 	char* data = dataH;
 	ntroStruct* sEntries = (ntroStruct*) (((char*) &ntroH->structOffset) + ntroH->structOffset);
 	ntroStruct* baseStruct = 0;
@@ -195,6 +195,7 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 	// Apply base struct structure
 	if(str->baseStructId != 0)
 	{
+		// Find it in NTRO block (move this to its own function?)
 		for(int s=1;s<ntroH->structCount;s++)
 		{
 			ntroStruct* checking = sEntries + s;
@@ -204,33 +205,39 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 				break;
 			}
 		}
-		//printf("Applying base struct %s\n",((char*) &baseStruct->nameOffset) + baseStruct->nameOffset); 
-		ApplyStruct(parent, baseStruct, dataH, rerlH, ntroH);
+		// Now apply it
+		ApplyStruct(parent, baseStruct, data, rerlH, ntroH);
+		// Don't need to apply size to data because diskOffset of field in derived struct
+		// already include this padding
 	}
-	//printf("Applying current struct %s\n",((char*) &str->nameOffset) + str->nameOffset);
 	// Apply our structure
-	unsigned int read = 0;	// past-tense, how much data were read
 	ntroField* fEntry = (ntroField*) (((char*) &str->fieldOffset) + str->fieldOffset);
 	for(int k=0;k<str->fieldCount;k++)
 	{
+		// variable prepare
 		ntroField* f = fEntry + k;
-		
 		char* dataF = data + f->diskOffset;
-		
+		// create node, assign name, hash, type
 		KeyValue* node = new KeyValue();
 		char* fieldName = ((char*) &f->nameOffset) + f->nameOffset;
 		node->key = fieldName;
 		node->CalcHash();
 		node->type = f->type;
 		
+		// prepare just in case
 		char* indirect =  ((char*) &f->indirectOffset) + f->indirectOffset;
+		
+		// check for special type
 		if(f->indirectLevel > 0 && indirect[0] == 0x04)
 		{
-			//printf("Applying array %s\n",((char*) &f->nameOffset) + f->nameOffset);
-			// array of data
+			// Array of data
 			// assume it's struct type
+			
+			// structure: { 4:offset, 4:count }
 			char* elemPointer = dataF + *((unsigned int*) dataF);
 			unsigned int elemCount = *((unsigned int*) (dataF + 4));
+			
+			// finding the structure used for this data from NTRO blocks
 			baseStruct = 0;
 			for(int s=1;s<ntroH->structCount;s++)
 			{
@@ -241,13 +248,20 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 					break;
 				}
 			}
+			
+			// assign node value and attach them to tree
 			node->value = 0;
 			parent->Attach(node);
+			
+			// loop over each element
 			for(int e=0;e<elemCount;e++)
 			{
+				// new element node
 				KeyValue* elemNode = new KeyValue();
 				node->Attach(elemNode);
+				// apply it
 				ApplyStruct(elemNode, baseStruct, elemPointer, rerlH, ntroH);
+				// move pointer to next element
 				elemPointer += baseStruct->size;
 			}
 		}
@@ -259,9 +273,10 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 		}
 		else
 		{
-			//printf("Applying value %s of type 0x%X\n",((char*) &f->nameOffset) + f->nameOffset,f->type);
-			// direct value
+			// Direct value
+			// rememeber: node->value is a pointer, not an actual value
 			node->value = dataF;
+			// special type
 			if(node->type == NTRO_DATA_TYPE_NAME)
 			{
 				// solve string reference
@@ -270,17 +285,17 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 			else if(node->type == NTRO_DATA_TYPE_HANDLE)
 			{
 				// solve external reference
+				// prepare hash value
 				int* h0 = (int*) node->value;
 				int* h1 = h0 + 1;
-				//printf("Processing record 0x%X%X (reverse for little end)\n",*h1,*h0);
+				// loop over RERL record
 				rerlRecord* recEntries = (rerlRecord*) (((char*) &rerlH->recordOffset) + rerlH->recordOffset);
 				for(int r=0;r<rerlH->recordCount;r++)
 				{
 					rerlRecord* rec = recEntries + r;
-					//printf("- comparing rec %d : 0x%X%X (reverse for little end) - %s\n",r,rec->id[0],rec->id[1],((char*) &rec->nameOffset) + rec->nameOffset);
 					if((*h0) == rec->id[0] && (*h1) == rec->id[1])
 					{
-						//printf("Found at %d\n",r);
+						// found it
 						node->value = ((char*) &rec->nameOffset) + rec->nameOffset;
 						break;
 					}
@@ -294,6 +309,7 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 
 void KVReader2::Clean(KeyValue* pData)
 {
+	// Recursively delete node
 	if(pData==0) return;
 	Clean(pData->sibling);
 	Clean(pData->child);
