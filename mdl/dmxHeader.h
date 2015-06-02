@@ -31,6 +31,11 @@ struct ntroStruct
 	emscripten_align1_int fieldOffset;
 	emscripten_align1_int fieldCount;
 	emscripten_align1_int flags;
+	
+	inline const char* name()
+	{
+		return ((char*) &this->nameOffset) + nameOffset;	
+	};
 };
 
 struct ntroEnumRes

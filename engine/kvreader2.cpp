@@ -186,7 +186,6 @@ KeyValue* KVReader2::Parse(char* data)
 
 void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerlHeader* rerlH, ntroHeader* ntroH)
 {
-	
 	// variable prepare
 	char* data = dataH;
 	ntroStruct* sEntries = (ntroStruct*) (((char*) &ntroH->structOffset) + ntroH->structOffset);
@@ -223,6 +222,7 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 		node->key = fieldName;
 		node->CalcHash();
 		node->type = f->type;
+		parent->Attach(node);
 		
 		// prepare just in case
 		char* indirect =  ((char*) &f->indirectOffset) + f->indirectOffset;
@@ -231,38 +231,77 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 		if(f->indirectLevel > 0 && indirect[0] == 0x04)
 		{
 			// Array of data
-			// assume it's struct type
 			
 			// structure: { 4:offset, 4:count }
 			char* elemPointer = dataF + *((unsigned int*) dataF);
 			unsigned int elemCount = *((unsigned int*) (dataF + 4));
 			
-			// finding the structure used for this data from NTRO blocks
-			baseStruct = 0;
-			for(int s=1;s<ntroH->structCount;s++)
+			node->value = 0;
+			
+			if(f->type==0x01)
 			{
-				ntroStruct* checking = sEntries + s;
-				if(checking->id == f->typeData)
+				// finding the structure used for this data from NTRO blocks
+				baseStruct = 0;
+				for(int s=1;s<ntroH->structCount;s++)
 				{
-					baseStruct = checking;
-					break;
+					ntroStruct* checking = sEntries + s;
+					if(checking->id == f->typeData)
+					{
+						baseStruct = checking;
+						break;
+					}
+				}
+				// loop over each element
+				for(int e=0;e<elemCount;e++)
+				{
+					// new element node
+					KeyValue* elemNode = new KeyValue();
+					node->Attach(elemNode);
+					// apply it
+					ApplyStruct(elemNode, baseStruct, elemPointer, rerlH, ntroH);
+					// move pointer to next element
+					elemPointer += baseStruct->size;
 				}
 			}
-			
-			// assign node value and attach them to tree
-			node->value = 0;
-			parent->Attach(node);
-			
-			// loop over each element
-			for(int e=0;e<elemCount;e++)
+			else
 			{
-				// new element node
-				KeyValue* elemNode = new KeyValue();
-				node->Attach(elemNode);
-				// apply it
-				ApplyStruct(elemNode, baseStruct, elemPointer, rerlH, ntroH);
-				// move pointer to next element
-				elemPointer += baseStruct->size;
+				printf("field %s type %d count %d\n",((char*) (&f->nameOffset)) + f->nameOffset,f->type,elemCount);
+			
+				// Apply current field over array
+				int fieldSize = 0;
+				if(f->type==NTRO_DATA_TYPE_HANDLE)
+				{
+					fieldSize = 8;
+				}
+				else if(f->type==NTRO_DATA_TYPE_NAME)
+				{
+					fieldSize = 4;
+				}
+				else if(f->type==NTRO_DATA_TYPE_SHORT || f->type==NTRO_DATA_TYPE_USHORT)
+				{
+					fieldSize = 2;
+				}
+				else if(f->type==NTRO_DATA_TYPE_INTEGER || f->type==NTRO_DATA_TYPE_UINTEGER || f->type==NTRO_DATA_TYPE_FLOAT)
+				{
+					fieldSize = 4;
+				}
+				if(fieldSize==0)
+				{
+					fieldSize = 8;
+					printf("Need field type for non-handle %d!!\n",f->type);
+				}
+				for(int e=0;e<elemCount;e++)
+				{
+					// new element node
+					KeyValue* elemNode = new KeyValue();
+					node->Attach(elemNode);
+					elemNode->type = f->type;
+					elemNode->key = 0;
+					// apply it
+					ApplyField(elemNode, f, elemPointer, rerlH, ntroH);
+					// move pointer to next element
+					elemPointer += fieldSize;
+				}
 			}
 		}
 		else if(f->indirectLevel > 0 && indirect[1] == 0x03)
@@ -273,36 +312,60 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 		}
 		else
 		{
-			// Direct value
-			// rememeber: node->value is a pointer, not an actual value
-			node->value = dataF;
-			// special type
-			if(node->type == NTRO_DATA_TYPE_NAME)
+			
+			if(f->type==0x01)
 			{
-				// solve string reference
-				node->value = node->value + *((unsigned int*) node->value);
-			}
-			else if(node->type == NTRO_DATA_TYPE_HANDLE)
-			{
-				// solve external reference
-				// prepare hash value
-				int* h0 = (int*) node->value;
-				int* h1 = h0 + 1;
-				// loop over RERL record
-				rerlRecord* recEntries = (rerlRecord*) (((char*) &rerlH->recordOffset) + rerlH->recordOffset);
-				for(int r=0;r<rerlH->recordCount;r++)
+				// child struct
+				for(int s=1;s<ntroH->structCount;s++)
 				{
-					rerlRecord* rec = recEntries + r;
-					if((*h0) == rec->id[0] && (*h1) == rec->id[1])
+					ntroStruct* checking = sEntries + s;
+					if(checking->id == f->typeData)
 					{
-						// found it
-						node->value = ((char*) &rec->nameOffset) + rec->nameOffset;
+						baseStruct = checking;
 						break;
 					}
 				}
+				// Now apply it
+				node->value = 0;
+				ApplyStruct(node, baseStruct, dataF, rerlH, ntroH);
 			}
-			// add node to parent
-			parent->Attach(node);
+			else
+			{
+				// Direct value
+				ApplyField(node, f, dataF,rerlH,ntroH);
+				// add node to parent
+			}
+		}
+	}
+}
+
+void KVReader2::ApplyField(KeyValue* node, ntroField* f, char* dataF, rerlHeader* rerlH, ntroHeader* ntroH)
+{
+	// rememeber: node->value is a pointer, not an actual value
+	node->value = dataF;
+	// special type
+	if(node->type == NTRO_DATA_TYPE_NAME)
+	{
+		// solve string reference
+		node->value = node->value + *((unsigned int*) node->value);
+	}
+	else if(node->type == NTRO_DATA_TYPE_HANDLE)
+	{
+		// solve external reference
+		// prepare hash value
+		int* h0 = (int*) node->value;
+		int* h1 = h0 + 1;
+		// loop over RERL record
+		rerlRecord* recEntries = (rerlRecord*) (((char*) &rerlH->recordOffset) + rerlH->recordOffset);
+		for(int r=0;r<rerlH->recordCount;r++)
+		{
+			rerlRecord* rec = recEntries + r;
+			if((*h0) == rec->id[0] && (*h1) == rec->id[1])
+			{
+				// found it
+				node->value = ((char*) &rec->nameOffset) + rec->nameOffset;
+				break;
+			}
 		}
 	}
 }
@@ -356,6 +419,10 @@ void KVReader2::Dump(KeyValue* cur)
 		else if(cur->type==NTRO_DATA_TYPE_BYTE)
 		{
 			printf(" %u",cur->AsByte());
+		}
+		else if(cur->type==NTRO_DATA_TYPE_FLOAT)
+		{
+			printf(" %f",cur->AsFloat());
 		}
 		else if(cur->type==10)	// not sure what it is, but it's used as image format
 		{

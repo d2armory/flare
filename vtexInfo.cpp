@@ -26,7 +26,7 @@ int main()
 	
 	// main code is here
 	printf("Openning vmat_c file\n");
-	const char* fileName = "testbin/axe_body_color.vmat_c";
+	const char* fileName = "testbin/axe.vmdl_c";
 	FILE* fp = fopen(fileName,"rb");
 	fseek(fp, 0, SEEK_END);
 	int fileSize = ftell(fp);
@@ -74,10 +74,12 @@ int main()
 	// Clean up
 	KVReader2::Clean(root);
 	
+	free(origFileData);
+	return 0;
 	
 	// Old Code
 	
-	/* dmxHeader* fileHeader = (dmxHeader*) fileData;
+	dmxHeader* fileHeader = (dmxHeader*) fileData;
 	
 	printf("File: %s\n",fileName);
 	printf("- size: %d\n",fileHeader->fileSize);
@@ -146,7 +148,7 @@ int main()
 				printf("------- name: %s\n",name);
 				printf("------- resource count: %d\n",e->resourceCount);
 				
-				ntroField* fEntry = (ntroField*) (((char*) &s->fieldOffset) + s->fieldOffset);
+				/* ntroField* fEntry = (ntroField*) (((char*) &s->fieldOffset) + s->fieldOffset);
 				for(int k=0;k<s->fieldCount;k++)
 				{
 					ntroField* f = fEntry + k;
@@ -163,7 +165,7 @@ int main()
 					{
 						printf("----------- %s\n",indirect);
 					}
-				}
+				} */
 			}
 		}
 		else if(blockHeader->name[0] == 'D')
@@ -188,10 +190,8 @@ int main()
 		// Note: can we compare hash using uint64_t or 2 uint32_t ? it should be a lot faster
 		// TODO: work on full parser
 	}
-//	
-	*/
+	
 	
 	free(origFileData);
-	
 	return 0;
 }

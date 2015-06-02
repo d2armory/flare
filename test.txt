@@ -1,0 +1,8 @@
+Adding directories to PATH:
+PATH += /root/emsdk_portable
+PATH += /root/emsdk_portable/clang/fastcomp/build_master_64/bin
+PATH += /root/emsdk_portable/emscripten/master
+
+Setting environment variables:
+EMSCRIPTEN = /root/emsdk_portable/emscripten/master
+

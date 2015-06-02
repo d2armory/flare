@@ -139,5 +139,6 @@ private:
 
 	// Applying structure recursively
 	static void ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerlHeader* rerlH, ntroHeader* ntroH);
+	static void ApplyField(KeyValue* node, ntroField* f, char* dataF, rerlHeader* rerlH, ntroHeader* ntroH);
 	
 };
