@@ -1,4 +1,6 @@
 
+#extension GL_OES_standard_derivatives : enable
+
 // settings
 precision mediump float;
 
@@ -51,6 +53,25 @@ float fclamp(float v, float min, float max)
 	return v;
 }
 
+mat3 cotangent_frame( vec3 N, vec3 p, vec2 uv )
+{
+	// get edge vectors of the pixel triangle
+	vec3 dp1 = dFdx( p );
+	vec3 dp2 = dFdy( p );
+	vec2 duv1 = dFdx( uv );
+	vec2 duv2 = dFdy( uv );
+	
+	// solve the linear system
+	vec3 dp2perp = cross( dp2, N );
+	vec3 dp1perp = cross( N, dp1 );
+	vec3 T = dp2perp * duv1.x + dp1perp * duv2.x;
+	vec3 B = dp2perp * duv1.y + dp1perp * duv2.y;
+	
+	// construct a scale-invariant frame 
+	float invmax = inversesqrt( max( dot(T,T), dot(B,B) ) );
+	return mat3( T * invmax, B * invmax, N );
+}
+
 // main
 void main()
 {
@@ -71,23 +92,28 @@ void main()
 		// if we want bluish looking normal map, (normal/2.0)-0.5 yield that result
 	}
 	
+	vec3 V = v3normalize(-fPos);
+	
+	mat3 invTBN = cotangent_frame( fN, -V, fUV );
+	
 	// Light calc
 	vec3 L = lightDir;
 	
 	vec3 N = fN;//normalTransform * v3normalize(fNormal);
-	vec3 T = fT;//normalTransform * v3normalize(fTangent.xyz);
-	vec3 B = fB;//cross(T, N);
+	//vec3 T = fT;//normalTransform * v3normalize(fTangent.xyz);
+	//vec3 B = fB;//cross(T, N);
 
-	mat3 TBN = mat3( T.x, B.x, N.x, T.y, B.y, N.y, T.z, B.z, N.z );
+	//mat3 TBN = mat3( T.x, B.x, N.x, T.y, B.y, N.y, T.z, B.z, N.z );
 	//mat3 invTBN = m3transpose(TBN);
 	//mat3 invNT = m3transpose(normalTransform);
 	
 	//vec3 txtNworld = invNT * invTBN * v3normalize((normal.rgb * 2.0) - 1.0);
 
 	vec3 txtN = v3normalize(normal.rgb);
-	vec3 tangentL = TBN * L;
+	vec3 worldN = invTBN * txtN;
+	//vec3 tangentL = TBN * L;
 	
-	float NdotL = -1.0 * dot(txtN, tangentL);
+	float NdotL = -1.0 * dot(worldN, L);
 	//float NdotL = dot(N, L);
 	
 	vec3 lColor = vec3(0.8,0.8,0.8);
@@ -145,15 +171,17 @@ void main()
 	}
 	diffuse = lColor * max(diffuseLight, 1e-6) * visibility;
 	
-	vec3 V = v3normalize(-fPos);
-	vec3 tangentV = TBN * V;
+	// moved to front
+	//vec3 V = v3normalize(-fPos);
+	//vec3 tangentV = TBN * V;
 	
 	if(NdotL > 1e-6)
 	{	
 		
-		//vec3 R = tangentL - (txtN * NdotL * 2.0);
-		vec3 tangentR = tangentL + (txtN * NdotL * 2.0);
-		float RdotV = dot(tangentR, tangentV);
+		vec3 R = L - (worldN * NdotL * 2.0);
+		//vec3 tangentR = tangentL + (txtN * NdotL * 2.0);
+		
+		float RdotV = dot(R, V);
 		
 		sColor = (sColor * (1.0 - mask2.b)) + (color.rgb * (mask2.b));
 		
@@ -171,7 +199,7 @@ void main()
 	
 	// somehow, normal from normal map break rimlight
 	// disabled until I find a reliable way to detect edge
-	float VdotN = dot(tangentV,txtN);
+	float VdotN = dot(V,worldN);
 	vec3 rimLight = vec3(0,0,0);
 	if(VdotN > 1e-6)
 	{
@@ -187,6 +215,8 @@ void main()
 	//gl_FragColor = (vec4(fTangent.aaa,1) / 4.0) + vec4(0.5,0.5,0.5,0);
 	//gl_FragColor = vec4(texture2D( texture[3], fUV ).rrr,1);
 	//gl_FragColor = normal;
+	
+	//gl_FragColor = vec4(fPos,1);
 	
 	/* int bshader= int(boneShader);
 	if(bshader&0x10==0 && bshader&0x01==0)

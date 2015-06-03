@@ -31,11 +31,13 @@ public:
 	static bool enableTextureCompression;
 	static bool enableVAO;
 	static bool enableFragDepth;
+	static bool enableFragTangent;
 	
 	static bool supportShadow;
 	static bool supportTextureCompression;
 	static bool supportVAO;
 	static bool supportFragDepth;
+	static bool supportFragTangent;
 	
 	static GLuint shadowFrameBuffer;
 	static GLuint shadowDepthTexture;

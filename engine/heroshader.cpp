@@ -105,7 +105,7 @@ bool HeroShader::Load()
 	return true;
 }
 
-void HeroShader::Bind(Model* m)
+void HeroShader::Bind(Model* m, int stripGroupIdx)
 {
 	// Use the program object
 	glUseProgram ( programLocation );
@@ -113,7 +113,7 @@ void HeroShader::Bind(Model* m)
 	
 }
 
-void HeroShader::Populate(Model* m, int stripGroupIdx)
+void HeroShader::Populate(Model* m, int index)
 {
 	
 	// debug flag: draw scene in light PoV
@@ -171,10 +171,10 @@ void HeroShader::Populate(Model* m, int stripGroupIdx)
 	}
 	
 	// texture binding
-	if(m->material != 0)
+	if(m->subModel[index]->material != 0)
 	{
-		m->material->Bind();
-		m->material->SetUniform(locHqNormal);
+		m->subModel[index]->material->Bind();
+		m->subModel[index]->material->SetUniform(locHqNormal);
 	}
 	// bind shadowmap
 	if(Scene::enableShadow)
@@ -186,16 +186,12 @@ void HeroShader::Populate(Model* m, int stripGroupIdx)
 	glUniform1iv( locTexture, 5, samplers );
 	
 	//unsigned int boneIndex[128];
-	unsigned int* boneIndexP = m->meshBoneIndex[stripGroupIdx];
-	//glm::vec3 bonePos[53];
-	//glm::quat boneRot[53];
+	unsigned int* boneIndexP = m->subModel[index]->meshBoneIndex;
 	glm::mat4 boneTransform[53];
-	unsigned int* mBoneList = m->meshBoneList[stripGroupIdx];
-	int bCount = m->meshBoneCount[stripGroupIdx];
+	unsigned int* mBoneList = m->subModel[index]->meshBoneList;
+	int bCount = m->subModel[index]->boneCount;
 	for(int i=0;i<bCount;i++)
 	{
-		//bonePos[i] = m->bonePos[mBoneList[i]];
-		//boneRot[i] = m->boneRot[mBoneList[i]];
 		boneTransform[i] = m->boneTransform[mBoneList[i]];
 	}
 	
@@ -207,13 +203,13 @@ void HeroShader::Populate(Model* m, int stripGroupIdx)
 	glUniformMatrix4fv( locBoneTransform, 53, GL_FALSE, &boneTransform[0][0][0]);
 }
 
-void HeroShader::Unbind(Model* m)
+void HeroShader::Unbind(Model* m, int index)
 {
 	
 	// unbind texture
-	if(m->material != 0)
+	if(m->subModel[index]->material != 0)
 	{
-		m->material->Unbind();
+		m->subModel[index]->material->Unbind();
 	}
 	//unbind shadow map
 	if(Scene::enableShadow)

@@ -15,6 +15,31 @@
 #define MODEL_NAME_LENGTH 128
 #define MODEL_STRIP_COUNT 4
 
+// forward dec
+class KeyValue;
+
+struct VertEx
+{
+	glm::vec3 normal;
+	//glm::vec3 tangent;
+};
+
+struct ModelDrawCall
+{
+	GLuint VAO;	// vertex array object
+	GLuint vertexVBO; // main vertex buffer object
+	GLuint vertexVBOex;	// extension vertex buffer object (for runtime processed data)
+	GLuint meshVBO;	// strip data
+	
+	unsigned int vertexCount;
+	unsigned int indexCount;
+	Material* material;
+	
+	unsigned int boneCount;
+	unsigned int* meshBoneList;
+	unsigned int* meshBoneIndex;
+};
+
 class Model
 {
 	
@@ -28,7 +53,7 @@ public:
 	void Draw(ESContext *esContext);
 	
 	// use on every draw call because no vao
-	void SetVAO();
+	void SetVAO(int i);
 
 	// TODO: move to private and make accessor
 	
@@ -42,27 +67,17 @@ public:
 	// data
 	char fileName[MODEL_NAME_LENGTH];
 	char meshFileName[MODEL_NAME_LENGTH];
-	char vertexFileName[MODEL_NAME_LENGTH];
 	FILE_STATE mdlState;
 	FILE_STATE meshState;
-	FILE_STATE vertexState;
 	
-	mdlHeader* data;	// kept for animation data
-	vvdHeader* vData;
-	vtxHeader* mData;
+	char* vmdlData;
+	char* vmeshData;
+	char* vanimData;
 	
-	int vertexCount;
+	KeyValue* meshRoot;
 	
-	GLuint vao;
-	GLuint vertexVBO[2];
-	int tangentOffset;
-	
-	int numStrip;
-	GLuint meshVBO[MODEL_STRIP_COUNT];
-	int elementLength[MODEL_STRIP_COUNT];
-	int meshBoneCount[MODEL_STRIP_COUNT];
-	unsigned int* meshBoneList[MODEL_STRIP_COUNT];	// to use in data preparation, 53 int for each strip (map to bonePos/boneRot)
-	unsigned int* meshBoneIndex[MODEL_STRIP_COUNT]; // to use in vert shader, 128 int for each strip
+	unsigned int subModelCount;
+	ModelDrawCall** subModel;
 	
 	int numBone;
 	glm::vec3* bonePos;	// array of position and rotation (in quat)
@@ -78,7 +93,6 @@ public:
 	
 	HeroShader* shader;
 	ShadowShader* shaderShadow;
-	Material* material;
 	
 	// manager
 	Model* nextModel;

@@ -239,8 +239,14 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 			
 			if(elemCount<=0)
 			{
-				printf("Something's wrong here...\n");
+				printf("Got %d size array, skippping\n",elemCount);
 				continue;
+			}
+			
+			if(elemCount>100)
+			{
+				// why it has to put all vertex in structure ...
+				elemCount = 100;
 			}
 			
 			node->value = 0;
@@ -272,7 +278,7 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 			}
 			else
 			{
-				printf("field %s type %d count %d\n",((char*) (&f->nameOffset)) + f->nameOffset,f->type,elemCount);
+				//printf("field %s type %d count %d\n",((char*) (&f->nameOffset)) + f->nameOffset,f->type,elemCount);
 			
 				// Apply current field over array
 				int fieldSize = 0;
@@ -295,7 +301,7 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 				if(fieldSize==0)
 				{
 					fieldSize = 8;
-					printf("Need field type for non-handle %d!!\n",f->type);
+					//printf("Need field type for non-handle %d!!\n",f->type);
 				}
 				for(int e=0;e<elemCount;e++)
 				{
@@ -407,35 +413,35 @@ void KVReader2::Dump(KeyValue* inNode)
 		{
 			if(cur->type==NTRO_DATA_TYPE_HANDLE || cur->type==NTRO_DATA_TYPE_NAME)
 			{
-				printf(" '%s'",cur->AsHandle());
+				printf(" str:'%s'",cur->AsHandle());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_INTEGER)
 			{
-				printf(" %d",cur->AsInt());
+				printf(" int:%d",cur->AsInt());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_UINTEGER)
 			{
-				printf(" %u",cur->AsUint());
+				printf(" uint:%u",cur->AsUint());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_SHORT)
 			{
-				printf(" %d",cur->AsShort());
+				printf(" short:%d",cur->AsShort());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_USHORT)
 			{
-				printf(" %u",cur->AsUshort());
+				printf(" ushort:%u",cur->AsUshort());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_BYTE)
 			{
-				printf(" %u",cur->AsByte());
+				printf(" char:%u",cur->AsByte());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_FLOAT)
 			{
-				printf(" %f",cur->AsFloat());
+				printf(" float:%f",cur->AsFloat());
 			}
 			else if(cur->type==10)	// not sure what it is, but it's used as image format
 			{
-				printf(" %u",cur->AsByte());
+				printf(" format:%u",cur->AsByte());
 			}
 			else
 			{

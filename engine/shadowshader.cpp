@@ -73,7 +73,7 @@ void ShadowShader::Load()
 	locMvpTransform = glGetUniformLocation(programObject, "mvpTransform");
 }
 
-void ShadowShader::Bind(Model* m)
+void ShadowShader::Bind(Model* m, int index)
 {
 	// Use the program object
 	glUseProgram ( programLocation );
@@ -81,7 +81,7 @@ void ShadowShader::Bind(Model* m)
 	
 }
 
-void ShadowShader::Populate(Model* m, int stripGroupIdx)
+void ShadowShader::Populate(Model* m, int index)
 {
 	
 	// TODO: send bone data
@@ -108,7 +108,7 @@ void ShadowShader::Populate(Model* m, int stripGroupIdx)
 
 }
 
-void ShadowShader::Unbind(Model* m)
+void ShadowShader::Unbind(Model* m, int index)
 {
 	// Use the program object
 	glUseProgram ( 0 );

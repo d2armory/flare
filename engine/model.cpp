@@ -4,32 +4,22 @@
 Model::Model(const char* fileName)
 {
 	strncpy(this->fileName,fileName,MODEL_NAME_LENGTH);
-	std::string sFN(this->fileName);
-	unsigned found = sFN.find_last_of(".");
-	std::string sFNne = sFN.substr(0,found);
-	std::string vFilename = sFNne + ".vvd";
-	std::string mFilename = sFNne + ".dx90.vtx";
-	strncpy(this->meshFileName,mFilename.c_str(),MODEL_NAME_LENGTH);
-	strncpy(this->vertexFileName,vFilename.c_str(),MODEL_NAME_LENGTH);
+	
 	state = FS_UNINIT;
 	mdlState = FS_UNINIT;
 	meshState = FS_UNINIT;
-	vertexState = FS_UNINIT;
-	numStrip = 0;
+	
+	vmdlData = 0;
+	vmeshData = 0;
+	vanimData = 0;
+	
+	subModel = 0;
+	subModelCount = 0;
+	
 	nextModel = 0;
-	material = 0;
+	
 	shader = 0;
 	shaderShadow = 0;
-	vao = 0;
-	
-	//meshBoneCount[0] = 0;
-	//meshBoneList[MODEL_STRIP_COUNT];
-	for(int i=0;i<MODEL_STRIP_COUNT;i++)
-	{
-		meshBoneCount[i] = 0;
-		meshBoneList[i] = 0;	// to be filled whend data came
-		meshBoneIndex[i] = 0;
-	}
 	
 	numBone = 0;
 	bonePos = 0;	// init after we know exact number
@@ -43,9 +33,18 @@ Model::Model(const char* fileName)
 
 Model::~Model()
 {
-	if(data) delete data;
-	if(vData) delete vData;
-	if(mData) delete mData;
+	if(meshRoot)
+	{
+		KVReader2::Clean(meshRoot);
+	}
+	if(subModel) 
+	{
+		for(int i=0;i<subModelCount;i++)
+		{
+			delete subModel[i];
+		}
+		delete subModel;
+	}
 	if(bonePos) delete bonePos;
 	if(boneRot) delete boneRot;
 }
@@ -56,351 +55,167 @@ void Model::Update(ESContext *esContext, float deltaTime)
 	{
 		state = FS_LOADING;
 		mdlState = FS_LOADING;
-		meshState = FS_LOADING;
-		vertexState = FS_LOADING;
 		FileLoader::Load(fileName);
-		FileLoader::Load(meshFileName);
-		FileLoader::Load(vertexFileName);
 	}
 	if(state==FS_LOADING)
 	{
 		if(mdlState == FS_LOADING && FileLoader::FileExist(fileName))
 		{
 			mdlState = FS_READY;
+			
+			vmdlData = FileLoader::ReadFile(fileName);
+			KeyValue* root = KVReader2::Parse(vmdlData);
+			
+			KeyValue* modelRefs = root->Find("m_refMeshes");
+			KeyValue* lod0 = modelRefs->Get(0);
+			
+			// Read vmdl and load related mesh and animation files
+			std::string mFilename = std::string(lod0->AsHandle()) + "_c";
+			strncpy(this->meshFileName,mFilename.c_str(),MODEL_NAME_LENGTH);
+			FileLoader::Load(meshFileName);
+			meshState = FS_LOADING;
+			
+			KVReader2::Clean(root);
+
 		}
 		if(meshState == FS_LOADING && FileLoader::FileExist(meshFileName))
 		{
 			meshState = FS_READY;
 		}
-		if(vertexState == FS_LOADING && FileLoader::FileExist(vertexFileName))
-		{
-			vertexState = FS_READY;
-		}
-		if(mdlState == FS_READY && meshState == FS_READY && vertexState == FS_READY)
+		if(mdlState == FS_READY && meshState == FS_READY)
 		{
 			state = FS_READY;
 			
-			mdlHeader* mh =  data = (mdlHeader*) FileLoader::ReadFile(fileName);
+			vmeshData = FileLoader::ReadFile(meshFileName);
+			KeyValue* root = KVReader2::Parse(vmeshData);
+			meshRoot = root;
 			
-			char* mhId = (char*) &mh->id;
+			KeyValue* scene = root->Find("m_sceneObjects");
+			KeyValue* drawCalls = scene->Get(0)->Find("m_drawCalls");
 			
-			printf("model: %s\n",fileName);
-			//printf("- ID: %c%c%c%c (0x%X)\n",*mhId,*(mhId+1),*(mhId+2),*(mhId+3),mh->id);
-			//printf("- Version: %d\n",mh->version);
-			//printf("- Checksum: 0x%X\n",mh->checksum);
-			//printf("- Name: %s\n",mh->name);
-			//printf("- Length: %d\n",mh->length);
-			
-			// assume 1 material per model
-			mdlTexture* texture = mh->pTexture(0);
-			//printf("----- %i: %s\n",i,texture->pszName());
-			std::string txtFilename = std::string(texture->pszName());
-			
-			// TODO: don't force this on source 1 format
-			txtFilename = "materials/" + txtFilename + ".vmt";
-			
-			material = new Material(txtFilename.c_str());
-			Manager::add(material);
+			subModelCount = drawCalls->childCount;
+			subModel = new ModelDrawCall*[subModelCount];
 			
 			//printf("- Num bones: %d\n",mh->numbones);
-			numBone = mh->numbones;
+			KeyValue* skeleton = root->Find("m_skeleton")->Get(0);
+			numBone = skeleton->Find("m_nBoneCount")->AsUshort();
 			bonePos = new glm::vec3[numBone];
 			boneRot = new glm::quat[numBone];
 			boneTransform = new glm::mat4[numBone];
 		
-			for(int i=0;i<mh->numbones;i++)
+			KeyValue* boneNameList = skeleton->Find("m_boneNames");
+		
+			for(int i=0;i<boneNameList->childCount;i++)
 			{
 				boneTransform[i] = glm::mat4(1);
-				mdlBone* bone = mh->pBone(i);
-				printf("--- %i: %s",i,bone->pszName());
-				//if(bone->parent != -1)
+				printf("--- %i: %s\n",i,boneNameList->Get(i)->AsName());
+			}
+			
+			for(int d=0;d<subModelCount;d++)
+			{
+				
+				KeyValue* dc = drawCalls->Get(d);
+				
+				// Prepare material
+				KeyValue* materialNode = dc->Find("m_pMaterial");
+				std::string txtFilename = std::string(materialNode->AsHandle());
+				txtFilename = txtFilename + "_c";
+				Material* mat = new Material(txtFilename.c_str());
+				Manager::add(mat);
+				
+				// Prepar variable
+				subModel[d] = new ModelDrawCall();
+				ModelDrawCall* sm = subModel[d];
+				
+				glGenBuffers(1, (GLuint*) &sm->vertexVBO);
+				glGenBuffers(1, (GLuint*) &sm->vertexVBOex);
+				glGenBuffers(1, (GLuint*) &sm->meshVBO);
+				if(Scene::enableVAO)
+				{
+					glGenVertexArrays(1, &sm->VAO);
+				}
+				
+				sm->vertexCount = dc->Find("m_nVertexCount")->AsInt();
+				sm->indexCount = dc->Find("m_nIndexCount")->AsInt();
+				sm->material = mat;
+				
+				// Load vertex
+				KeyValue* vbNode = root->Find("m_vertexBuffers")->Get(d);
+				char* vertexData = vbNode->Find("m_pData")->Get(0)->value;
+				int vertexSize = vbNode->Find("m_nElementSizeInBytes")->AsInt();
+				
+				glBindBuffer(GL_ARRAY_BUFFER, sm->vertexVBO);
+				unsigned int vertexBufferSize = vertexSize * sm->vertexCount;
+				glBufferData(GL_ARRAY_BUFFER, vertexBufferSize , vertexData, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				
+				// Prepare vertex data extension
+				VertEx* vertexExData = new VertEx[sm->vertexCount];
+				//for(int v=0;v<sm->vertexCount;v++)	// might consider merging into below loop
 				//{
-				//	printf(" - %s (%i)",mh->pBone(bone->parent)->pszName(),bone->parent);
+				//	vertexExData[v] = new VertEx();
 				//}
-				//printf(" - %x",(unsigned int) &(bone->rot));
-				//printf("\n");
-			}
-			
-			// VBO gen
-			glGenBuffers(2, (GLuint*) &this->vertexVBO);
-			glGenBuffers(MODEL_STRIP_COUNT, (GLuint*) &this->meshVBO);
-			
-			if(this->vertexVBO[0]==0 || this->meshVBO[0]==0)
-			{
-				printf("Error: unbale to gen buffer for vertex\n");
-				return;
-			}
-			
-			// load vertex data
-			
-			vData = (vvdHeader*) FileLoader::ReadFile(vertexFileName);
-			
-			//printf("vertices: %s\n",vertexFileName);
-			//printf("- id: %d\n",vData->id);
-			//printf("- version: %d\n",vData->version);
-			//printf("- checksum: %ld\n",vData->checksum);
-			//printf("- num lods: %d\n",vData->numLODs);
-			vertexCount = 0;
-			for(int l=0;l<vData->numLODs;l++)
-			{
-				vertexCount += vData->numLODVertexes[l];
-				//printf("--- lod %d: %d verts\n",l,vData->numLODVertexes[l]);
-			}
-			// ignore fixup
-			//printf("- num fixup: %d\n",vData->numFixups);
-			
-			char* vertexData = (char*) vData;
-			vertexData += vData->vertexDataStart;
-			
-			glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[0]);
-			// vertex and tangent
-			unsigned int vertexBufferSize = (sizeof(vvdVertexFormat)) * vertexCount;
-			glBufferData(GL_ARRAY_BUFFER, vertexBufferSize , vertexData, GL_STATIC_DRAW);
-			
-			//printf("err = %d\n",glGetError());
-			
-			//tangentOffset = vData->tangentDataStart - vData->vertexDataStart;
-			
-			//printf("tOffset = %d , calcSize = %d\n",tangentOffset, sizeof(vvdVertexFormat) * vertexCount);
-			
-			char* tangentData = (char*) vData;
-			tangentData += vData->tangentDataStart;
-			
-			glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[1]);
-			// vertex and tangent
-			unsigned int tangentBufferSize = sizeof(glm::vec4) * vertexCount;
-			glBufferData(GL_ARRAY_BUFFER, tangentBufferSize , tangentData, GL_STATIC_DRAW);
-			
-			if(Scene::enableVAO)
-			{
-				glGenVertexArrays(1, &this->vao);
-				glBindVertexArray(this->vao);
-				this->SetVAO();
-				glBindVertexArray(0);
-			}
-			
-			// bind mesh
-			mData = (vtxHeader*) FileLoader::ReadFile(meshFileName);
-			//printf("meshes: %s\n",meshFileName);
-			//printf("- version: %d\n",mData->version);
-			//printf("- num lods: %d\n",mData->numLODs);
-			//printf("- num bodyparts: %d\n",mData->numBodyParts);
-			printf("max bone per strip = %d\n",mData->maxBonesPerStrip);
-			
-			//elementLength = 0;
-			
-			// assume 1 body parts
-			if(mData->numBodyParts==1)
-			{
-				vtxBodyPart* bp = (vtxBodyPart*) (((char*)(mData)) + mData->bodyPartOffset);
-				//printf("- num models: %d\n",bp->numModels);
-				// assume 1 models
-				if(bp->numModels==1)
+				// since GLES 2 does not supprt GL_INT_2_10_10_10_REV,
+				// integer uniform, bitwise operation, and lots other things
+				// that can make my life easier, I have to preprocessed this
+				// normal into one that GLES 2 understand
+				
+				// unpack GL_INT_2_10_10_10_REV normal
+				float maxN = 1 / ((float) (1 << 11));
+				for(int v=0;v<sm->vertexCount;v++)
 				{
-					vtxModelHeader* mh = (vtxModelHeader*) (((char*)(bp)) + bp->modelOffset);
-					for(int l=0;l<mh->numLODs;l++)
-					{
-						vtxModelLOD* mlod = ((vtxModelLOD*) (((char*)(mh)) + mh->lodOffset)) + l;
-						//printf("--- lod %d: mesh = %d\n",l,mlod->numMeshes);
-						if(l==0)
-						{
-							for(int m=0;m<mlod->numMeshes;m++)
-							{
-								vtxMesh* msh = ((vtxMesh*) (((char*)(mlod)) + mlod->meshOffset)) + m;
-								//printf("----- mesh %d: strip group = %d\n",m,msh->numStripGroups);
-								for(int sg=0;sg<msh->numStripGroups;sg++)
-								{
-									vtxStripGroup* stripgr = ((vtxStripGroup*) (((char*)(msh)) + msh->stripGroupHeaderOffset)) + sg;
-									
-									printf("------- strip group %d\n",sg);
-									//printf("--------- verts: %d\n",stripgr->numVerts);
-									//printf("--------- indices: %d\n",stripgr->numIndices);
-									//printf("--------- strips: %d\n",stripgr->numStrips);
-									//printf("--------- flag: 0x%X\n",stripgr->flags);
-									
-									if((stripgr->flags & 0x02) != 0)
-									{
-										//for(int s=0;s<stripgr->numStrips;s++)
-										//{
-										//vtxStrip* strip = ((vtxStrip*) (((char*)(stripgr)) + stripgr->stripOffset));
-										//printf("--------- strip %d\n",s);
-										//printf("----------- verts: %d\n",strip->numVerts);
-										//printf("----------- indices: %d\n",strip->numIndices);
-										//printf("----------- flag: 0x%X\n",strip->flags);
-										//}
-										
-										//if(elementLength>0) continue;
-										
-										elementLength[numStrip] = stripgr->numIndices;
-										unsigned short* elementBuffer = new unsigned short[stripgr->numIndices];
-										
-										vtxVertex* vertexArr = ((vtxVertex*) (((char*)(stripgr)) + stripgr->vertOffset));
-										//printf("%X\n",stripgr->vertOffset);
-										unsigned char* vertexArrC = (unsigned char*) (((unsigned int)(stripgr)) + stripgr->vertOffset);
-										
-										//vertexArr = ((vtxVertex*) (((char*)(stripgr)) + strip->vertOffset));
-										//printf("%X\n",vertexArr);
-										unsigned short* indexArr = (unsigned short*) (((unsigned int) (stripgr)) + stripgr->indexOffset);
-										unsigned char* indexArrC = (unsigned char*) (((unsigned int) (stripgr)) + stripgr->indexOffset);
-										
-										//printf("%d\n",((unsigned int)indexArr)-((unsigned int)mData));
-										
-										/* for(int v=0;v<10;v++)
-										{
-											printf("%u ",&(indexArr[v]) - ((unsigned int) mData));
-										}
-										printf("\n"); */
-										
-										/* for(int v=0;v<stripgr->numVerts;v++)
-										{
-											printf("%hu ",vertexArr[v].origMeshVertID);
-										}
-										printf("\n"); */
-										
-										// bone list for this strip
-										bool boneUsage[128];	// 128 bone per model
-										for(int b=0;b<128;b++)
-										{
-											boneUsage[b] = false;
-										}
-										for(int v=0;v<stripgr->numVerts;v++)
-										{
-											unsigned char* efp = vertexArrC + (v*9) + 4;
-											unsigned char* efp2 = efp + 1;
-											unsigned short evp = *efp;
-											unsigned short evp2 = *efp2;
-											unsigned int vID = (evp2 << 8) + evp;
-											vvdVertexFormat* vert = ((vvdVertexFormat*) (((char*) vData) + vData->vertexDataStart)) + vID;
-											//unsigned char* b1 = vertexArrC + (v*9) + 6;
-											//unsigned char* b2 = b1 + 1;
-											//unsigned char* b3 = b1 + 2;
-											unsigned char b1 = vert->boneid[0];
-											unsigned char b2 = vert->boneid[1];
-											unsigned char b3 = vert->boneid[2];
-											boneUsage[b1] = true;
-											boneUsage[b2] = true;
-											boneUsage[b3] = true;
-										}
-										
-										meshBoneCount[numStrip] = 0;
-										meshBoneList[numStrip] = new unsigned int[53];
-										meshBoneIndex[numStrip] = new unsigned int[128];
-										unsigned char bCounter = 0;
-										printf("Bone usage: ");
-										for(int b=0;b<128;b++)
-										{
-											if(boneUsage[b])
-											{
-												meshBoneCount[numStrip]++;
-												meshBoneList[numStrip][bCounter] = b;
-												meshBoneIndex[numStrip][b] = bCounter;
-												bCounter++;
-												printf("%d ",b);
-											}
-											else
-											{
-												meshBoneIndex[numStrip][b] = 0;	// fallback to root?
-											}
-										}
-										printf("\n");
-										
-										// if this model has parent, map bone id to parent instead
-										
-										for(int v=0;v<elementLength[numStrip];v++)
-										{
-											// need hack to access short correctly on non-aligned byte
-											//unsigned short idx = *((unsigned short*) (((unsigned int) indexArr) + (v * 2)));
-											unsigned char* fp = indexArrC + (v<<1);
-											unsigned char* fp2 = fp + 1;
-											unsigned short vp = *fp;
-											unsigned short vp2 = *fp2;
-											unsigned short idx = (vp2 << 8) + vp;
-											//printf("%u ",((unsigned int) (indexArr + v)) - ((unsigned int)mData));
-											//printf("%X %X ",vp, vp2);
-											//printf("%hu ",idx);
-											//if(v%32==31) printf("\n");
-											//char* fp = vertexArrC + (idx*9) + 3;
-											//char* fp2 = fp + 1;
-											unsigned char* efp = vertexArrC + (idx*9) + 4;
-											unsigned char* efp2 = efp + 1;
-											unsigned short evp = *efp;
-											unsigned short evp2 = *efp2;
-											elementBuffer[v] = (evp2 << 8) + evp;
-											//printf("%hu %hu ",*fp,*fp2);
-											
-											//unsigned char* b1 = efp2 + 1;
-											//unsigned char* b2 = efp2 + 2;
-											//unsigned char* b3 = efp2 + 3;
-											
-											//printf("bone: %d, %d, %d\n",*b1,*b2,*b3);
-											
-											//if(elementBuffer[idx] >= vertexCount) 
-											//{
-											//	printf("%d\n",elementBuffer[idx]);
-											//	elementBuffer[idx] = vertexCount - 1;
-											//}
-											
-											//printf("%d: %hu - %hu - %hu\n",v,indexArr[v],vertexArr[v].origMeshVertID,elementBuffer[v]);
-											
-											/* if(v%3==2)
-											{
-												// swap 2 and 3
-												unsigned short tmp = elementBuffer[v-1];
-												elementBuffer[v-1] = elementBuffer[v];
-												elementBuffer[v] = tmp;
-											} */
-										}
-										
-										/* for(int v=0;v<elementLength[numStrip];v++)
-										{
-											printf("%hu ",elementBuffer[v]);
-										}
-										printf("\n"); */
-										
-										//printf("--------- put stripgroup %d to vbo %d : %d unsigned short transfered\n",sg,this->meshVBO[numStrip],stripgr->numIndices);
-										
-										glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->meshVBO[numStrip]);
-										glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * stripgr->numIndices, elementBuffer, GL_STATIC_DRAW);
-										glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-										
-										numStrip++;
-										
-										delete elementBuffer;
-									}
-									else
-									{
-										//printf("----------- non-hw skin grp, skip\n");
-									}
-									
-								}
-							}
-						}
-						else
-						{
-							//printf("----- skipping non-0 lod\n");
-						}
-					}
+					int normal = *((int*) (vertexData + (v * vertexSize) + 12));
+					int nx = (((int) normal & 0x000003FF) << 22) >> 22;	// so we get signed padding
+					int ny = ((normal & 0x000FFC00) << 12) >> 22;
+					int nz = ((normal & 0x3FF00000) << 2) >> 22;
+					vertexExData[v].normal[0] = nx * maxN;
+					vertexExData[v].normal[1] = ny * maxN;
+					vertexExData[v].normal[2] = nz * maxN;
+					vertexExData[v].normal = glm::normalize(vertexExData[v].normal);
 				}
-				else
+				// tangent calculation moved to fragment shader
+				
+				// transfer data
+				glBindBuffer(GL_ARRAY_BUFFER, sm->vertexVBOex);
+				unsigned int vertexExBufferSize = sizeof(VertEx) * sm->vertexCount;
+				glBufferData(GL_ARRAY_BUFFER, vertexExBufferSize , vertexExData, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				delete vertexExData;
+				
+				// Bind VAO
+				if(Scene::enableVAO)
 				{
-					printf("- unsporrted num models count\n");
+					glBindVertexArray(sm->VAO);
+					this->SetVAO(d);
+					glBindVertexArray(0);
 				}
-			}
-			else
-			{
-				printf("- unsporrted num bodyparts count\n");
-			}
 			
-			// unbind all
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			//glBindVertexArray(0);
+				// Load strip data
+				KeyValue* ibNode = root->Find("m_indexBuffers")->Get(d);
+				char* indexData = ibNode->Find("m_pData")->Get(0)->value;
+				int indexSize = ibNode->Find("m_nElementSizeInBytes")->AsInt();
+				unsigned int indexBufferSize = indexSize * sm->indexCount;
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sm->meshVBO);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBufferSize, indexData, GL_STATIC_DRAW);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				
+				// calculate bone data
+				// TODO: calculate them
+				sm->boneCount = 1;
+				sm->meshBoneList = new unsigned int[sm->boneCount];
+				sm->meshBoneIndex = new unsigned int[128];	// = MAX_BONE
+				
+			}
+
+			// dont't clean up yet
+			//KVReader2::Clean(root);
 			
 		}
 	}
 	else if(state==FS_READY)
 	{
 		// handle animation here
-		if(useAnimation)
+		/* if(useAnimation)
 		{
 			mdlHeader* mh = data;
 			// 3 for loadout
@@ -572,18 +387,18 @@ void Model::Update(ESContext *esContext, float deltaTime)
 							
 							//glm::vec3 jointPos = bOrigPosSw;// glm::vec4(bonePos[b],1);
 							
-							/* if(p>=0)
-							{
-								int curPar = p;
-								mdlBone* par = 0;
-								do
-								{
-									par = mh->pBone(curPar);
-									jointPos -= glm::vec4(bonePos[curPar],0);
-									curPar = par->parent;
-								} while(curPar >= 0);
-								//jointPos = boneTransform[p] * jointPos;
-							} */
+							//if(p>=0)
+							//{
+							//	int curPar = p;
+							//	mdlBone* par = 0;
+							//	do
+							//	{
+							//		par = mh->pBone(curPar);
+							//		jointPos -= glm::vec4(bonePos[curPar],0);
+							//		curPar = par->parent;
+							//	} while(curPar >= 0);
+							//	//jointPos = boneTransform[p] * jointPos;
+							//}
 							
 							if(b==0)
 							{
@@ -598,30 +413,30 @@ void Model::Update(ESContext *esContext, float deltaTime)
 							//}
 							//else //if(b==1)
 							//{
-								/* glm::mat4 toSMD(
-									0.0f,	0.0f,	-1.0f,	0.0f,
-									1.0f,	0.0f,	0.0f,	0.0f,
-									0.0f,	1.0f,	0.0f,	0.0f,
-									0.0f,	0.0f,	0.0f,	1.0f
-								);
-								glm::mat4 fromSMD(
-									0.0f,	1.0f,	0.0f,	0.0f,
-									0.0f,	0.0f,	1.0f,	0.0f,
-									-1.0f,	0.0f,	0.0f,	0.0f,
-									0.0f,	0.0f,	0.0f,	1.0f
-								); */
-								glm::mat4 toSMD(1);/*
-									0.0f,	-1.0f,	0.0f,	0.0f,
-									0.0f,	0.0f,	1.0f,	0.0f,
-									1.0f,	0.0f,	0.0f,	0.0f,
-									0.0f,	0.0f,	0.0f,	1.0f
-								);*/
-								glm::mat4 fromSMD(1);/*
-									0.0f,	0.0f,	1.0f,	0.0f,
-									-1.0f,	0.0f,	0.0f,	0.0f,
-									0.0f,	1.0f,	0.0f,	0.0f,
-									0.0f,	0.0f,	0.0f,	1.0f
-								);*/
+								// glm::mat4 toSMD(
+								//	0.0f,	0.0f,	-1.0f,	0.0f,
+								//	1.0f,	0.0f,	0.0f,	0.0f,
+								//	0.0f,	1.0f,	0.0f,	0.0f,
+								//	0.0f,	0.0f,	0.0f,	1.0f
+								//);
+								//glm::mat4 fromSMD(
+								//	0.0f,	1.0f,	0.0f,	0.0f,
+								//	0.0f,	0.0f,	1.0f,	0.0f,
+								//	-1.0f,	0.0f,	0.0f,	0.0f,
+								//	0.0f,	0.0f,	0.0f,	1.0f
+								//);
+								//glm::mat4 toSMD(1);
+								//	0.0f,	-1.0f,	0.0f,	0.0f,
+								//	0.0f,	0.0f,	1.0f,	0.0f,
+								//	1.0f,	0.0f,	0.0f,	0.0f,
+								//	0.0f,	0.0f,	0.0f,	1.0f
+								//);
+								//glm::mat4 fromSMD(1);
+								//	0.0f,	0.0f,	1.0f,	0.0f,
+								//	-1.0f,	0.0f,	0.0f,	0.0f,
+								//	0.0f,	1.0f,	0.0f,	0.0f,
+								//	0.0f,	0.0f,	0.0f,	1.0f
+								//);
 								//toSMD = glm::transpose(toSMD);
 								//fromSMD = glm::transpose(fromSMD);
 								
@@ -629,7 +444,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 							//} 
 							//else
 							//{
-							//	boneTransform[b] = glm::translate(glm::mat4(1), bAnimPosSw) /* * glm::mat4_cast(boneRot[b]) * glm::transpose(glm::mat4_cast(bone->quat))*/ * glm::translate(glm::mat4(1), -1.0f * jointPos);
+							//	boneTransform[b] = glm::translate(glm::mat4(1), bAnimPosSw) * glm::translate(glm::mat4(1), -1.0f * jointPos);
 							//}
 							
 							if(p>=0)
@@ -645,7 +460,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					//}
 				}
 			}
-		}
+		}*/
 	}
 	
 }
@@ -665,91 +480,95 @@ void Model::Draw(ESContext *esContext)
 	
 	if(state == FS_READY)
 	{
-		// vao
-		if(Scene::enableVAO)
-		{
-			glBindVertexArray(this->vao);
-		}
-		else
-		{
-			this->SetVAO();
-		}
 		// shader check
 		bool shaderActive = 
-				(Scene::currentStep == RS_SCENE && shader != 0) || 
-				(Scene::currentStep == RS_SHADOW && shaderShadow != 0);
+			(Scene::currentStep == RS_SCENE && shader != 0) || 
+			(Scene::currentStep == RS_SHADOW && shaderShadow != 0);
+			
 		if(shaderActive)
 		{
-			// draw each strip
-			for(int i=0;i<numStrip;i++) 
+			// draw each submodel
+			for(int i=0;i<subModelCount;i++) 
 			{
-				if(meshVBO[i]!=0)
+				if(subModel[i]->vertexVBO!=0)
 				{
+					//printf("Drawing subModel %d\n",i);
+					// vao
+					if(Scene::enableVAO)
+					{
+						glBindVertexArray(subModel[i]->VAO);
+					}
+					else
+					{
+						this->SetVAO(i);
+					}
 					
-					if(Scene::currentStep==RS_SCENE) shader->Bind(this);
-					else if(Scene::currentStep==RS_SHADOW) shaderShadow->Bind(this);
+					if(Scene::currentStep==RS_SCENE) shader->Bind(this, i);
+					else if(Scene::currentStep==RS_SHADOW) shaderShadow->Bind(this, i);
 					
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVBO[i]);
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, subModel[i]->meshVBO);
 					
 					if(Scene::currentStep==RS_SCENE) shader->Populate(this, i);
 					else if(Scene::currentStep==RS_SHADOW) shaderShadow->Populate(this, i);
 		
 					// real drawing code, just 3 lines lol
-					glDrawElements(GL_TRIANGLES, elementLength[i], GL_UNSIGNED_SHORT, 0);
+					glDrawElements(GL_TRIANGLE_STRIP, subModel[i]->indexCount, GL_UNSIGNED_SHORT, 0);
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 					glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
-					if(Scene::currentStep==RS_SCENE) shader->Unbind(this);
-					else if(Scene::currentStep==RS_SHADOW) shaderShadow->Unbind(this);
+					if(Scene::currentStep==RS_SCENE) shader->Unbind(this, i);
+					else if(Scene::currentStep==RS_SHADOW) shaderShadow->Unbind(this, i);
+					
+					if(Scene::enableVAO)
+					{
+						glBindVertexArray(0);
+					}
 				}
 			}
-		}
-		if(Scene::enableVAO)
-		{
-			glBindVertexArray(0);
 		}
 	}
 }
 
-void Model::SetVAO()
+void Model::SetVAO(int i)
 {
-	if(this->vertexVBO[0]!=0)
+	if(subModel[i]->vertexVBO!=0)
 	{ 
-		glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[0]);
+		glBindBuffer(GL_ARRAY_BUFFER, subModel[i]->vertexVBO);
 		// XYZ pos
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 16);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 28, (void*) 0);
 		glEnableVertexAttribArray(0);
-		// Normal
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 28);
-		glEnableVertexAttribArray(1);
 		// UV
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 40);
+		glVertexAttribPointer(2, 2, GL_UNSIGNED_SHORT, GL_TRUE, 28, (void*) 16);
 		glEnableVertexAttribArray(2);
 		// num bones
-		glVertexAttribPointer(3, 1, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 15);
+		glVertexAttribPointer(3, 1, GL_UNSIGNED_BYTE, GL_FALSE, 28, (void*) 23);	// not used anymore?
 		glEnableVertexAttribArray(3);
 		// bone id
-		glVertexAttribPointer(4, 1, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 12);
+		glVertexAttribPointer(4, 1, GL_UNSIGNED_BYTE, GL_FALSE, 28, (void*) 20);
 		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(5, 1, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 13);
+		glVertexAttribPointer(5, 1, GL_UNSIGNED_BYTE, GL_FALSE, 28, (void*) 21);
 		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(6, 1, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(vvdVertexFormat), (void*) 14);
+		glVertexAttribPointer(6, 1, GL_UNSIGNED_BYTE, GL_FALSE, 28, (void*) 22);
 		glEnableVertexAttribArray(6);
 		// bone weight
-		glVertexAttribPointer(7, 1, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 0);
+		glVertexAttribPointer(7, 1, GL_UNSIGNED_BYTE, GL_TRUE, 28, (void*) 24);
 		glEnableVertexAttribArray(7);
-		glVertexAttribPointer(8, 1, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 4);
+		glVertexAttribPointer(8, 1, GL_UNSIGNED_BYTE, GL_TRUE, 28, (void*) 25);
 		glEnableVertexAttribArray(8);
-		glVertexAttribPointer(9, 1, GL_FLOAT, GL_FALSE, sizeof(vvdVertexFormat), (void*) 8);
+		glVertexAttribPointer(9, 1, GL_UNSIGNED_BYTE, GL_TRUE, 28, (void*) 26);
 		glEnableVertexAttribArray(9);
 	}
 	
-	if(this->vertexVBO[1]!=0)
+	if(subModel[i]->vertexVBOex!=0)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO[1]);
-		// tangent
-		glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*) 0);
-		glEnableVertexAttribArray(10);
+		glBindBuffer(GL_ARRAY_BUFFER, subModel[i]->vertexVBOex);
+		// Normal
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertEx), (void*) 0);
+		glEnableVertexAttribArray(1);
+		
+		// tangent - moved to frag shader
+		//glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*) 0);
+		//glEnableVertexAttribArray(10);
 	}
 }
 

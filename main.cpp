@@ -31,7 +31,7 @@ unsigned int frames = 0;
 bool axe_data = false;
 bool bounty_data = false;
 float total = 0;
-int modelCount = 6;
+int modelCount = 1;
 Model** mx = 0;
 
 int Init ( ESContext *esContext )
@@ -104,13 +104,13 @@ void Update ( ESContext *esContext, float deltaTime )
 	{
 		bounty_data = true;
 
-		const char* modelName[6] = {
-			"models/heroes/axe/axe.mdl",
+		const char* modelName[1] = {
+			"models/heroes/axe/axe.vmdl_c",
 			//"models/heroes/axe/axe_armor.mdl",
-			"models/items/axe/molten_claw/molten_claw.mdl",
-			"models/heroes/axe/axe_belt.mdl",
-			"models/heroes/axe/axe_ponytail.mdl",
-			"models/heroes/axe/axe_weapon.mdl",
+			//"models/items/axe/molten_claw/molten_claw.mdl",
+			//"models/heroes/axe/axe_belt.mdl",
+			//"models/heroes/axe/axe_ponytail.mdl",
+			//"models/heroes/axe/axe_weapon.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter_backpack.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter_bandana.mdl",
@@ -126,7 +126,7 @@ void Update ( ESContext *esContext, float deltaTime )
 			//"models/heroes/tidehunter/tidehunter_fish.mdl"
 			////"models/heroes/tidehunter/tidehunter_hook.mdl"
 			//"models/heroes/enigma/enigma.mdl"
-			"models/heroes/pedestal/pedestal_1_small.mdl"
+			//"models/heroes/pedestal/pedestal_1_small.mdl"
 		};
 
 		mx = new Model*[modelCount];
@@ -141,8 +141,8 @@ void Update ( ESContext *esContext, float deltaTime )
 		
 		//mx[0]->useAnimation = true; // enable animation for model in index 0
 		
-		Model* pedes = mx[modelCount-1];
-		pedes->rotation[0] = - M_PI / 2.0f;
+		//Model* pedes = mx[modelCount-1];
+		//pedes->rotation[0] = - M_PI / 2.0f;
 		//pedes->position[1] = -10.0f;
 		
 	//	Texture* testVtex = new Texture("custom/axe_body_color_psd_63afddb2.vtex_c");
@@ -155,14 +155,14 @@ void Update ( ESContext *esContext, float deltaTime )
 	if(bounty_data)
 	{
 		
-		if(mx[0]->material!=0)
-		{
+		//if(mx[0]->material!=0)
+		//{
 			//Texture* t = Manager::find("custom/axe_body_color_psd_63afddb2.vtex_c");
 			//Texture* t2 = Manager::find("materials/models/heroes/axe/axe_body_normal.vtf");
 			//printf("%X\n",(unsigned int) t);
 			//mx[0]->material->textureDiffuse = t;
 			//mx[0]->material->textureNormal = t2;
-		}
+		//}
 		
 		for(int i=0;i<modelCount;i++)
 		{

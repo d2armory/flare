@@ -51,6 +51,11 @@ varying vec3 fShadowCoord;
 
 varying float boneShader;
 
+vec2 v2normalize(vec2 a)
+{
+	return a / length(a);
+}
+
 vec3 v3normalize(vec3 a)
 {
 	return a / length(a);
@@ -84,37 +89,17 @@ void main()
 {
 	
 	vec3 vaPosIn = vPosition;
-	//vec3 bonePos1 = bonePos[boneIndex[int(vBone1)]];
-	//vec3 bonePos2 = bonePos[boneIndex[int(vBone2)]];
-	//vec3 bonePos3 = bonePos[boneIndex[int(vBone3)]];
-	//vec4 boneRot1 = boneRot[boneIndex[int(vBone1)]];
-	//vec4 boneRot2 = boneRot[boneIndex[int(vBone2)]];
-	//vec4 boneRot3 = boneRot[boneIndex[int(vBone3)]];
-	
-	//vec3 vaPos1 = (q4tom3(boneRot1) * vaPos) + bonePos1;
-	//vec3 vaPos2 = (q4tom3(boneRot2) * vaPos) + bonePos2;
-	//vec3 vaPos3 = (q4tom3(boneRot3) * vaPos) + bonePos3;
 	
 	vec3 vaPos = vec3(0,0,0);
-	
-	if(vBoneCount>=0.5)
-	{
-		vec3 vaPos1 = (boneTransform[boneIndex[int(vBone1)]] * vec4(vaPosIn,1)).xyz;
-		vaPos += vaPos1 * vBoneweight1;
-	}
-	if(vBoneCount>=1.5)
-	{
-		vec3 vaPos2 = (boneTransform[boneIndex[int(vBone2)]] * vec4(vaPosIn,1)).xyz;
-		vaPos += vaPos2 * vBoneweight2;
-	}
-	if(vBoneCount>=2.5)
-	{
-		vec3 vaPos3 = (boneTransform[boneIndex[int(vBone3)]] * vec4(vaPosIn,1)).xyz;
-		vaPos += vaPos3 * vBoneweight3;
-	}
+	vec3 vaPos1 = (boneTransform[boneIndex[int(vBone1)]] * vec4(vaPosIn,1)).xyz;
+	vaPos += vaPos1 * vBoneweight1;
+	vec3 vaPos2 = (boneTransform[boneIndex[int(vBone2)]] * vec4(vaPosIn,1)).xyz;
+	vaPos += vaPos2 * vBoneweight2;
+	vec3 vaPos3 = (boneTransform[boneIndex[int(vBone3)]] * vec4(vaPosIn,1)).xyz;
+	vaPos += vaPos3 * vBoneweight3;
 	
 	gl_Position = mvpTransform * vec4(vaPos,1);
-	fUV = vUV;
+	fUV = v2normalize(vUV);
 	fPos = (mvTransform * vec4(vaPos,1)).xyz;
 	fNormal = vNormal;
 	fTangent = vTangent;//normalTransform * vTangent;
