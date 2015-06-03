@@ -12,6 +12,7 @@ Texture::Texture(const char* fileName)
 	childLeft = 0;
 	childRight = 0;
 	nextTexture = 0;
+	isVtex = false;
 }
 Texture::~Texture()
 {
@@ -44,6 +45,7 @@ void Texture::Update()
 				printf("texture [S2]: %s\n",fileName);
 				
 				// SOURCE 2 format
+				isVtex = true;
 				
 				dmxHeader* dmxH = (dmxHeader*) txtData;
 				vtexHeader* vtexH = 0;
@@ -138,7 +140,7 @@ void Texture::Update()
 					{
 						// get data pointer
 						char* data = entry + imgSize[m*4+3];
-						printf("----- mm #%d : %dx%d , dxtSize: %d, startAt: %d (%d from SoF, %d from entry)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],(unsigned int) data,(unsigned int) (data-txtData),imgSize[m*4+3]);
+						//printf("----- mm #%d : %dx%d , dxtSize: %d, startAt: %d (%d from SoF, %d from entry)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],(unsigned int) data,(unsigned int) (data-txtData),imgSize[m*4+3]);
 						
 						unsigned int txtTypeFS = txtType;
 						

@@ -95,6 +95,7 @@ bool HeroShader::Load()
 	locLightDir = glGetUniformLocation(programObject, "lightDir");
 	locTexture = glGetUniformLocation(programObject, "texture");
 	locDrawShadow = glGetUniformLocation(programObject, "drawShadow");
+	locHqNormal = glGetUniformLocation(programObject, "hqNormal");
 	
 	locBoneIndex = glGetUniformLocation(programObject, "boneIndex");
 	//locBonePos = glGetUniformLocation(programObject, "bonePos");
@@ -173,6 +174,7 @@ void HeroShader::Populate(Model* m, int stripGroupIdx)
 	if(m->material != 0)
 	{
 		m->material->Bind();
+		m->material->SetUniform(locHqNormal);
 	}
 	// bind shadowmap
 	if(Scene::enableShadow)

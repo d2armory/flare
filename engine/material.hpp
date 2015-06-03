@@ -21,6 +21,7 @@ public:
 	// function
 	void Update();
 	void Bind();
+	void SetUniform(GLuint locHqNormal);
 	void Unbind();
 
 	char fileName[MATERIAL_NAME_LENGTH];

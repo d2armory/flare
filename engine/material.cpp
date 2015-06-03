@@ -177,6 +177,15 @@ void Material::Bind()
 	}
 }
 
+void Material::SetUniform(GLuint locHqNormal)
+{
+	Texture* txtN = Scene::defaultNormal;
+	if(state == FS_READY && textureNormal && textureNormal->state == FS_READY) txtN = textureNormal;
+	// HQ normal map
+	int hqn = (txtN->isVtex)?1:0;
+	glUniform1iv(locHqNormal, 1, &hqn);
+}
+
 void Material::Unbind()
 {
 	if(state == FS_READY)

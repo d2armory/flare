@@ -23,6 +23,7 @@ uniform sampler2D texture[5];
 
 uniform vec3 lightDir;
 uniform int drawShadow;
+uniform int hqNomal;
 
 // 2 1/4 vec4
 
@@ -61,13 +62,14 @@ void main()
 	vec4 mask2 = texture2D( texture[3], fUV);
 	
 	// resconstructing normal for source 2 (dx10)
-	// TODO: need a boolean flag, for backward compat with vtf normal (dxt1)
-	normal.r = normal.a;
-	normal.g = normal.g;
-	normal.b = sqrt(1.0 - fclamp(dot(normal.rg,normal.rg),0.0,1.0));
-	normal.a = 1.0;
-	
-	// if we want bluish looking normal map, (normal/2.0)-0.5 yield that result
+	if(hqNomal==1)
+	{
+		normal.r = normal.a;
+		normal.g = normal.g;
+		normal.b = sqrt(1.0 - fclamp(dot(normal.rg,normal.rg),0.0,1.0));
+		normal.a = 1.0;
+		// if we want bluish looking normal map, (normal/2.0)-0.5 yield that result
+	}
 	
 	// Light calc
 	vec3 L = lightDir;
@@ -82,7 +84,7 @@ void main()
 	
 	//vec3 txtNworld = invNT * invTBN * v3normalize((normal.rgb * 2.0) - 1.0);
 
-	vec3 txtN = v3normalize((normal.rgb * 2.0) - 1.0);
+	vec3 txtN = v3normalize(normal.rgb);
 	vec3 tangentL = TBN * L;
 	
 	float NdotL = -1.0 * dot(txtN, tangentL);
@@ -164,17 +166,17 @@ void main()
 		}
 	}
 	
-	float rimScale = 0.75;
+	float rimScale = 0.5;
 	vec3 rimColor = vec3(1,1,1);
 	
 	// somehow, normal from normal map break rimlight
 	// disabled until I find a reliable way to detect edge
-	//float VdotN = dot(V,N);
+	float VdotN = dot(tangentV,txtN);
 	vec3 rimLight = vec3(0,0,0);
-	//if(VdotN > 1e-6)
-	//{
-	//	rimLight = rimColor * (smoothstep(0.8, 1.0,(1.0 - VdotN)) * (rimScale * mask2.g));
-	//}
+	if(VdotN > 1e-6)
+	{
+		//rimLight = rimColor * (smoothstep(0.85, 1.0,(1.0 - VdotN)) * (rimScale * mask2.g * (1.0 - mask1.b)));
+	}
 	
 	vec3 light = ambient + diffuse; 
 	vec3 finalcolor = (color.rgb) * (1.0 - mask1.b);

@@ -31,6 +31,7 @@ public:
 	FILE_STATE state;
 	// mdlTexture is temporary
 	
+	bool isVtex;
 	bool isCubemap;
 	unsigned int txtType;
 	GLuint textureId;

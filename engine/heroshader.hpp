@@ -33,6 +33,7 @@ public:
 	GLuint locLightDir;
 	GLuint locTexture;
 	GLuint locDrawShadow;
+	GLuint locHqNormal;
 	
 	GLuint locBoneIndex;
 	//GLuint locBonePos;
