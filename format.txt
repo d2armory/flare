@@ -9,718 +9,879 @@ EMSCRIPTEN = /root/emsdk_portable/emscripten/master
 Validating pointer size
 - Expected: 4, Runtime: 4
 Openning vmat_c file
-File size: 8852 bytes
+File size: 15408 bytes
 File data read into memory (0x501038)
-field m_ExtParts type 1
-field m_refMeshes type 3
-field m_refMeshGroupMasks type 17
-field m_refPhysGroupMasks type 17
-field m_refLODGroupMasks type 11
-field m_lodGroupSwitchDistances type 18
-field m_refPhysicsData type 3
-field m_refPhysicsHitboxData type 3
-field m_refAnimGroups type 3
-field m_refSequenceGroups type 3
-field m_meshGroups type 31
-field m_materialGroups type 1
-field m_boneName type 31
-field m_nParent type 12
-field m_boneSphere type 18
-field m_nFlag type 15
-field m_bonePosParent type 22
-field m_boneRotParent type 25
-field m_remappingTable type 12
-field m_remappingTableStarts type 13
-field m_boneFlexDrivers type 1
-= [] [17]
-=== 'm_name' [A565FCC4] : 'models/heroes/axe/axe.vmdl'
-=== 'm_ExtParts' [6C6BD8D1] : [0]
-=== [] [2]
-===== [] 0x5024E8 [t=0]
-===== [] 0x5024F0 [t=0]
-=== [] [2]
-===== [] 0x5024F8 [t=0]
-===== [] 0x502500 [t=0]
-=== [] [1]
-===== [] 0x502518 [t=0]
-=== [] [2]
-===== [] 0x502508 [t=0]
-===== [] 0x502510 [t=0]
-=== [] [8]
-===== [] 0x5032AC [t=0]
-===== [] 0x5032B4 [t=0]
-===== [] 0x5032BC [t=0]
-===== [] 0x5032C4 [t=0]
-===== [] 0x5032CC [t=0]
-===== [] 0x5032D4 [t=0]
-===== [] 0x5032DC [t=0]
-===== [] 0x5032E4 [t=0]
-=== [] [1]
-===== [] 0x502510 [t=0]
-=== 'm_refPhysicsHitboxData' [CA122FEC] : [0]
-=== [] [1]
-===== [] 0x502520 [t=0]
-=== 'm_refSequenceGroups' [6F02F670] : [0]
-=== [] [2]
-===== [] 0x502528 [t=0]
-===== [] 0x502530 [t=0]
-=== 'm_materialGroups' [CA56F493] : [0]
-=== 'm_nDefaultMeshGroupMask' [7C833DAF] : 0x502460 [t=17]
-=== [] [194]
-===== [] 0x503126 [t=0]
-===== [] 0x50312E [t=0]
-===== [] 0x503136 [t=0]
-===== [] 0x50313E [t=0]
-===== [] 0x503146 [t=0]
-===== [] 0x50314E [t=0]
-===== [] 0x503156 [t=0]
-===== [] 0x50315E [t=0]
-===== [] 0x503166 [t=0]
-===== [] 0x50316E [t=0]
-===== [] 0x503176 [t=0]
-===== [] 0x50317E [t=0]
-===== [] 0x503186 [t=0]
-===== [] 0x50318E [t=0]
-===== [] 0x503196 [t=0]
-===== [] 0x50319E [t=0]
-===== [] 0x5031A6 [t=0]
-===== [] 0x5031AE [t=0]
-===== [] 0x5031B6 [t=0]
-===== [] 0x5031BE [t=0]
-===== [] 0x5031C6 [t=0]
-===== [] 0x5031CE [t=0]
-===== [] 0x5031D6 [t=0]
-===== [] 0x5031DE [t=0]
-===== [] 0x5031E6 [t=0]
-===== [] 0x5031EE [t=0]
-===== [] 0x5031F6 [t=0]
-===== [] 0x5031FE [t=0]
-===== [] 0x503206 [t=0]
-===== [] 0x50320E [t=0]
-===== [] 0x503216 [t=0]
-===== [] 0x50321E [t=0]
-===== [] 0x503226 [t=0]
-===== [] 0x50322E [t=0]
-===== [] 0x503236 [t=0]
-===== [] 0x50323E [t=0]
-===== [] 0x503246 [t=0]
-===== [] 0x50324E [t=0]
-===== [] 0x503256 [t=0]
-===== [] 0x50325E [t=0]
-===== [] 0x503266 [t=0]
-===== [] 0x50326E [t=0]
-===== [] 0x503276 [t=0]
-===== [] 0x50327E [t=0]
-===== [] 0x503286 [t=0]
-===== [] 0x50328E [t=0]
-===== [] 0x503296 [t=0]
-===== [] 0x50329E [t=0]
-===== [] 0x5032A6 [t=0]
-===== [] 0x5032AE [t=0]
-===== [] 0x5032B6 [t=0]
-===== [] 0x5032BE [t=0]
-===== [] 0x5032C6 [t=0]
-===== [] 0x5032CE [t=0]
-===== [] 0x5032D6 [t=0]
-===== [] 0x5032DE [t=0]
-===== [] 0x5032E6 [t=0]
-===== [] 0x5032EE [t=0]
-===== [] 0x5032F6 [t=0]
-===== [] 0x5032FE [t=0]
-===== [] 0x503306 [t=0]
-===== [] 0x50330E [t=0]
-===== [] 0x503316 [t=0]
-===== [] 0x50331E [t=0]
-===== [] 0x503326 [t=0]
-===== [] 0x50332E [t=0]
-===== [] 0x503336 [t=0]
-===== [] 0x50333E [t=0]
-===== [] 0x503346 [t=0]
-===== [] 0x50334E [t=0]
-===== [] 0x503356 [t=0]
-===== [] 0x50335E [t=0]
-===== [] 0x503366 [t=0]
-===== [] 0x50336E [t=0]
-===== [] 0x503376 [t=0]
-===== [] 0x50337E [t=0]
-===== [] 0x503386 [t=0]
-===== [] 0x50338E [t=0]
-===== [] 0x503396 [t=0]
-===== [] 0x50339E [t=0]
-===== [] 0x5033A6 [t=0]
-===== [] 0x5033AE [t=0]
-===== [] 0x5033B6 [t=0]
-===== [] 0x5033BE [t=0]
-===== [] 0x5033C6 [t=0]
-===== [] 0x5033CE [t=0]
-===== [] 0x5033D6 [t=0]
-===== [] 0x5033DE [t=0]
-===== [] 0x5033E6 [t=0]
-===== [] 0x5033EE [t=0]
-===== [] 0x5033F6 [t=0]
-===== [] 0x5033FE [t=0]
-===== [] 0x503406 [t=0]
-===== [] 0x50340E [t=0]
-===== [] 0x503416 [t=0]
-===== [] 0x50341E [t=0]
-===== [] 0x503426 [t=0]
-===== [] 0x50342E [t=0]
-===== [] 0x503436 [t=0]
-===== [] 0x50343E [t=0]
-===== [] 0x503446 [t=0]
-===== [] 0x50344E [t=0]
-===== [] 0x503456 [t=0]
-===== [] 0x50345E [t=0]
-===== [] 0x503466 [t=0]
-===== [] 0x50346E [t=0]
-===== [] 0x503476 [t=0]
-===== [] 0x50347E [t=0]
-===== [] 0x503486 [t=0]
-===== [] 0x50348E [t=0]
-===== [] 0x503496 [t=0]
-===== [] 0x50349E [t=0]
-===== [] 0x5034A6 [t=0]
-===== [] 0x5034AE [t=0]
-===== [] 0x5034B6 [t=0]
-===== [] 0x5034BE [t=0]
-===== [] 0x5034C6 [t=0]
-===== [] 0x5034CE [t=0]
-===== [] 0x5034D6 [t=0]
-===== [] 0x5034DE [t=0]
-===== [] 0x5034E6 [t=0]
-===== [] 0x5034EE [t=0]
-===== [] 0x5034F6 [t=0]
-===== [] 0x5034FE [t=0]
-===== [] 0x503506 [t=0]
-===== [] 0x50350E [t=0]
-===== [] 0x503516 [t=0]
-===== [] 0x50351E [t=0]
-===== [] 0x503526 [t=0]
-===== [] 0x50352E [t=0]
-===== [] 0x503536 [t=0]
-===== [] 0x50353E [t=0]
-===== [] 0x503546 [t=0]
-===== [] 0x50354E [t=0]
-===== [] 0x503556 [t=0]
-===== [] 0x50355E [t=0]
-===== [] 0x503566 [t=0]
-===== [] 0x50356E [t=0]
-===== [] 0x503576 [t=0]
-===== [] 0x50357E [t=0]
-===== [] 0x503586 [t=0]
-===== [] 0x50358E [t=0]
-===== [] 0x503596 [t=0]
-===== [] 0x50359E [t=0]
-===== [] 0x5035A6 [t=0]
-===== [] 0x5035AE [t=0]
-===== [] 0x5035B6 [t=0]
-===== [] 0x5035BE [t=0]
-===== [] 0x5035C6 [t=0]
-===== [] 0x5035CE [t=0]
-===== [] 0x5035D6 [t=0]
-===== [] 0x5035DE [t=0]
-===== [] 0x5035E6 [t=0]
-===== [] 0x5035EE [t=0]
-===== [] 0x5035F6 [t=0]
-===== [] 0x5035FE [t=0]
-===== [] 0x503606 [t=0]
-===== [] 0x50360E [t=0]
-===== [] 0x503616 [t=0]
-===== [] 0x50361E [t=0]
-===== [] 0x503626 [t=0]
-===== [] 0x50362E [t=0]
-===== [] 0x503636 [t=0]
-===== [] 0x50363E [t=0]
-===== [] 0x503646 [t=0]
-===== [] 0x50364E [t=0]
-===== [] 0x503656 [t=0]
-===== [] 0x50365E [t=0]
-===== [] 0x503666 [t=0]
-===== [] 0x50366E [t=0]
-===== [] 0x503676 [t=0]
-===== [] 0x50367E [t=0]
-===== [] 0x503686 [t=0]
-===== [] 0x50368E [t=0]
-===== [] 0x503696 [t=0]
-===== [] 0x50369E [t=0]
-===== [] 0x5036A6 [t=0]
-===== [] 0x5036AE [t=0]
-===== [] 0x5036B6 [t=0]
-===== [] 0x5036BE [t=0]
-===== [] 0x5036C6 [t=0]
-===== [] 0x5036CE [t=0]
-===== [] 0x5036D6 [t=0]
-===== [] 0x5036DE [t=0]
-===== [] 0x5036E6 [t=0]
-===== [] 0x5036EE [t=0]
-===== [] 0x5036F6 [t=0]
-===== [] 0x5036FE [t=0]
-===== [] 0x503706 [t=0]
-===== [] 0x50370E [t=0]
-===== [] 0x503716 [t=0]
-===== [] 0x50371E [t=0]
-===== [] 0x503726 [t=0]
-===== [] 0x50372E [t=0]
-=== [] [2]
-===== [] 0x503122 [t=0]
-===== [] 0x50312A [t=0]
-=== 'm_boneFlexDrivers' [B85CB5A1] : [0]
-File: testbin/axe.vmdl_c
-- size: 8852
+File: testbin/axe_belt_bg_default_lod0.vmesh_c
+- size: 15408
 - sig: 0xC
 - block offset: 0x8
 - block count: 4
 -- block 0
 --- name: RERL
 --- data offset: 0x2C
---- data size: 379
+--- data size: 72
 -- block 1
 --- name: REDI
---- data offset: 0x19C
---- data size: 2008
+--- data offset: 0x68
+--- data size: 504
 -- block 2
 --- name: NTRO
---- data offset: 0x968
---- data size: 2521
+--- data offset: 0x254
+--- data size: 4835
 ---- ntro version 4
------ struct count: 7
+----- struct count: 14
 ----- struct offset: 16
 ------ struct version 4
-------- id: 0x847184F0
+------- id: 0xF4C066E3
 ------- baseid: 0x0
-------- name: PermModelData_t
-------- field count: 19
+------- name: PermRenderMeshData_t
+------- field count: 8
 -------- field 0
---------- name: m_name
+--------- name: m_sceneObjects
 --------- disk size: 0
 --------- disk offset: 0x0
---------- level: 0
---------- type: 0x1F
---------- typedata: 0x0
----------- iByte: 0x0
--------- field 1
---------- name: m_modelInfo
---------- disk size: 0
---------- disk offset: 0x4
---------- level: 0
+--------- level: 1
 --------- type: 0x1
---------- typedata: 0xF051D868
+--------- typedata: 0xD4308FB5
+---------- iByte: 0x4
+-------- field 1
+--------- name: m_pMorphSet
+--------- disk size: 0
+--------- disk offset: 0x8
+--------- level: 0
+--------- type: 0x3
+--------- typedata: 0x726F6D76
 ---------- iByte: 0x0
 -------- field 2
---------- name: m_ExtParts
---------- disk size: 0
---------- disk offset: 0x54
---------- level: 1
---------- type: 0x1
---------- typedata: 0xABBDA326
----------- iByte: 0x4
--------- field 3
---------- name: m_refMeshes
---------- disk size: 0
---------- disk offset: 0x5C
---------- level: 1
---------- type: 0x3
---------- typedata: 0x73656D76
----------- iByte: 0x4
--------- field 4
---------- name: m_refMeshGroupMasks
---------- disk size: 0
---------- disk offset: 0x64
---------- level: 1
---------- type: 0x11
---------- typedata: 0x0
----------- iByte: 0x4
--------- field 5
---------- name: m_refPhysGroupMasks
---------- disk size: 0
---------- disk offset: 0x6C
---------- level: 1
---------- type: 0x11
---------- typedata: 0x0
----------- iByte: 0x4
--------- field 6
---------- name: m_refLODGroupMasks
---------- disk size: 0
---------- disk offset: 0x74
---------- level: 1
---------- type: 0xB
---------- typedata: 0x0
----------- iByte: 0x4
--------- field 7
---------- name: m_lodGroupSwitchDistances
---------- disk size: 0
---------- disk offset: 0x7C
---------- level: 1
---------- type: 0x12
---------- typedata: 0x0
----------- iByte: 0x4
--------- field 8
---------- name: m_refPhysicsData
---------- disk size: 0
---------- disk offset: 0x84
---------- level: 1
---------- type: 0x3
---------- typedata: 0x79687076
----------- iByte: 0x4
--------- field 9
---------- name: m_refPhysicsHitboxData
---------- disk size: 0
---------- disk offset: 0x8C
---------- level: 1
---------- type: 0x3
---------- typedata: 0x79687076
----------- iByte: 0x4
--------- field 10
---------- name: m_refAnimGroups
---------- disk size: 0
---------- disk offset: 0x94
---------- level: 1
---------- type: 0x3
---------- typedata: 0x72676176
----------- iByte: 0x4
--------- field 11
---------- name: m_refSequenceGroups
---------- disk size: 0
---------- disk offset: 0x9C
---------- level: 1
---------- type: 0x3
---------- typedata: 0x71657376
----------- iByte: 0x4
--------- field 12
---------- name: m_meshGroups
---------- disk size: 0
---------- disk offset: 0xA4
---------- level: 1
---------- type: 0x1F
---------- typedata: 0x0
----------- iByte: 0x4
--------- field 13
---------- name: m_materialGroups
---------- disk size: 0
---------- disk offset: 0xAC
---------- level: 1
---------- type: 0x1
---------- typedata: 0xC54DF706
----------- iByte: 0x4
--------- field 14
---------- name: m_nDefaultMeshGroupMask
---------- disk size: 0
---------- disk offset: 0xB8
---------- level: 0
---------- type: 0x11
---------- typedata: 0x0
----------- iByte: 0x0
--------- field 15
---------- name: m_modelSkeleton
---------- disk size: 0
---------- disk offset: 0xC0
---------- level: 0
---------- type: 0x1
---------- typedata: 0xBB8C1578
----------- iByte: 0x0
--------- field 16
---------- name: m_remappingTable
---------- disk size: 0
---------- disk offset: 0xF0
---------- level: 1
---------- type: 0xC
---------- typedata: 0x0
----------- iByte: 0x4
--------- field 17
---------- name: m_remappingTableStarts
---------- disk size: 0
---------- disk offset: 0xF8
---------- level: 1
---------- type: 0xD
---------- typedata: 0x0
----------- iByte: 0x4
--------- field 18
---------- name: m_boneFlexDrivers
---------- disk size: 0
---------- disk offset: 0x100
---------- level: 1
---------- type: 0x1
---------- typedata: 0xD6F6B4EC
----------- iByte: 0x4
------- struct version 4
-------- id: 0xF051D868
-------- baseid: 0x0
-------- name: PermModelInfo_t
-------- field count: 10
--------- field 0
---------- name: m_nFlags
---------- disk size: 0
---------- disk offset: 0x0
---------- level: 0
---------- type: 0xF
---------- typedata: 0x0
----------- iByte: 0x0
--------- field 1
---------- name: m_vHullMin
---------- disk size: 0
---------- disk offset: 0x4
---------- level: 0
---------- type: 0x16
---------- typedata: 0x0
----------- iByte: 0x0
--------- field 2
---------- name: m_vHullMax
+--------- name: m_skeleton
 --------- disk size: 0
 --------- disk offset: 0x10
---------- level: 0
---------- type: 0x16
---------- typedata: 0x0
----------- iByte: 0x0
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0x4E988402
+---------- iByte: 0x3
 -------- field 3
---------- name: m_vViewMin
+--------- name: m_attachments
+--------- disk size: 0
+--------- disk offset: 0x14
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0xF098C63B
+---------- iByte: 0x4
+-------- field 4
+--------- name: m_hitboxsets
 --------- disk size: 0
 --------- disk offset: 0x1C
---------- level: 0
---------- type: 0x16
---------- typedata: 0x0
----------- iByte: 0x0
--------- field 4
---------- name: m_vViewMax
---------- disk size: 0
---------- disk offset: 0x28
---------- level: 0
---------- type: 0x16
---------- typedata: 0x0
----------- iByte: 0x0
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0xE83FD981
+---------- iByte: 0x4
 -------- field 5
---------- name: m_flMass
+--------- name: m_boneConstraints
+--------- disk size: 0
+--------- disk offset: 0x24
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0x297B4CFE
+---------- iByte: 0x4
+-------- field 6
+--------- name: m_vertexBuffers
+--------- disk size: 0
+--------- disk offset: 0x2C
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0xFB24B5FE
+---------- iByte: 0x4
+-------- field 7
+--------- name: m_indexBuffers
 --------- disk size: 0
 --------- disk offset: 0x34
---------- level: 0
---------- type: 0x12
---------- typedata: 0x0
----------- iByte: 0x0
--------- field 6
---------- name: m_vEyePosition
---------- disk size: 0
---------- disk offset: 0x38
---------- level: 0
---------- type: 0x16
---------- typedata: 0x0
----------- iByte: 0x0
--------- field 7
---------- name: m_flMaxEyeDeflection
---------- disk size: 0
---------- disk offset: 0x44
---------- level: 0
---------- type: 0x12
---------- typedata: 0x0
----------- iByte: 0x0
--------- field 8
---------- name: m_sSurfaceProperty
---------- disk size: 0
---------- disk offset: 0x48
---------- level: 0
---------- type: 0x1F
---------- typedata: 0x0
----------- iByte: 0x0
--------- field 9
---------- name: m_keyValueText
---------- disk size: 0
---------- disk offset: 0x4C
---------- level: 0
---------- type: 0x1F
---------- typedata: 0x0
----------- iByte: 0x0
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0xFB24B5FE
+---------- iByte: 0x4
 ------ struct version 4
-------- id: 0xABBDA326
+------- id: 0xD4308FB5
 ------- baseid: 0x0
-------- name: PermModelExtPart_t
-------- field count: 4
+------- name: SceneObjectData_t
+------- field count: 5
 -------- field 0
---------- name: m_Transform
+--------- name: m_vMinBounds
 --------- disk size: 0
 --------- disk offset: 0x0
 --------- level: 0
---------- type: 0x28
+--------- type: 0x16
 --------- typedata: 0x0
 ---------- iByte: 0x0
 -------- field 1
---------- name: m_Name
+--------- name: m_vMaxBounds
 --------- disk size: 0
---------- disk offset: 0x20
+--------- disk offset: 0xC
 --------- level: 0
---------- type: 0x1F
+--------- type: 0x16
 --------- typedata: 0x0
 ---------- iByte: 0x0
 -------- field 2
---------- name: m_nParent
+--------- name: m_translucencyType
+--------- disk size: 0
+--------- disk offset: 0x18
+--------- level: 0
+--------- type: 0x2
+--------- typedata: 0x318C9E6B
+---------- iByte: 0x0
+-------- field 3
+--------- name: m_drawCalls
+--------- disk size: 0
+--------- disk offset: 0x1C
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0x7709D7E0
+---------- iByte: 0x4
+-------- field 4
+--------- name: m_vTintColor
 --------- disk size: 0
 --------- disk offset: 0x24
+--------- level: 0
+--------- type: 0x17
+--------- typedata: 0x0
+---------- iByte: 0x0
+------ struct version 4
+------- id: 0x7709D7E0
+------- baseid: 0x0
+------- name: MaterialDrawDescriptor_t
+------- field count: 15
+-------- field 0
+--------- name: m_nBaseVertex
+--------- disk size: 0
+--------- disk offset: 0x0
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 1
+--------- name: m_nVertexCount
+--------- disk size: 0
+--------- disk offset: 0x4
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 2
+--------- name: m_nStartIndex
+--------- disk size: 0
+--------- disk offset: 0x8
 --------- level: 0
 --------- type: 0xE
 --------- typedata: 0x0
 ---------- iByte: 0x0
 -------- field 3
---------- name: m_refModel
+--------- name: m_nIndexCount
 --------- disk size: 0
---------- disk offset: 0x28
+--------- disk offset: 0xC
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 4
+--------- name: m_nStartInstance
+--------- disk size: 0
+--------- disk offset: 0x10
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 5
+--------- name: m_nInstanceCount
+--------- disk size: 0
+--------- disk offset: 0x14
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 6
+--------- name: m_flUvDensity
+--------- disk size: 0
+--------- disk offset: 0x18
+--------- level: 0
+--------- type: 0x12
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 7
+--------- name: m_nPrimitiveType
+--------- disk size: 0
+--------- disk offset: 0x1C
+--------- level: 0
+--------- type: 0xB
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 8
+--------- name: m_bAlphaBlendedMaterial
+--------- disk size: 0
+--------- disk offset: 0x1D
+--------- level: 0
+--------- type: 0xB
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 9
+--------- name: m_nFlags
+--------- disk size: 0
+--------- disk offset: 0x1E
+--------- level: 0
+--------- type: 0xB
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 10
+--------- name: m_padding
+--------- disk size: 0
+--------- disk offset: 0x1F
+--------- level: 0
+--------- type: 0xB
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 11
+--------- name: m_hInputLayoutHandle
+--------- disk size: 5
+--------- disk offset: 0x20
+--------- level: 0
+--------- type: 0xF
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 12
+--------- name: m_vertexBuffers
+--------- disk size: 0
+--------- disk offset: 0x34
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0x9FB39D82
+---------- iByte: 0x4
+-------- field 13
+--------- name: m_indexBuffer
+--------- disk size: 0
+--------- disk offset: 0x40
+--------- level: 0
+--------- type: 0x1
+--------- typedata: 0x9FB39D82
+---------- iByte: 0x0
+-------- field 14
+--------- name: m_pMaterial
+--------- disk size: 0
+--------- disk offset: 0x50
 --------- level: 0
 --------- type: 0x3
---------- typedata: 0x6C646D76
+--------- typedata: 0x74616D76
 ---------- iByte: 0x0
 ------ struct version 4
-------- id: 0xC54DF706
+------- id: 0x9FB39D82
 ------- baseid: 0x0
-------- name: MaterialGroup_t
+------- name: RenderBufferBinding_t
 ------- field count: 2
 -------- field 0
---------- name: m_name
+--------- name: m_hBuffer
 --------- disk size: 0
 --------- disk offset: 0x0
 --------- level: 0
---------- type: 0x1F
+--------- type: 0x11
 --------- typedata: 0x0
 ---------- iByte: 0x0
 -------- field 1
---------- name: m_materials
+--------- name: m_nBindOffsetBytes
+--------- disk size: 0
+--------- disk offset: 0x8
+--------- level: 0
+--------- type: 0xF
+--------- typedata: 0x0
+---------- iByte: 0x0
+------ struct version 4
+------- id: 0x4E988402
+------- baseid: 0x0
+------- name: RenderSkeletonData_t
+------- field count: 11
+-------- field 0
+--------- name: m_nBoneCount
+--------- disk size: 0
+--------- disk offset: 0x0
+--------- level: 0
+--------- type: 0xD
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 1
+--------- name: m_nBoneWeightCount
+--------- disk size: 0
+--------- disk offset: 0x2
+--------- level: 0
+--------- type: 0xD
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 2
+--------- name: m_bonesHash
 --------- disk size: 0
 --------- disk offset: 0x4
 --------- level: 1
---------- type: 0x3
---------- typedata: 0x74616D76
----------- iByte: 0x4
------- struct version 4
-------- id: 0xBB8C1578
-------- baseid: 0x0
-------- name: ModelSkeletonData_t
-------- field count: 6
--------- field 0
---------- name: m_boneName
---------- disk size: 0
---------- disk offset: 0x0
---------- level: 1
---------- type: 0x1F
+--------- type: 0xF
 --------- typedata: 0x0
 ---------- iByte: 0x4
--------- field 1
---------- name: m_nParent
+-------- field 3
+--------- name: m_indexNames
 --------- disk size: 0
---------- disk offset: 0x8
+--------- disk offset: 0xC
 --------- level: 1
---------- type: 0xC
+--------- type: 0xD
 --------- typedata: 0x0
 ---------- iByte: 0x4
--------- field 2
---------- name: m_boneSphere
+-------- field 4
+--------- name: m_indexHash
 --------- disk size: 0
---------- disk offset: 0x10
+--------- disk offset: 0x14
+--------- level: 1
+--------- type: 0xD
+--------- typedata: 0x0
+---------- iByte: 0x4
+-------- field 5
+--------- name: m_invBindPose
+--------- disk size: 0
+--------- disk offset: 0x1C
+--------- level: 1
+--------- type: 0x24
+--------- typedata: 0x0
+---------- iByte: 0x4
+-------- field 6
+--------- name: m_bboxes
+--------- disk size: 0
+--------- disk offset: 0x24
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0x21EA077A
+---------- iByte: 0x4
+-------- field 7
+--------- name: m_spheres
+--------- disk size: 0
+--------- disk offset: 0x2C
 --------- level: 1
 --------- type: 0x12
 --------- typedata: 0x0
 ---------- iByte: 0x4
--------- field 3
---------- name: m_nFlag
+-------- field 8
+--------- name: m_nFlags
 --------- disk size: 0
---------- disk offset: 0x18
---------- level: 1
+--------- disk offset: 0x34
+--------- level: 0
 --------- type: 0xF
 --------- typedata: 0x0
----------- iByte: 0x4
--------- field 4
---------- name: m_bonePosParent
+---------- iByte: 0x0
+-------- field 9
+--------- name: m_boneNames
 --------- disk size: 0
---------- disk offset: 0x20
+--------- disk offset: 0x38
 --------- level: 1
+--------- type: 0x1F
+--------- typedata: 0x0
+---------- iByte: 0x4
+-------- field 10
+--------- name: m_boneParents
+--------- disk size: 0
+--------- disk offset: 0x40
+--------- level: 1
+--------- type: 0xD
+--------- typedata: 0x0
+---------- iByte: 0x4
+------ struct version 4
+------- id: 0x21EA077A
+------- baseid: 0x0
+------- name: SkeletonBoneBbox_t
+------- field count: 4
+-------- field 0
+--------- name: m_vecCenter
+--------- disk size: 0
+--------- disk offset: 0x0
+--------- level: 0
 --------- type: 0x16
 --------- typedata: 0x0
----------- iByte: 0x4
--------- field 5
---------- name: m_boneRotParent
---------- disk size: 0
---------- disk offset: 0x28
---------- level: 1
---------- type: 0x19
---------- typedata: 0x0
----------- iByte: 0x4
------- struct version 4
-------- id: 0xD6F6B4EC
-------- baseid: 0x0
-------- name: ModelBoneFlexDriver_t
-------- field count: 3
--------- field 0
---------- name: m_boneName
---------- disk size: 0
---------- disk offset: 0x0
---------- level: 0
---------- type: 0x1F
---------- typedata: 0x0
 ---------- iByte: 0x0
 -------- field 1
---------- name: m_boneNameToken
---------- disk size: 0
---------- disk offset: 0x4
---------- level: 0
---------- type: 0xF
---------- typedata: 0x0
----------- iByte: 0x0
--------- field 2
---------- name: m_controls
---------- disk size: 0
---------- disk offset: 0x8
---------- level: 1
---------- type: 0x1
---------- typedata: 0x40E12EF3
----------- iByte: 0x4
------- struct version 4
-------- id: 0x40E12EF3
-------- baseid: 0x0
-------- name: ModelBoneFlexDriverControl_t
-------- field count: 5
--------- field 0
---------- name: m_nBoneComponent
---------- disk size: 0
---------- disk offset: 0x0
---------- level: 0
---------- type: 0x2
---------- typedata: 0x9B255456
----------- iByte: 0x0
--------- field 1
---------- name: m_flexController
---------- disk size: 0
---------- disk offset: 0x4
---------- level: 0
---------- type: 0x1F
---------- typedata: 0x0
----------- iByte: 0x0
--------- field 2
---------- name: m_flexControllerToken
---------- disk size: 0
---------- disk offset: 0x8
---------- level: 0
---------- type: 0xF
---------- typedata: 0x0
----------- iByte: 0x0
--------- field 3
---------- name: m_flMin
+--------- name: m_pad0
 --------- disk size: 0
 --------- disk offset: 0xC
 --------- level: 0
 --------- type: 0x12
 --------- typedata: 0x0
 ---------- iByte: 0x0
--------- field 4
---------- name: m_flMax
+-------- field 2
+--------- name: m_vecSize
 --------- disk size: 0
 --------- disk offset: 0x10
+--------- level: 0
+--------- type: 0x16
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 3
+--------- name: m_pad1
+--------- disk size: 0
+--------- disk offset: 0x1C
 --------- level: 0
 --------- type: 0x12
 --------- typedata: 0x0
 ---------- iByte: 0x0
------ enum count: 1
------ enum offset: 288
+------ struct version 4
+------- id: 0xF098C63B
+------- baseid: 0x0
+------- name: AttachmentData_t
+------- field count: 7
+-------- field 0
+--------- name: m_name
+--------- disk size: 0
+--------- disk offset: 0x0
+--------- level: 0
+--------- type: 0x1F
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 1
+--------- name: m_influenceNames
+--------- disk size: 3
+--------- disk offset: 0x4
+--------- level: 0
+--------- type: 0x1F
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 2
+--------- name: m_vInfluenceOffsets
+--------- disk size: 3
+--------- disk offset: 0x10
+--------- level: 0
+--------- type: 0x16
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 3
+--------- name: m_vInfluenceRotations
+--------- disk size: 3
+--------- disk offset: 0x34
+--------- level: 0
+--------- type: 0x19
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 4
+--------- name: m_influenceWeights
+--------- disk size: 3
+--------- disk offset: 0x64
+--------- level: 0
+--------- type: 0x12
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 5
+--------- name: m_nFlags
+--------- disk size: 3
+--------- disk offset: 0x70
+--------- level: 0
+--------- type: 0xB
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 6
+--------- name: m_nInfluences
+--------- disk size: 0
+--------- disk offset: 0x73
+--------- level: 0
+--------- type: 0xB
+--------- typedata: 0x0
+---------- iByte: 0x0
+------ struct version 4
+------- id: 0xE83FD981
+------- baseid: 0x0
+------- name: HitBoxSet_t
+------- field count: 3
+-------- field 0
+--------- name: m_name
+--------- disk size: 0
+--------- disk offset: 0x0
+--------- level: 0
+--------- type: 0x1F
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 1
+--------- name: m_SourceFilename
+--------- disk size: 0
+--------- disk offset: 0x4
+--------- level: 0
+--------- type: 0x1F
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 2
+--------- name: m_hitboxes
+--------- disk size: 0
+--------- disk offset: 0x8
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0xA9EAA7B6
+---------- iByte: 0x4
+------ struct version 4
+------- id: 0xA9EAA7B6
+------- baseid: 0x0
+------- name: HitBox_t
+------- field count: 10
+-------- field 0
+--------- name: m_name
+--------- disk size: 0
+--------- disk offset: 0x0
+--------- level: 0
+--------- type: 0x1F
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 1
+--------- name: m_sSurfaceProperty
+--------- disk size: 0
+--------- disk offset: 0x4
+--------- level: 0
+--------- type: 0x1F
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 2
+--------- name: m_nGroupId
+--------- disk size: 0
+--------- disk offset: 0x8
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 3
+--------- name: m_sBoneName
+--------- disk size: 0
+--------- disk offset: 0xC
+--------- level: 0
+--------- type: 0x1F
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 4
+--------- name: m_nBoneNameHash
+--------- disk size: 0
+--------- disk offset: 0x10
+--------- level: 0
+--------- type: 0xF
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 5
+--------- name: m_cRenderColor
+--------- disk size: 4
+--------- disk offset: 0x14
+--------- level: 0
+--------- type: 0xB
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 6
+--------- name: m_nHitBoxIndex
+--------- disk size: 0
+--------- disk offset: 0x18
+--------- level: 0
+--------- type: 0xD
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 7
+--------- name: m_vMinBounds
+--------- disk size: 0
+--------- disk offset: 0x1C
+--------- level: 0
+--------- type: 0x16
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 8
+--------- name: m_vMaxBounds
+--------- disk size: 0
+--------- disk offset: 0x28
+--------- level: 0
+--------- type: 0x16
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 9
+--------- name: m_bVisible
+--------- disk size: 0
+--------- disk offset: 0x34
+--------- level: 0
+--------- type: 0x1E
+--------- typedata: 0x0
+---------- iByte: 0x0
+------ struct version 4
+------- id: 0x297B4CFE
+------- baseid: 0x0
+------- name: BaseConstraint_t
+------- field count: 11
+-------- field 0
+--------- name: m_name
+--------- disk size: 0
+--------- disk offset: 0x0
+--------- level: 0
+--------- type: 0x1F
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 1
+--------- name: m_nConstraintType
+--------- disk size: 0
+--------- disk offset: 0x4
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 2
+--------- name: m_vUpVector
+--------- disk size: 0
+--------- disk offset: 0x8
+--------- level: 0
+--------- type: 0x16
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 3
+--------- name: m_qAimOffset
+--------- disk size: 0
+--------- disk offset: 0x14
+--------- level: 0
+--------- type: 0x19
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 4
+--------- name: m_nTargetUpBoneHash
+--------- disk size: 0
+--------- disk offset: 0x24
+--------- level: 0
+--------- type: 0xF
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 5
+--------- name: m_nUpType
+--------- disk size: 0
+--------- disk offset: 0x28
+--------- level: 0
+--------- type: 0xF
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 6
+--------- name: m_bInverse
+--------- disk size: 0
+--------- disk offset: 0x2C
+--------- level: 0
+--------- type: 0x1E
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 7
+--------- name: m_qParentBindRotation
+--------- disk size: 0
+--------- disk offset: 0x30
+--------- level: 0
+--------- type: 0x19
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 8
+--------- name: m_qChildBindRotation
+--------- disk size: 0
+--------- disk offset: 0x40
+--------- level: 0
+--------- type: 0x19
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 9
+--------- name: m_slaves
+--------- disk size: 0
+--------- disk offset: 0x50
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0xED54AAA0
+---------- iByte: 0x4
+-------- field 10
+--------- name: m_targets
+--------- disk size: 0
+--------- disk offset: 0x58
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0x15C84150
+---------- iByte: 0x4
+------ struct version 4
+------- id: 0xED54AAA0
+------- baseid: 0x0
+------- name: ConstraintSlave_t
+------- field count: 4
+-------- field 0
+--------- name: m_nBoneHash
+--------- disk size: 0
+--------- disk offset: 0x0
+--------- level: 0
+--------- type: 0xF
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 1
+--------- name: m_flWeight
+--------- disk size: 0
+--------- disk offset: 0x4
+--------- level: 0
+--------- type: 0x12
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 2
+--------- name: m_vBasePosition
+--------- disk size: 0
+--------- disk offset: 0x8
+--------- level: 0
+--------- type: 0x16
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 3
+--------- name: m_qBaseOrientation
+--------- disk size: 0
+--------- disk offset: 0x14
+--------- level: 0
+--------- type: 0x19
+--------- typedata: 0x0
+---------- iByte: 0x0
+------ struct version 4
+------- id: 0x15C84150
+------- baseid: 0x0
+------- name: ConstraintTarget_t
+------- field count: 5
+-------- field 0
+--------- name: m_nBoneHash
+--------- disk size: 0
+--------- disk offset: 0x0
+--------- level: 0
+--------- type: 0xF
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 1
+--------- name: m_flWeight
+--------- disk size: 0
+--------- disk offset: 0x4
+--------- level: 0
+--------- type: 0x12
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 2
+--------- name: m_vOffset
+--------- disk size: 0
+--------- disk offset: 0x8
+--------- level: 0
+--------- type: 0x16
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 3
+--------- name: m_qOffset
+--------- disk size: 0
+--------- disk offset: 0x14
+--------- level: 0
+--------- type: 0x19
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 4
+--------- name: m_bIsAttachment
+--------- disk size: 0
+--------- disk offset: 0x24
+--------- level: 0
+--------- type: 0x1E
+--------- typedata: 0x0
+---------- iByte: 0x0
+------ struct version 4
+------- id: 0xFB24B5FE
+------- baseid: 0x0
+------- name: OnDiskBufferData_t
+------- field count: 4
+-------- field 0
+--------- name: m_nElementCount
+--------- disk size: 0
+--------- disk offset: 0x0
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 1
+--------- name: m_nElementSizeInBytes
+--------- disk size: 0
+--------- disk offset: 0x4
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 2
+--------- name: m_inputLayoutFields
+--------- disk size: 0
+--------- disk offset: 0x8
+--------- level: 1
+--------- type: 0x1
+--------- typedata: 0xEE990BE
+---------- iByte: 0x4
+-------- field 3
+--------- name: m_pData
+--------- disk size: 0
+--------- disk offset: 0x10
+--------- level: 1
+--------- type: 0xB
+--------- typedata: 0x0
+---------- iByte: 0x4
+------ struct version 4
+------- id: 0xEE990BE
+------- baseid: 0x0
+------- name: RenderInputLayoutField_t
+------- field count: 7
+-------- field 0
+--------- name: m_pSemanticName
+--------- disk size: 32
+--------- disk offset: 0x0
+--------- level: 0
+--------- type: 0xB
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 1
+--------- name: m_nSemanticIndex
+--------- disk size: 0
+--------- disk offset: 0x20
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 2
+--------- name: m_Format
+--------- disk size: 0
+--------- disk offset: 0x24
+--------- level: 0
+--------- type: 0xF
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 3
+--------- name: m_nOffset
+--------- disk size: 0
+--------- disk offset: 0x28
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 4
+--------- name: m_nSlot
+--------- disk size: 0
+--------- disk offset: 0x2C
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+-------- field 5
+--------- name: m_nSlotType
+--------- disk size: 0
+--------- disk offset: 0x30
+--------- level: 0
+--------- type: 0x2
+--------- typedata: 0x67FE1B7
+---------- iByte: 0x0
+-------- field 6
+--------- name: m_nInstanceStepRate
+--------- disk size: 0
+--------- disk offset: 0x34
+--------- level: 0
+--------- type: 0xE
+--------- typedata: 0x0
+---------- iByte: 0x0
+----- enum count: 2
+----- enum offset: 568
 ------ enum version 4
-------- id: 0x9B255456
-------- name: ModelBoneFlexComponent_t
-------- resource count: 4
+------- id: 0x318C9E6B
+------- name: MeshTranslucencyType_t
+------- resource count: 3
+------ enum version 109044151
+------- id: 0xF6C
+------- name: 
+------- resource count: 1684956498
 -- block 3
 --- name: DATA
---- data offset: 0x1338
---- data size: 3876
-sId: 0x108
+--- data offset: 0x1538
+--- data size: 9920
+sId: 0x40
  

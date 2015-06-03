@@ -3,7 +3,7 @@ PATH  := /root/emsdk_portable:/root/emsdk_portable/clang/fastcomp/build_master_6
 
 COMPILER = emcc
 #OPTIMIZE = -s DEMANGLE_SUPPORT=1 -Werror -s ASSERTIONS=2 -s FULL_ES2=1 -lglfw
-OPTIMIZE = -Werror -s FULL_ES2=1 -s USE_GLFW=3
+OPTIMIZE = -Werror -s FULL_ES2=1 -s USE_GLFW=3 -O2
 LDLIBS = 
 
 all: flare

@@ -31,7 +31,7 @@ unsigned int frames = 0;
 bool axe_data = false;
 bool bounty_data = false;
 float total = 0;
-int modelCount = 3;
+int modelCount = 6;
 Model** mx = 0;
 
 int Init ( ESContext *esContext )
@@ -96,18 +96,21 @@ void Update ( ESContext *esContext, float deltaTime )
 	userData->deg += M_PI/90 / 10;
 	
 	Scene::lightDir = glm::vec3(-1.0,-2.0,-1.0);
+	Scene::camPosition = glm::vec3(0.0f,100.0f,250.0f);
+	Scene::camTarget = glm::vec3(0.0f,100.0f,0.0f);
 	
 	// data loading
 	if(totaltime > 0.1f && !bounty_data)
 	{
 		bounty_data = true;
 
-		const char* modelName[3] = {
+		const char* modelName[6] = {
 			"models/heroes/axe/axe.mdl",
-			"models/heroes/axe/axe_armor.mdl",
-			//"models/heroes/axe/axe_belt.mdl",
-			//"models/heroes/axe/axe_ponytail.mdl",
-			//"models/heroes/axe/axe_weapon.mdl",
+			//"models/heroes/axe/axe_armor.mdl",
+			"models/items/axe/molten_claw/molten_claw.mdl",
+			"models/heroes/axe/axe_belt.mdl",
+			"models/heroes/axe/axe_ponytail.mdl",
+			"models/heroes/axe/axe_weapon.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter_backpack.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter_bandana.mdl",
@@ -115,7 +118,7 @@ void Update ( ESContext *esContext, float deltaTime )
 			//"models/heroes/bounty_hunter/bounty_hunter_lweapon.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter_rweapon.mdl",
 			//"models/heroes/bounty_hunter/bounty_hunter_pads.mdl",
-			//"models/heroes/bounty_hunter/bounty_hunter_shuriken.mdl"
+			//"models/heroes/bounty_hunter/bounty_hunter_shuriken.mdl",
 			//"models/heroes/tidehunter/tidehunter.mdl",
 			//"models/heroes/tidehunter/tidehunter_anchor.mdl",
 			//"models/heroes/tidehunter/tidehunter_belt.mdl",
@@ -142,11 +145,11 @@ void Update ( ESContext *esContext, float deltaTime )
 		pedes->rotation[0] = - M_PI / 2.0f;
 		//pedes->position[1] = -10.0f;
 		
-		Texture* testVtex = new Texture("custom/axe_body_color_psd_63afddb2.vtex_c");
-		Manager::add(testVtex);
+	//	Texture* testVtex = new Texture("custom/axe_body_color_psd_63afddb2.vtex_c");
+	//	Manager::add(testVtex);
 		
-		Texture* testVtf = new Texture("materials/models/heroes/axe/axe_body_normal.vtf");
-		Manager::add(testVtf);
+	//	Texture* testVtf = new Texture("materials/models/heroes/axe/axe_body_normal.vtf");
+	//	Manager::add(testVtf);
 	}
 	
 	if(bounty_data)
@@ -154,10 +157,10 @@ void Update ( ESContext *esContext, float deltaTime )
 		
 		if(mx[0]->material!=0)
 		{
-			Texture* t = Manager::find("custom/axe_body_color_psd_63afddb2.vtex_c");
-			Texture* t2 = Manager::find("materials/models/heroes/axe/axe_body_normal.vtf");
+			//Texture* t = Manager::find("custom/axe_body_color_psd_63afddb2.vtex_c");
+			//Texture* t2 = Manager::find("materials/models/heroes/axe/axe_body_normal.vtf");
 			//printf("%X\n",(unsigned int) t);
-			mx[0]->material->textureDiffuse = t;
+			//mx[0]->material->textureDiffuse = t;
 			//mx[0]->material->textureNormal = t2;
 		}
 		
@@ -187,6 +190,7 @@ void Draw ( ESContext *esContext )
 		glClearColor (1.0f, 1.0f, 1.0f, 1.0f );
 		glClear ( GL_COLOR_BUFFER_BIT );
 		glClear ( GL_DEPTH_BUFFER_BIT );
+		glFrontFace(GL_CCW);
 		if(mx!=0)
 		{
 			// TODO: use scene graph
@@ -195,6 +199,7 @@ void Draw ( ESContext *esContext )
 				mx[m]->Draw(esContext);
 			}
 		}
+		glFrontFace(GL_CW);
 		// Draw real scene
 		Scene::currentStep = RS_SCENE;
 		//glBindFramebuffer(GL_FRAMEBUFFER, Scene::finalRenderFrameBuffer);

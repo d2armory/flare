@@ -228,13 +228,20 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 		char* indirect =  ((char*) &f->indirectOffset) + f->indirectOffset;
 		
 		// check for special type
-		if(f->indirectLevel > 0 && indirect[0] == 0x04)
+		if(f->indirectLevel > 0)// && indirect[0] == 0x04)
 		{
 			// Array of data
 			
 			// structure: { 4:offset, 4:count }
 			char* elemPointer = dataF + *((unsigned int*) dataF);
 			unsigned int elemCount = *((unsigned int*) (dataF + 4));
+			if(indirect[0] == 0x03) elemCount = 1;
+			
+			if(elemCount<=0)
+			{
+				printf("Something's wrong here...\n");
+				continue;
+			}
 			
 			node->value = 0;
 			
@@ -304,12 +311,6 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 				}
 			}
 		}
-		else if(f->indirectLevel > 0 && indirect[1] == 0x03)
-		{
-			// pointer?
-			// dunon how to process this
-			printf("Dunno how to process pointer..\n");
-		}
 		else
 		{
 			
@@ -373,72 +374,84 @@ void KVReader2::ApplyField(KeyValue* node, ntroField* f, char* dataF, rerlHeader
 void KVReader2::Clean(KeyValue* pData)
 {
 	// Recursively delete node
-	if(pData==0) return;
-	Clean(pData->sibling);
-	Clean(pData->child);
-	delete pData;
+	KeyValue* cur = pData;
+	while(cur!=0)
+	{
+		Clean(cur->child);
+		KeyValue* tmp = cur->sibling;
+		delete cur;
+		cur = tmp;
+	}
 }
 
-void KVReader2::Dump(KeyValue* cur)
+void KVReader2::Dump(KeyValue* inNode)
 {
-	if(cur==0) return;
-	for(int i=0;i<cur->depth;i++)
+	KeyValue* cur = inNode;
+
+	while(cur!=0) 
 	{
-		printf("==");
-	}
-	if(cur->key!=0)
-	{
-		printf("= '%s' [%X] :",cur->key,cur->keyHash);
-	}
-	else 
-	{
-		printf("= []");
-	}
-	if(cur->value)
-	{
-		if(cur->type==NTRO_DATA_TYPE_HANDLE || cur->type==NTRO_DATA_TYPE_NAME)
+	
+		for(int i=0;i<cur->depth;i++)
 		{
-			printf(" '%s'",cur->AsHandle());
+			printf("==");
 		}
-		else if(cur->type==NTRO_DATA_TYPE_INTEGER)
+		if(cur->key!=0)
 		{
-			printf(" %d",cur->AsInt());
+			printf("= '%s' [%X] :",cur->key,cur->keyHash);
 		}
-		else if(cur->type==NTRO_DATA_TYPE_UINTEGER)
+		else 
 		{
-			printf(" %u",cur->AsUint());
+			printf("= []");
 		}
-		else if(cur->type==NTRO_DATA_TYPE_SHORT)
+		if(cur->value)
 		{
-			printf(" %d",cur->AsShort());
-		}
-		else if(cur->type==NTRO_DATA_TYPE_USHORT)
-		{
-			printf(" %u",cur->AsUshort());
-		}
-		else if(cur->type==NTRO_DATA_TYPE_BYTE)
-		{
-			printf(" %u",cur->AsByte());
-		}
-		else if(cur->type==NTRO_DATA_TYPE_FLOAT)
-		{
-			printf(" %f",cur->AsFloat());
-		}
-		else if(cur->type==10)	// not sure what it is, but it's used as image format
-		{
-			printf(" %u",cur->AsByte());
+			if(cur->type==NTRO_DATA_TYPE_HANDLE || cur->type==NTRO_DATA_TYPE_NAME)
+			{
+				printf(" '%s'",cur->AsHandle());
+			}
+			else if(cur->type==NTRO_DATA_TYPE_INTEGER)
+			{
+				printf(" %d",cur->AsInt());
+			}
+			else if(cur->type==NTRO_DATA_TYPE_UINTEGER)
+			{
+				printf(" %u",cur->AsUint());
+			}
+			else if(cur->type==NTRO_DATA_TYPE_SHORT)
+			{
+				printf(" %d",cur->AsShort());
+			}
+			else if(cur->type==NTRO_DATA_TYPE_USHORT)
+			{
+				printf(" %u",cur->AsUshort());
+			}
+			else if(cur->type==NTRO_DATA_TYPE_BYTE)
+			{
+				printf(" %u",cur->AsByte());
+			}
+			else if(cur->type==NTRO_DATA_TYPE_FLOAT)
+			{
+				printf(" %f",cur->AsFloat());
+			}
+			else if(cur->type==10)	// not sure what it is, but it's used as image format
+			{
+				printf(" %u",cur->AsByte());
+			}
+			else
+			{
+				printf(" 0x%X [t=%d]",(unsigned int) cur->value, cur->type);
+			}
 		}
 		else
 		{
-			printf(" 0x%X [t=%d]",(unsigned int) cur->value, cur->type);
+			printf(" [%d]",cur->childCount);
 		}
-	}
-	else
-	{
-		printf(" [%d]",cur->childCount);
-	}
-	printf("\n");
+		printf("\n");
+		
+		Dump(cur->child);
 	
-	Dump(cur->child);
-	Dump(cur->sibling);
+		cur = cur->sibling;
+	
+	}
+	
 }
