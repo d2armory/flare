@@ -204,7 +204,7 @@ void Draw ( ESContext *esContext )
 		glClearColor (1.0f, 1.0f, 1.0f, 1.0f );
 		glClear ( GL_COLOR_BUFFER_BIT );
 		glClear ( GL_DEPTH_BUFFER_BIT );
-		glFrontFace(GL_CW);
+		//glFrontFace(GL_CW);
 		if(mx!=0)
 		{
 			// TODO: use scene graph
