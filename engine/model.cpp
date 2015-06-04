@@ -148,6 +148,15 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				unsigned int vertexBufferSize = vertexSize * sm->vertexCount;
 				glBufferData(GL_ARRAY_BUFFER, vertexBufferSize , vertexData, GL_STATIC_DRAW);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
+			
+				// Load strip data
+				KeyValue* ibNode = root->Find("m_indexBuffers")->Get(d);
+				char* indexData = ibNode->Find("m_pData")->Get(0)->value;
+				int indexSize = ibNode->Find("m_nElementSizeInBytes")->AsInt();
+				unsigned int indexBufferSize = indexSize * sm->indexCount;
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sm->meshVBO);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBufferSize, indexData, GL_STATIC_DRAW);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 				
 				// Prepare vertex data extension
 				VertEx* vertexExData = new VertEx[sm->vertexCount];
@@ -155,23 +164,59 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				//{
 				//	vertexExData[v] = new VertEx();
 				//}
-				// since GLES 2 does not supprt GL_INT_2_10_10_10_REV,
-				// integer uniform, bitwise operation, and lots other things
-				// that can make my life easier, I have to preprocessed this
-				// normal into one that GLES 2 understand
 				
-				// unpack GL_INT_2_10_10_10_REV normal
-				float maxN = 1 / ((float) (1 << 11));
+				// really don't know how to unpack these normal (it's in RGBA8 format that also use alpha for correction)
+				// so, fuck it, just calculate normal from vertex
+				int trisCount = sm->indexCount / 3;
+				glm::vec3* surfaceNormal = new glm::vec3[trisCount];
+				unsigned short* indexes = (unsigned short*) indexData;
+				unsigned short* vertexMeshCount = new unsigned short[sm->vertexCount];
+				unsigned short** vertexMesh = new unsigned short*[sm->vertexCount];
 				for(int v=0;v<sm->vertexCount;v++)
 				{
-					int normal = *((int*) (vertexData + (v * vertexSize) + 12));
-					int nx = (((int) normal & 0x000003FF) << 22) >> 22;	// so we get signed padding
-					int ny = ((normal & 0x000FFC00) << 12) >> 22;
-					int nz = ((normal & 0x3FF00000) << 2) >> 22;
-					vertexExData[v].normal[0] = nx * maxN;
-					vertexExData[v].normal[1] = ny * maxN;
-					vertexExData[v].normal[2] = nz * maxN;
-					vertexExData[v].normal = glm::normalize(vertexExData[v].normal);
+					vertexMesh[v] = new unsigned short[8];	// 8 mesh per vertex, might not be enough
+					vertexMeshCount[v] = 0;
+				}
+				for(int t=0;t<trisCount;t++)
+				{
+					unsigned short idx1 = *(indexes + (t*3 + 0));
+					unsigned short idx2 = *(indexes + (t*3 + 1));
+					unsigned short idx3 = *(indexes + (t*3 + 2));
+					glm::vec3 v1 = *((glm::vec3*) (vertexData + (28 * idx1)));
+					glm::vec3 v2 = *((glm::vec3*) (vertexData + (28 * idx2)));
+					glm::vec3 v3 = *((glm::vec3*) (vertexData + (28 * idx3)));
+					surfaceNormal[t] = glm::normalize(glm::cross(v2-v1,v3-v1));
+					vertexMesh[idx1][vertexMeshCount[idx1]] = t;
+					vertexMesh[idx2][vertexMeshCount[idx2]] = t;
+					vertexMesh[idx3][vertexMeshCount[idx3]] = t;
+					vertexMeshCount[idx1]++;
+					vertexMeshCount[idx2]++;
+					vertexMeshCount[idx3]++;
+				}
+				for(int v=0;v<sm->vertexCount;v++)
+				{
+					//char* nc = (vertexData + (v * vertexSize) + 12);
+					//int normal = ((*(nc + 0))<<24) + ((*(nc + 8))<<16) + ((*(nc + 16))<<8) + ((*(nc + 24))<<0);
+					//int normal = *((int*) (vertexData + (v * vertexSize) + 12));
+					//int nz = (((int) normal & 0x000003FF) << 22) >> 22;	// so we get signed padding
+					//int ny = ((normal & 0x000FFC00) << 12) >> 22;
+					//int nx = ((normal & 0x3FF00000) << 2) >> 22;
+					/*
+					int nx = (((int) normal & 0xFFC00000) << 0) >> 20;	// so we get signed padding
+					int ny = ((normal & 0x003FF000) << 10) >> 20;
+					int nz = ((normal & 0x00000FFC) << 20) >> 20;
+					*/
+					//PackedNorm* normal = (PackedNorm*) (vertexData + (v * vertexSize) + 12);
+					//vertexExData[v].normal[0] = normal->x * maxN;
+					//vertexExData[v].normal[1] = normal->y * maxN;
+					//vertexExData[v].normal[2] = normal->z * maxN;
+					//vertexExData[v].normal = glm::normalize(vertexExData[v].normal);
+					for(int t=0;t<vertexMeshCount[v];t++)
+					{
+						int mid = vertexMesh[v][t];
+						vertexExData[v].normal += surfaceNormal[mid];
+					}
+					vertexExData[v].normal = glm::normalize(vertexExData[v].normal * (1.0f / vertexMeshCount[v]));
 				}
 				// tangent calculation moved to fragment shader
 				
@@ -182,6 +227,14 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 				delete vertexExData;
 				
+				for(int v=0;v<sm->vertexCount;v++)
+				{
+					//delete vertexMesh[v];
+				}
+				delete vertexMesh;
+				delete surfaceNormal;
+				delete vertexMeshCount;
+				
 				// Bind VAO
 				if(Scene::enableVAO)
 				{
@@ -189,15 +242,20 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					this->SetVAO(d);
 					glBindVertexArray(0);
 				}
-			
-				// Load strip data
-				KeyValue* ibNode = root->Find("m_indexBuffers")->Get(d);
-				char* indexData = ibNode->Find("m_pData")->Get(0)->value;
-				int indexSize = ibNode->Find("m_nElementSizeInBytes")->AsInt();
-				unsigned int indexBufferSize = indexSize * sm->indexCount;
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sm->meshVBO);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBufferSize, indexData, GL_STATIC_DRAW);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				
+				/* printf("draw call %d: %d verts %d indexes\n",d,sm->vertexCount,sm->indexCount);
+				for(int v=0;v<sm->vertexCount;v++)
+				{
+					char* vt = vertexData + (28*v);
+					printf("v %d: [%f\t%f\t%f]\tN: [%f\t%f\t%f] l=%f m=%d\n",v,*((float*)(vt)),*((float*)(vt+4)),*((float*)(vt+8)),vertexExData[v].normal[0],vertexExData[v].normal[1],vertexExData[v].normal[2],glm::length(vertexExData[v].normal),vertexMeshCount[v]);
+				}
+				for(int m=0;m<sm->indexCount;m++)
+				{
+					char* vi = indexData + (2*m);
+					printf("%hu ",(*((short*) vi)));
+				}
+				printf("\n"); */
+				
 				
 				// calculate bone data
 				// TODO: calculate them
@@ -512,7 +570,7 @@ void Model::Draw(ESContext *esContext)
 					else if(Scene::currentStep==RS_SHADOW) shaderShadow->Populate(this, i);
 		
 					// real drawing code, just 3 lines lol
-					glDrawElements(GL_TRIANGLE_STRIP, subModel[i]->indexCount, GL_UNSIGNED_SHORT, 0);
+					glDrawElements(GL_TRIANGLES, subModel[i]->indexCount, GL_UNSIGNED_SHORT, 0);
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 					glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
@@ -523,6 +581,9 @@ void Model::Draw(ESContext *esContext)
 					{
 						glBindVertexArray(0);
 					}
+					
+					for(int j=0;j<10;j++) glDisableVertexAttribArray(j);
+					
 				}
 			}
 		}
@@ -537,6 +598,9 @@ void Model::SetVAO(int i)
 		// XYZ pos
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 28, (void*) 0);
 		glEnableVertexAttribArray(0);
+		// Normal
+		//glVertexAttribPointer(1, 3, GL_UNSIGNED_BYTE, GL_TRUE, 28, (void*) 12);
+		//glEnableVertexAttribArray(1);
 		// UV
 		glVertexAttribPointer(2, 2, GL_UNSIGNED_SHORT, GL_TRUE, 28, (void*) 16);
 		glEnableVertexAttribArray(2);

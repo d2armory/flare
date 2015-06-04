@@ -10,8 +10,6 @@ varying vec3 fPos;
 varying vec3 fNormal;
 varying vec4 fTangent;
 
-varying vec3 fT;
-varying vec3 fB;
 varying vec3 fN;
 varying vec3 fShadowCoord;
 
@@ -113,6 +111,8 @@ void main()
 	vec3 worldN = invTBN * txtN;
 	//vec3 tangentL = TBN * L;
 	
+	worldN = fN;
+	
 	float NdotL = -1.0 * dot(worldN, L);
 	//float NdotL = dot(N, L);
 	
@@ -208,7 +208,7 @@ void main()
 	
 	vec3 light = ambient + diffuse; 
 	vec3 finalcolor = (color.rgb) * (1.0 - mask1.b);
-	//finalcolor = vec3(0.7,0.7,0.7);
+	finalcolor = vec3(0.7,0.7,0.7);
 	
 	gl_FragColor = vec4((light * finalcolor) + specular + rimLight,1);
 	//gl_FragColor = vec4((txtNworld) * 0.25,1) + vec4(0.25,0.25,0.25,0) + (vec4(0.5,0.5,0.5,0) * ((fTangent.a / 2.0) + 0.5));
@@ -216,7 +216,7 @@ void main()
 	//gl_FragColor = vec4(texture2D( texture[3], fUV ).rrr,1);
 	//gl_FragColor = normal;
 	
-	//gl_FragColor = vec4(fPos,1);
+	//gl_FragColor = vec4(normal.rgb * 2.0 - 1.0,1);
 	
 	/* int bshader= int(boneShader);
 	if(bshader&0x10==0 && bshader&0x01==0)

@@ -18,6 +18,13 @@
 // forward dec
 class KeyValue;
 
+struct PackedNorm {
+	int z:8;
+	int y:8;
+	int x:8;
+	int a:8;
+};
+
 struct VertEx
 {
 	glm::vec3 normal;

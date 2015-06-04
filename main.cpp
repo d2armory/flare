@@ -50,6 +50,10 @@ int Init ( ESContext *esContext )
 	Scene::InitFeatures();
 	Scene::InitDefaultTextures();
 	
+	// Scene feature setting
+	//Scene::enableShadow = false;
+	//Scene::enableVAO = false;
+	
 	// Passable data
 	esContext->userData = (char*) malloc(sizeof(UserData));
 	UserData *userData = (UserData*) esContext->userData;
@@ -72,7 +76,7 @@ int Init ( ESContext *esContext )
 	
 	// Back Face Culling
 	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CW);
+	glFrontFace(GL_CCW);
 	
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
@@ -145,6 +149,8 @@ void Update ( ESContext *esContext, float deltaTime )
 		//pedes->rotation[0] = - M_PI / 2.0f;
 		//pedes->position[1] = -10.0f;
 		
+		mx[0]->rotation[0] = - M_PI / 2.0f;
+		
 	//	Texture* testVtex = new Texture("custom/axe_body_color_psd_63afddb2.vtex_c");
 	//	Manager::add(testVtex);
 		
@@ -190,7 +196,7 @@ void Draw ( ESContext *esContext )
 		glClearColor (1.0f, 1.0f, 1.0f, 1.0f );
 		glClear ( GL_COLOR_BUFFER_BIT );
 		glClear ( GL_DEPTH_BUFFER_BIT );
-		glFrontFace(GL_CCW);
+		glFrontFace(GL_CW);
 		if(mx!=0)
 		{
 			// TODO: use scene graph
@@ -199,7 +205,7 @@ void Draw ( ESContext *esContext )
 				mx[m]->Draw(esContext);
 			}
 		}
-		glFrontFace(GL_CW);
+		glFrontFace(GL_CCW);
 		// Draw real scene
 		Scene::currentStep = RS_SCENE;
 		//glBindFramebuffer(GL_FRAMEBUFFER, Scene::finalRenderFrameBuffer);

@@ -43,8 +43,8 @@ varying vec3 fPos;
 varying vec3 fNormal;
 varying vec4 fTangent;
 
-varying vec3 fT;
-varying vec3 fB;
+//varying vec3 fT;
+//varying vec3 fB;
 varying vec3 fN;
 
 varying vec3 fShadowCoord;
@@ -88,15 +88,15 @@ mat3 q4tom3(vec4 q)
 void main()
 {
 	
-	vec3 vaPosIn = vPosition;
+	vec3 vaPos = vPosition;
 	
-	vec3 vaPos = vec3(0,0,0);
+	/* vec3 vaPos = vec3(0,0,0);
 	vec3 vaPos1 = (boneTransform[boneIndex[int(vBone1)]] * vec4(vaPosIn,1)).xyz;
 	vaPos += vaPos1 * vBoneweight1;
 	vec3 vaPos2 = (boneTransform[boneIndex[int(vBone2)]] * vec4(vaPosIn,1)).xyz;
 	vaPos += vaPos2 * vBoneweight2;
 	vec3 vaPos3 = (boneTransform[boneIndex[int(vBone3)]] * vec4(vaPosIn,1)).xyz;
-	vaPos += vaPos3 * vBoneweight3;
+	vaPos += vaPos3 * vBoneweight3; */
 	
 	gl_Position = mvpTransform * vec4(vaPos,1);
 	fUV = v2normalize(vUV);
@@ -104,9 +104,9 @@ void main()
 	fNormal = vNormal;
 	fTangent = vTangent;//normalTransform * vTangent;
 	
-	fN = nTransform * v3normalize(fNormal);
-	fT = nTransform * v3normalize(fTangent.xyz);
-	fB = cross(fT, fN);
+	fN = nTransform * fNormal;
+	//fT = nTransform * v3normalize(fTangent.xyz);
+	//fB = cross(fT, fN);
 	
 	fShadowCoord = (depthBiasMvpTransform * vec4(vaPos,1)).xyz;
 	
