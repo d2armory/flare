@@ -1,9 +1,12 @@
 
 /*
 
-	Flare DotA Viewer Engine
+	Manta Style (Project Flare)
+	DotA 2 Model Viewer Engine
 	
 	Author: KennyZero (@bongikairu)
+
+	why manta? http://www.nerfnow.com/comic/1269
 
 */
 
@@ -31,7 +34,7 @@ unsigned int frames = 0;
 bool axe_data = false;
 bool bounty_data = false;
 float total = 0;
-int modelCount = 1;
+int modelCount = 5;
 Model** mx = 0;
 
 int Init ( ESContext *esContext )
@@ -108,8 +111,12 @@ void Update ( ESContext *esContext, float deltaTime )
 	{
 		bounty_data = true;
 
-		const char* modelName[1] = {
+		const char* modelName[5] = {
 			"models/heroes/axe/axe.vmdl_c",
+			"models/heroes/axe/axe_armor.vmdl_c",
+			"models/heroes/axe/axe_belt.vmdl_c",
+			"models/heroes/axe/axe_ponytail.vmdl_c",
+			"models/heroes/axe/axe_weapon.vmdl_c"
 			//"models/heroes/axe/axe_armor.mdl",
 			//"models/items/axe/molten_claw/molten_claw.mdl",
 			//"models/heroes/axe/axe_belt.mdl",
@@ -141,6 +148,7 @@ void Update ( ESContext *esContext, float deltaTime )
 			mx[i]->shader = userData->heroShader;
 			mx[i]->shaderShadow = userData->shadowShader;
 			Manager::add(mx[i]);
+			mx[i]->rotation[0] = - M_PI / 2.0f;
 		}
 		
 		//mx[0]->useAnimation = true; // enable animation for model in index 0
@@ -149,7 +157,7 @@ void Update ( ESContext *esContext, float deltaTime )
 		//pedes->rotation[0] = - M_PI / 2.0f;
 		//pedes->position[1] = -10.0f;
 		
-		mx[0]->rotation[0] = - M_PI / 2.0f;
+		
 		
 	//	Texture* testVtex = new Texture("custom/axe_body_color_psd_63afddb2.vtex_c");
 	//	Manager::add(testVtex);

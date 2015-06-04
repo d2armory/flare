@@ -179,7 +179,7 @@ void main()
 	if(NdotL > 1e-6)
 	{	
 		
-		vec3 R = L - (worldN * NdotL * 2.0);
+		vec3 R = L + (worldN * NdotL * 2.0);
 		//vec3 tangentR = tangentL + (txtN * NdotL * 2.0);
 		
 		float RdotV = dot(R, V);
@@ -187,7 +187,7 @@ void main()
 		sColor = (sColor * (1.0 - mask2.b)) + (color.rgb * (mask2.b));
 		
 		float specExp = 20.0;
-		float specScale = 0.5;//2.5;
+		float specScale = 1.25;//2.5;
 		
 		if(RdotV > 1e-6)
 		{
@@ -210,6 +210,8 @@ void main()
 	vec3 light = ambient + diffuse; 
 	vec3 finalcolor = (color.rgb) * (1.0 - mask1.b);
 	//finalcolor = vec3(0.5,0.5,0.5) + (finalcolor * 0.5);
+	
+	//
 	
 	gl_FragColor = vec4((light * finalcolor) + specular + rimLight,1);
 	//gl_FragColor = vec4((txtNworld) * 0.25,1) + vec4(0.25,0.25,0.25,0) + (vec4(0.5,0.5,0.5,0) * ((fTangent.a / 2.0) + 0.5));
