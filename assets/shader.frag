@@ -110,9 +110,9 @@ void main()
 	vec3 txtN = v3normalize(normal.rgb);
 	vec3 worldN = invTBN * txtN;
 	//vec3 tangentL = TBN * L;
-	vec3 worldN2 = worldN;
+	//vec3 worldN2 = worldN;
 	
-	worldN = fN;
+	//worldN = fN;
 	
 	float NdotL = -1.0 * dot(worldN, L);
 	//float NdotL = dot(N, L);
@@ -217,7 +217,7 @@ void main()
 	//gl_FragColor = vec4(texture2D( texture[3], fUV ).rrr,1);
 	//gl_FragColor = normal;
 	
-	gl_FragColor = vec4(worldN2.rgb,1);
+	//gl_FragColor = vec4(worldN2.rgb,1);
 	
 	/* int bshader= int(boneShader);
 	if(bshader&0x10==0 && bshader&0x01==0)
