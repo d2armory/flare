@@ -10,7 +10,7 @@
 #include "scene.hpp"
 #include <string>
 #include <math.h>
-
+#include "half.hpp"
 
 #define MODEL_NAME_LENGTH 128
 #define MODEL_STRIP_COUNT 4
@@ -29,6 +29,7 @@ struct VertEx
 {
 	glm::vec3 normal;
 	//glm::vec3 tangent;
+	glm::vec2 uv;
 };
 
 struct ModelDrawCall

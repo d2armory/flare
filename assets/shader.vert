@@ -99,7 +99,7 @@ void main()
 	vaPos += vaPos3 * vBoneweight3; */
 	
 	gl_Position = mvpTransform * vec4(vaPos,1);
-	fUV = v2normalize(vUV);
+	fUV = vUV;//vec2(vUV.y,1.0 - vUV.x);
 	fPos = (mvTransform * vec4(vaPos,1)).xyz;
 	fNormal = vNormal;
 	fTangent = vTangent;//normalTransform * vTangent;

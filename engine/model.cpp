@@ -217,6 +217,12 @@ void Model::Update(ESContext *esContext, float deltaTime)
 						vertexExData[v].normal += surfaceNormal[mid];
 					}
 					vertexExData[v].normal = glm::normalize(vertexExData[v].normal * (1.0f / vertexMeshCount[v]));
+					
+					// unpack uv from half float to single float
+					// (gles2 lacks so many function ...)
+					half_float::half* txtU = (half_float::half*) (vertexData + (v * vertexSize) + 16);
+					half_float::half* txtV = (half_float::half*) (vertexData + (v * vertexSize) + 18);
+					vertexExData[v].uv = glm::vec2((float) (*txtU),(float) (*txtV));
 				}
 				// tangent calculation moved to fragment shader
 				
@@ -602,8 +608,8 @@ void Model::SetVAO(int i)
 		//glVertexAttribPointer(1, 3, GL_UNSIGNED_BYTE, GL_TRUE, 28, (void*) 12);
 		//glEnableVertexAttribArray(1);
 		// UV
-		glVertexAttribPointer(2, 2, GL_UNSIGNED_SHORT, GL_TRUE, 28, (void*) 16);
-		glEnableVertexAttribArray(2);
+		//glVertexAttribPointer(2, 2, GL_HALF_FLOAT, GL_FALSE, 28, (void*) 16);
+		//glEnableVertexAttribArray(2);
 		// num bones
 		glVertexAttribPointer(3, 1, GL_UNSIGNED_BYTE, GL_FALSE, 28, (void*) 23);	// not used anymore?
 		glEnableVertexAttribArray(3);
@@ -629,6 +635,10 @@ void Model::SetVAO(int i)
 		// Normal
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertEx), (void*) 0);
 		glEnableVertexAttribArray(1);
+		
+		// UV
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertEx), (void*) 12);
+		glEnableVertexAttribArray(2);
 		
 		// tangent - moved to frag shader
 		//glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*) 0);
