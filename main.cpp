@@ -142,7 +142,7 @@ void Update ( ESContext *esContext, float deltaTime )
 			//"models/heroes/tidehunter/tidehunter_fish.mdl"
 			////"models/heroes/tidehunter/tidehunter_hook.mdl"
 			//"models/heroes/enigma/enigma.mdl"
-			//"models/heroes/pedestal/pedestal_1_small.mdl"
+			//"models/heroes/pedestal/pedestal_spotlight.vmdl_c"
 		};
 
 		//mx = new Model*[modelCount];

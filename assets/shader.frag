@@ -165,12 +165,12 @@ void main()
 		}
 	}
 
-	float diffuseLight = mask1.a;
+	float diffuseLight = 0.0;
 	if(NdotL > 1e-6)
 	{
-		diffuseLight  = diffuseLight + NdotL;
+		diffuseLight  = NdotL;
 	}
-	diffuse = lColor * max(diffuseLight, 1e-6) * visibility;
+	diffuse = lColor * max(max(diffuseLight, 1e-6) * visibility,mask1.a * 2.0);
 	
 	// moved to front
 	//vec3 V = v3normalize(-fPos);
