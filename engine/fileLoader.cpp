@@ -1,6 +1,8 @@
 
 #include "fileLoader.hpp"
 
+LoadedFile* FileLoader::loaded = 0;
+
 void FileLoader::PrepareDirectory(const char* fileName)
 {
 	std::string s(fileName);
@@ -32,19 +34,37 @@ void FileLoader::PrepareDirectory(const char* fileName)
 void FileLoader::Load(const char* fileName)
 {
 	
+	// blank string check
 	if(strcmp("",fileName)==0) return;
+	// existing file checl
 	if(FileLoader::FileExist(fileName)) return;
-	// add check for file loading in progress here?
+	
+	std::string fName(fileName);
+	
+	// currently loading file checl
+	LoadedFile* l = loaded;
+	if(l!=0)
+	{
+		if(l->fileName.compare(fName)==0)
+		{
+			return;
+		}
+		l = l->nextFile;
+	}
 	
 	std::string baseUrl = "http://dota2-assets.yearbeast.com/dota2/";
 	//std::string baseUrl = "http://104.236.208.106:8080/";
-	std::string fName(fileName);
 	
 	std::string fileUrl = baseUrl + fName;
 	
 	FileLoader::PrepareDirectory(fileName);
 	
 	printf("[Loader] Fetching: %s\n",fileUrl.c_str());
+	
+	LoadedFile* lf = new LoadedFile();
+	lf->fileName = fName;
+	lf->nextFile = loaded;
+	loaded = lf;
 	
 	emscripten_async_wget2(fileUrl.c_str(),fileName,"GET","",0,&FileLoader::LoadCallbackSuccess,&FileLoader::LoadCallbackFail,0);
 	

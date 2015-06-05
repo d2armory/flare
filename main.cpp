@@ -19,6 +19,9 @@
 #include "gl.h"
 #include "common.h"
 #include "engine/common.hpp"
+#include <emscripten/bind.h>
+
+using namespace emscripten;
 
 // Application Context
 ESContext* context;
@@ -34,7 +37,7 @@ unsigned int frames = 0;
 bool axe_data = false;
 bool bounty_data = false;
 float total = 0;
-int modelCount = 5;
+
 Model** mx = 0;
 
 int Init ( ESContext *esContext )
@@ -111,6 +114,8 @@ void Update ( ESContext *esContext, float deltaTime )
 	{
 		bounty_data = true;
 
+		int modelCount = 5;
+
 		const char* modelName[5] = {
 			"models/heroes/axe/axe.vmdl_c",
 			"models/heroes/axe/axe_armor.vmdl_c",
@@ -140,15 +145,15 @@ void Update ( ESContext *esContext, float deltaTime )
 			//"models/heroes/pedestal/pedestal_1_small.mdl"
 		};
 
-		mx = new Model*[modelCount];
+		//mx = new Model*[modelCount];
 
 		for(int i=0;i<modelCount;i++)
 		{
-			mx[i] = new Model(modelName[i]);
-			mx[i]->shader = userData->heroShader;
-			mx[i]->shaderShadow = userData->shadowShader;
-			Manager::add(mx[i]);
-			mx[i]->rotation[0] = - M_PI / 2.0f;
+			
+			Model* m = Manager::createModel(modelName[i]);
+			m->shader = userData->heroShader;
+			m->shaderShadow = userData->shadowShader;
+			m->rotation[0] = - M_PI / 2.0f;
 		}
 		
 		//mx[0]->useAnimation = true; // enable animation for model in index 0
@@ -178,9 +183,12 @@ void Update ( ESContext *esContext, float deltaTime )
 			//mx[0]->material->textureNormal = t2;
 		//}
 		
-		for(int i=0;i<modelCount;i++)
+		// TODO: use scene graph
+		Model* m = Manager::headModel;
+		while(m!=0)
 		{
-			mx[i]->rotation[1] = userData->deg;
+			m->rotation[1] = userData->deg;
+			m = m->nextModel;
 		}
 	}
 }
@@ -205,14 +213,15 @@ void Draw ( ESContext *esContext )
 		glClear ( GL_COLOR_BUFFER_BIT );
 		glClear ( GL_DEPTH_BUFFER_BIT );
 		//glFrontFace(GL_CW);
-		if(mx!=0)
+		
+		// TODO: use scene graph
+		Model* m = Manager::headModel;
+		while(m!=0)
 		{
-			// TODO: use scene graph
-			for(int m=0;m<modelCount;m++)
-			{
-				mx[m]->Draw(esContext);
-			}
+			m->Draw(esContext);
+			m = m->nextModel;
 		}
+		
 		glFrontFace(GL_CCW);
 		// Draw real scene
 		Scene::currentStep = RS_SCENE;
@@ -222,13 +231,12 @@ void Draw ( ESContext *esContext )
 		glClearColor (0, 0, 0, 0.0f );
 		glClear ( GL_COLOR_BUFFER_BIT );
 		glClear ( GL_DEPTH_BUFFER_BIT );
-		if(mx!=0)
+		// TODO: use scene graph
+		m = Manager::headModel;
+		while(m!=0)
 		{
-			// TODO: use scene graph
-			for(int m=0;m<modelCount;m++)
-			{
-				mx[m]->Draw(esContext);
-			}
+			m->Draw(esContext);
+			m = m->nextModel;
 		}
 		/* glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glColorMask(true, true, true, true);
@@ -247,13 +255,12 @@ void Draw ( ESContext *esContext )
 		glClearColor (1.0f, 1.0f, 1.0f, 1.0f );
 		glClear ( GL_COLOR_BUFFER_BIT );
 		glClear ( GL_DEPTH_BUFFER_BIT );
-		if(mx!=0)
+		// TODO: use scene graph
+		Model* m = Manager::headModel;
+		while(m!=0)
 		{
-			// TODO: use scene graph
-			for(int m=0;m<modelCount;m++)
-			{
-				mx[m]->Draw(esContext);
-			}
+			m->Draw(esContext);
+			m = m->nextModel;
 		}
 		/* glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glColorMask(true, true, true, true);
@@ -362,4 +369,65 @@ int main ( int argc, char *argv[] )
 	
 	return 0;
 	
+}
+
+// JS Binding
+
+void AddModel(std::string name)
+{
+	UserData *userData = (UserData*) context->userData;
+
+	const char* cName = name.c_str();
+
+	Model* m = Manager::findModel(cName);
+	
+	if(m==0)
+	{
+		Model* m2 = Manager::createModel(cName);
+		m2->shader = userData->heroShader;
+		m2->shaderShadow = userData->shadowShader;
+		m2->rotation[0] = - M_PI / 2.0f;
+	}
+}
+
+void RemoveModel(std::string name)
+{
+	Model* m = Manager::findModel(name.c_str());
+	if(m!=0)
+	{
+		Manager::remove(m);
+	}
+}
+
+int ModelCount()
+{
+	// TODO: move all of these into manager
+	Model* cur = Manager::headModel;
+	int  i = 0;
+	while(cur!=0)
+	{
+		i++;
+		cur = cur->nextModel;
+	}
+	return i;
+}
+
+std::string GetModel(int index)
+{
+	// TODO: move all of these into manager
+	Model* cur = Manager::headModel;	
+	for(int i = 0;i<=index && cur!=0;i++)
+	{
+		if(i == index) return std::string(cur->fileName);
+		cur = cur->nextModel;
+	}
+	return std::string("");
+}
+
+EMSCRIPTEN_BINDINGS(model_control)
+{
+	function("MC_AddModel",&AddModel);
+	function("MC_RemoveModel",&RemoveModel);
+	function("MC_ModelCount",&ModelCount);
+	function("MC_GetModel",&GetModel);
 }

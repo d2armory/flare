@@ -12,7 +12,55 @@ void Manager::add(Model* m)
 }
 void Manager::remove(Model* m)
 {
-	// so?
+	// only allow removal of model at moment
+	Model* cur = headModel;
+	if(cur==m)
+	{
+		headModel = cur->nextModel;
+		m->~Model();
+		free(m);
+	}
+	else
+	{
+		while(cur!=0)
+		{
+			if(cur->nextModel == m)
+			{
+				cur->nextModel = m->nextModel;
+				m->~Model();
+				free(m);
+				break;
+			}
+			cur = cur->nextModel;
+		}
+	}
+}
+
+Model* Manager::createModel(const char* fileName)
+{
+	
+	// new Model() won't work when called from embind for some reason
+	// so I call malloc myself
+	
+	void* mem = malloc(sizeof(Model));
+	Model* m = new (mem) Model(fileName);
+	add(m);
+	return m;
+}
+
+// need optimization here
+Model* Manager::findModel(const char* fileName)
+{
+	Model* cur = headModel;
+	while(cur!=0)
+	{
+		if(strncmp(cur->fileName,fileName,128) == 0)
+		{
+			return cur;
+		}
+		cur = cur->nextModel;
+	}
+	return 0;
 }
 
 void Manager::add(Material* m)

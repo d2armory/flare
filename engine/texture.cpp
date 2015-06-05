@@ -13,6 +13,7 @@ Texture::Texture(const char* fileName)
 	childRight = 0;
 	nextTexture = 0;
 	isVtex = false;
+	txtType = GL_TEXTURE_2D;
 }
 Texture::~Texture()
 {
@@ -194,7 +195,7 @@ void Texture::Bind(int i)
 }
 void Texture::Unbind(int i)
 {
-	if(state == FS_READY)
+	if(state == FS_READY && this->textureId != 0)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(txtType, 0);

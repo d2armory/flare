@@ -3,6 +3,7 @@
 #include <string>
 #include <functional>
 #include <sys/time.h>
+#include <stdlib.h>
 
 // forward dec
 class Model;
@@ -20,6 +21,8 @@ public:
 	
 	static void add(Model* m);
 	static void remove(Model* m);
+	static Model* createModel(const char* fileName);
+	static Model* findModel(const char* fileName);
 	
 	static void add(Material* m);
 	static void remove(Material* m);

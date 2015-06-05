@@ -5,10 +5,18 @@
 #include <emscripten.h>
 #include <string>
 
+struct LoadedFile
+{
+	std::string fileName;
+	struct LoadedFile* nextFile;
+};
+
 class FileLoader
 {
 	
 public:
+
+	static LoadedFile* loaded;
 
 	static void PrepareDirectory(const char* fileName);
 

@@ -3,7 +3,9 @@
 
 Model::Model(const char* fileName)
 {
+	//printf("Copying filename %s\n",fileName);
 	strncpy(this->fileName,fileName,MODEL_NAME_LENGTH);
+	//printf("Copied %s\n",fileName);
 	
 	state = FS_UNINIT;
 	mdlState = FS_UNINIT;
@@ -588,7 +590,7 @@ void Model::Draw(ESContext *esContext)
 						glBindVertexArray(0);
 					}
 					
-					for(int j=0;j<10;j++) glDisableVertexAttribArray(j);
+					//for(int j=0;j<10;j++) glDisableVertexAttribArray(j);
 					
 				}
 			}
