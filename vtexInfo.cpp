@@ -26,7 +26,8 @@ int main()
 	
 	// main code is here
 	printf("Openning vmat_c file\n");
-	const char* fileName = "testbin/axe_bg_default_lod0.vmesh_c";
+	//const char* fileName = "testbin/axe_bg_default_lod0.vmesh_c";
+	const char* fileName = "testbin/pedestal_spotlight_bg_default_lod0.vmesh_c";
 	FILE* fp = fopen(fileName,"rb");
 	fseek(fp, 0, SEEK_END);
 	int fileSize = ftell(fp);
@@ -46,7 +47,7 @@ int main()
 	KeyValue* root = KVReader2::Parse(fileData);
 	
 	// Dump all
-	KVReader2::Dump(root);
+	KVReader2::Dump(root, (unsigned int) fileData);
 	
 	// Sample Usage
 	/* KeyValue* txtParams = root->Find("m_textureParams");

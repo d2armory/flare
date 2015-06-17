@@ -6,6 +6,7 @@ KeyValue::KeyValue()
 	child = 0;
 	sibling = 0;
 	keyHash = 0;
+	childCountAddress = 0;
 	
 	key = (char*) 0;
 	value = (char*) 0;
@@ -175,6 +176,7 @@ KeyValue* KVReader2::Parse(char* data)
 	
 	// Create root node
 	KeyValue* root = new KeyValue();
+	root->childCountAddress = dataH;
 	
 	// Apply struct 0 to data
 	ntroStruct* str = (ntroStruct*) (((char*) &ntroH->structOffset) + ntroH->structOffset);
@@ -224,22 +226,38 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 		node->type = f->type;
 		parent->Attach(node);
 		
+		node->childCountAddress = dataF;
+		
 		// prepare just in case
 		char* indirect =  ((char*) &f->indirectOffset) + f->indirectOffset;
 		
 		// check for special type
-		if(f->indirectLevel > 0)// && indirect[0] == 0x04)
+		if(f->indirectLevel > 0)
 		{
 			// Array of data
 			
 			// structure: { 4:offset, 4:count }
-			char* elemPointer = dataF + *((unsigned int*) dataF);
-			unsigned int elemCount = *((unsigned int*) (dataF + 4));
-			if(indirect[0] == 0x03) elemCount = 1;
+			unsigned int elemPointerOffset = *((unsigned int*) dataF);
+			char* elemPointer = dataF + elemPointerOffset;
+			node->childCountAddress = dataF + 4;
+			unsigned int elemCount = *((unsigned int*) (node->childCountAddress));
+			if(indirect[0] == 0x03) 
+			{
+				elemCount = 1;
+				node->childCountAddress = dataF;
+			}
+			
+			if(elemPointerOffset == 0)
+			{
+				printf("Indirect pointer is 0, skippping\n");
+				continue;
+			}
+			
+			printf("%s is %d deep with i[0] = %d and have %d child\n",node->key,f->indirectLevel,indirect[0],elemCount);
 			
 			if(elemCount<=0)
 			{
-				printf("Got %d size array, skippping\n",elemCount);
+				//printf("Got %d size array, skippping\n",elemCount);
 				continue;
 			}
 			
@@ -270,6 +288,7 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 					// new element node
 					KeyValue* elemNode = new KeyValue();
 					node->Attach(elemNode);
+					elemNode->childCountAddress = elemPointer;
 					// apply it
 					ApplyStruct(elemNode, baseStruct, elemPointer, rerlH, ntroH);
 					// move pointer to next element
@@ -298,6 +317,10 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 				{
 					fieldSize = 4;
 				}
+				else if(f->type==NTRO_DATA_TYPE_BYTE)
+				{
+					fieldSize = 1;
+				}
 				if(fieldSize==0)
 				{
 					fieldSize = 8;
@@ -310,6 +333,7 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 					node->Attach(elemNode);
 					elemNode->type = f->type;
 					elemNode->key = 0;
+					elemNode->childCountAddress = elemPointer;
 					// apply it
 					ApplyField(elemNode, f, elemPointer, rerlH, ntroH);
 					// move pointer to next element
@@ -334,6 +358,7 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 				}
 				// Now apply it
 				node->value = 0;
+				node->childCountAddress = dataF;
 				ApplyStruct(node, baseStruct, dataF, rerlH, ntroH);
 			}
 			else
@@ -390,7 +415,7 @@ void KVReader2::Clean(KeyValue* pData)
 	}
 }
 
-void KVReader2::Dump(KeyValue* inNode)
+void KVReader2::Dump(KeyValue* inNode, unsigned int startAddress)
 {
 	KeyValue* cur = inNode;
 
@@ -409,7 +434,7 @@ void KVReader2::Dump(KeyValue* inNode)
 		{
 			printf("= []");
 		}
-		if(cur->value)
+		if(cur->value != 0)
 		{
 			if(cur->type==NTRO_DATA_TYPE_HANDLE || cur->type==NTRO_DATA_TYPE_NAME)
 			{
@@ -447,14 +472,17 @@ void KVReader2::Dump(KeyValue* inNode)
 			{
 				printf(" 0x%X [t=%d]",(unsigned int) cur->value, cur->type);
 			}
+			
+			printf(" @ R%d",(((unsigned int)cur->value)-startAddress));
 		}
 		else
 		{
 			printf(" [%d]",cur->childCount);
+			printf(" @ R%d",(((unsigned int)cur->childCountAddress)-startAddress));
 		}
 		printf("\n");
 		
-		Dump(cur->child);
+		Dump(cur->child, startAddress);
 	
 		cur = cur->sibling;
 	

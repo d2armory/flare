@@ -27,14 +27,19 @@ uniform mat3 nTransform;
 
 // 12 1/4 vec4
 
+// TODO: use 16x16 bone transform texture instead
+
 // current non-bone uniform: 14.5 vec4
 // current bone uniform 92.75+32 = 124.75 vec4
 // total = 139.25 vec4
 // max = 250 (up from 128)
-uniform int boneIndex[128];	// bone index into per-strip index
+//uniform int boneIndex[128];	// bone index into per-strip index
 //uniform vec3 bonePos[53]; // translation data
 //uniform vec4 boneRot[53]; // quat rotation data
-uniform mat4 boneTransform[53];
+//uniform mat4 boneTransform[53];
+//uniform vec4 boneTransform1[53];
+//uniform vec4 boneTransform2[53];
+//uniform vec4 boneTransform3[53];
 
 // fs output
 varying vec2 fUV;

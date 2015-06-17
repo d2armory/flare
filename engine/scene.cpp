@@ -86,7 +86,7 @@ void Scene::InitFinalRender()
 
 	glGenTextures(1, &finalRenderColorTexture);
 	glBindTexture(GL_TEXTURE_2D, finalRenderColorTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, floor(Scene::screenWidth), floor(Scene::screenHeight), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, floor(Scene::screenWidth) * 2.0f, floor(Scene::screenHeight) * 2.0f, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -95,7 +95,7 @@ void Scene::InitFinalRender()
 	// Depth texture. Slower than a depth buffer, but you can sample it later in your shader
 	glGenTextures(1, &finalRenderDepthTexture);
 	glBindTexture(GL_TEXTURE_2D, finalRenderDepthTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT, floor(Scene::screenWidth), floor(Scene::screenHeight), 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT, floor(Scene::screenWidth) * 2.0f, floor(Scene::screenHeight) * 2.0f, 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

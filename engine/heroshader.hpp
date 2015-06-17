@@ -38,6 +38,8 @@ public:
 	GLuint locBoneIndex;
 	//GLuint locBonePos;
 	//GLuint locBoneRot;
-	GLuint locBoneTransform;
+	//GLuint locBoneTransform1;
+	//GLuint locBoneTransform2;
+	//GLuint locBoneTransform3;
 	
 };

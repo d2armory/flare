@@ -65,6 +65,8 @@ public:
 	char* key;
 	char* value;
 	
+	char* childCountAddress; // temp debug
+	
 	unsigned char depth;
 	unsigned char type;
 	unsigned char childCount;
@@ -133,7 +135,7 @@ public:
 	static void Clean(KeyValue* pData);
 	
 	// Debug function to dump tree structure
-	static void Dump(KeyValue* cur);
+	static void Dump(KeyValue* cur, unsigned int startAddress);
 	
 private:
 

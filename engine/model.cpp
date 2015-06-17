@@ -101,13 +101,14 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			//printf("- Num bones: %d\n",mh->numbones);
 			KeyValue* skeleton = root->Find("m_skeleton")->Get(0);
 			numBone = skeleton->Find("m_nBoneCount")->AsUshort();
+			printf("- Num bones: %d\n",numBone);
 			bonePos = new glm::vec3[numBone];
 			boneRot = new glm::quat[numBone];
 			boneTransform = new glm::mat4[numBone];
 		
 			KeyValue* boneNameList = skeleton->Find("m_boneNames");
 		
-			for(int i=0;i<boneNameList->childCount;i++)
+			for(int i=0;i<numBone;i++)
 			{
 				boneTransform[i] = glm::mat4(1);
 				printf("--- %i: %s\n",i,boneNameList->Get(i)->AsName());

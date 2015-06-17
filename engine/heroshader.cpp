@@ -100,7 +100,9 @@ bool HeroShader::Load()
 	locBoneIndex = glGetUniformLocation(programObject, "boneIndex");
 	//locBonePos = glGetUniformLocation(programObject, "bonePos");
 	//locBoneRot = glGetUniformLocation(programObject, "boneRot");
-	locBoneTransform = glGetUniformLocation(programObject, "boneTransform");
+	//locBoneTransform1 = glGetUniformLocation(programObject, "boneTransform1");
+	//locBoneTransform2 = glGetUniformLocation(programObject, "boneTransform2");
+	//locBoneTransform3 = glGetUniformLocation(programObject, "boneTransform3");
 	
 	return true;
 }
@@ -186,21 +188,26 @@ void HeroShader::Populate(Model* m, int index)
 	glUniform1iv( locTexture, 5, samplers );
 	
 	//unsigned int boneIndex[128];
-	unsigned int* boneIndexP = m->subModel[index]->meshBoneIndex;
-	glm::mat4 boneTransform[53];
-	unsigned int* mBoneList = m->subModel[index]->meshBoneList;
-	int bCount = m->subModel[index]->boneCount;
-	for(int i=0;i<bCount;i++)
-	{
-		boneTransform[i] = m->boneTransform[mBoneList[i]];
-	}
+	//unsigned int* boneIndexP = m->subModel[index]->meshBoneIndex;
+	//glm::mat4 boneTransform[53];
+	//unsigned int* mBoneList = m->subModel[index]->meshBoneList;
+	//int bCount = m->subModel[index]->boneCount;
+	//for(int i=0;i<bCount;i++)
+	//{
+	//	boneTransform[i] = m->boneTransform[mBoneList[i]];
+	//}
 	
 	//bonePos[0] = glm::vec3(0,50,0);
 	
-	glUniform1iv( locBoneIndex, 128, (GLint*) boneIndexP );
+	//glUniform1iv( locBoneIndex, 128, (GLint*) boneIndexP );
 	//glUniform3fv( locBonePos, 53, (GLfloat*) &bonePos[0] );
 	//glUniform4fv( locBoneRot, 53, (GLfloat*) &boneRot[0] );
-	glUniformMatrix4fv( locBoneTransform, 53, GL_FALSE, &boneTransform[0][0][0]);
+	//glUniformMatrix4fv( locBoneTransform, 53, GL_FALSE, &boneTransform[0][0][0]);
+	//glUniform4fv( locBoneTransform1, 53, &boneTransform[0][0][0]);	
+	//glUniform4fv( locBoneTransform2, 53, &boneTransform[0][0][0]);
+	//glUniform4fv( locBoneTransform3, 53, &boneTransform[0][0][0]);
+	
+	// TODO: move bone data into 16x16 bone transform texture
 }
 
 void HeroShader::Unbind(Model* m, int index)

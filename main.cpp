@@ -114,14 +114,14 @@ void Update ( ESContext *esContext, float deltaTime )
 	{
 		bounty_data = true;
 
-		int modelCount = 5;
+		int modelCount = 6;
 
-		const char* modelName[5] = {
+		const char* modelName[6] = {
 			"models/heroes/axe/axe.vmdl_c",
 			"models/heroes/axe/axe_armor.vmdl_c",
 			"models/heroes/axe/axe_belt.vmdl_c",
 			"models/heroes/axe/axe_ponytail.vmdl_c",
-			"models/heroes/axe/axe_weapon.vmdl_c"
+			"models/heroes/axe/axe_weapon.vmdl_c",
 			//"models/heroes/axe/axe_armor.mdl",
 			//"models/items/axe/molten_claw/molten_claw.mdl",
 			//"models/heroes/axe/axe_belt.mdl",
@@ -142,7 +142,7 @@ void Update ( ESContext *esContext, float deltaTime )
 			//"models/heroes/tidehunter/tidehunter_fish.mdl"
 			////"models/heroes/tidehunter/tidehunter_hook.mdl"
 			//"models/heroes/enigma/enigma.mdl"
-			//"models/heroes/pedestal/pedestal_spotlight.vmdl_c"
+			"models/heroes/pedestal/pedestal_small.vmdl_c"
 		};
 
 		//mx = new Model*[modelCount];
@@ -315,7 +315,7 @@ int main ( int argc, char *argv[] )
 	
 	// don't change it after you set it here
 	Scene::screenWidth = 960.0f;
-	Scene::screenHeight = 640.0f;
+	Scene::screenHeight = 960.0f;
 	
 	context = new ESContext();
 	context->userData = new UserData();
