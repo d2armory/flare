@@ -219,7 +219,7 @@ void main()
 	//gl_FragColor = vec4(texture2D( texture[3], fUV ).rrr,1);
 	//gl_FragColor = normal;
 	
-	//gl_FragColor = vec4(worldN2.rgb,1);
+	//gl_FragColor = vec4(mask1.rgb,1);
 	
 	/* int bshader= int(boneShader);
 	if(bshader&0x10==0 && bshader&0x01==0)

@@ -69,10 +69,10 @@ void Scene::InitFeatures()
 
 void Scene::InitDefaultTextures()
 {
-	Manager::add(Scene::defaultDiffuse = new Texture("assets/button_blank_64_grey_psd_53f54ea1.vtex_c"));
-	Manager::add(Scene::defaultNormal = new Texture("assets/flatnormal_normal_psd_760f0359.vtex_c"));
-	Manager::add(Scene::defaultMask1 = new Texture("assets/blankmasks1_selfillummask_tga_ac873b92.vtex_c"));
-	Manager::add(Scene::defaultMask2 = new Texture("assets/blankmasks2_rimmask_tga_2fbf6342.vtex_c"));
+	Manager::add(Scene::defaultDiffuse = new Texture("assetsp/button_blank_64_grey_psd_53f54ea1.vtex_c"));
+	Manager::add(Scene::defaultNormal = new Texture("assetsp/flatnormal_normal_psd_760f0359.vtex_c"));
+	Manager::add(Scene::defaultMask1 = new Texture("assetsp/blankmasks1_selfillummask_tga_ac873b92.vtex_c"));
+	Manager::add(Scene::defaultMask2 = new Texture("assetsp/blankmasks2_rimmask_tga_2fbf6342.vtex_c"));
 }
 
 void Scene::InitFinalRender()

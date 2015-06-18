@@ -41,6 +41,8 @@ struct ModelDrawCall
 	
 	unsigned int vertexCount;
 	unsigned int indexCount;
+	unsigned int vertexSize;
+	unsigned int indexSize;
 	Material* material;
 	
 	unsigned int boneCount;

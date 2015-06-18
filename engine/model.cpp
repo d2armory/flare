@@ -53,6 +53,7 @@ Model::~Model()
 
 void Model::Update(ESContext *esContext, float deltaTime)
 {
+	//printf("Updating %s\n",fileName);
 	if(state==FS_UNINIT)
 	{
 		state = FS_LOADING;
@@ -77,6 +78,28 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			FileLoader::Load(meshFileName);
 			meshState = FS_LOADING;
 			
+			// Read vagrps
+			
+			// Prepare bone data
+			
+			//printf("- Num bones: %d\n",mh->numbones);
+			KeyValue* skeleton = root->Find("m_modelSkeleton")->Get(0);
+			numBone = skeleton->Find("m_boneName")->childCount;
+			printf("- Num bones: %d\n",numBone);
+			
+			int tNumBone = numBone + 1;
+			bonePos = new glm::vec3[tNumBone];
+			boneRot = new glm::quat[tNumBone];
+			boneTransform = new glm::mat4[tNumBone];
+		
+			KeyValue* boneNameList = skeleton->Find("m_boneName");
+		
+			for(int i=0;i<numBone;i++)
+			{
+				boneTransform[i] = glm::mat4(1);
+				printf("--- %i: %s\n",i,boneNameList->Get(i)->AsName());
+			}
+			
 			KVReader2::Clean(root);
 
 		}
@@ -89,40 +112,59 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			state = FS_READY;
 			
 			vmeshData = FileLoader::ReadFile(meshFileName);
-			KeyValue* root = KVReader2::Parse(vmeshData);
-			meshRoot = root;
 			
-			KeyValue* scene = root->Find("m_sceneObjects");
-			KeyValue* drawCalls = scene->Get(0)->Find("m_drawCalls");
+			//KeyValue* root = KVReader2::Parse(vmeshData);
+			meshRoot = 0;
 			
-			subModelCount = drawCalls->childCount;
+			//KeyValue* scene = root->Find("m_sceneObjects");
+			//KeyValue* drawCalls = scene->Get(0)->Find("m_drawCalls");
+			
+			dmxHeader* dmxH = (dmxHeader*) vmeshData;
+			// Getting VBIB block
+			dmxBlockHeader* blockH = dmxH->block(3);
+			char* dataM = (char*) blockH->data();
+			
+			int vhOffset = *((emscripten_align1_int*) (dataM));
+			int vhCount = *((emscripten_align1_int*) (dataM + 4));
+			int ihOffset = *((emscripten_align1_int*) (dataM + 8));
+			int ihCount = *((emscripten_align1_int*) (dataM + 12));
+			
+			printf("Mesh %s: dB:%c, adr: 0x%X, v[%d @%d], i[%d @%d]\n",meshFileName,blockH->name[0],(unsigned int) dataM,vhCount,vhOffset,ihCount,ihOffset);
+			
+			//subModelCount = drawCalls->childCount;
+			subModelCount = vhCount;
 			subModel = new ModelDrawCall*[subModelCount];
 			
-			//printf("- Num bones: %d\n",mh->numbones);
-			KeyValue* skeleton = root->Find("m_skeleton")->Get(0);
-			numBone = skeleton->Find("m_nBoneCount")->AsUshort();
-			printf("- Num bones: %d\n",numBone);
-			bonePos = new glm::vec3[numBone];
-			boneRot = new glm::quat[numBone];
-			boneTransform = new glm::mat4[numBone];
-		
-			KeyValue* boneNameList = skeleton->Find("m_boneNames");
-		
-			for(int i=0;i<numBone;i++)
+			dmxBlockHeader* rBlockH = dmxH->block(0);
+			rerlHeader* rerlH = rBlockH->rerlData();
+			
+			//printf("%c%c%c%c\n",rBlockH->name[0],rBlockH->name[1],rBlockH->name[2],rBlockH->name[3]);
+			
+			rerlRecord* recEntries = (rerlRecord*) (((char*) &rerlH->recordOffset) + rerlH->recordOffset);
+			
+			/* for(int x=0;x<rerlH->recordCount - 1;x++)
 			{
-				boneTransform[i] = glm::mat4(1);
-				printf("--- %i: %s\n",i,boneNameList->Get(i)->AsName());
-			}
+				rerlRecord* rec = recEntries + 1 + x;
+				char* recName = ((char*) &rec->nameOffset) + rec->nameOffset;
+				printf("rerl %s\n",recName);
+			} */
 			
 			for(int d=0;d<subModelCount;d++)
 			{
 				
-				KeyValue* dc = drawCalls->Get(d);
+				//KeyValue* dc = drawCalls->Get(d);
 				
 				// Prepare material
-				KeyValue* materialNode = dc->Find("m_pMaterial");
-				std::string txtFilename = std::string(materialNode->AsHandle());
+				//KeyValue* materialNode = dc->Find("m_pMaterial");
+				
+				rerlRecord* rec = recEntries + (rerlH->recordCount - subModelCount + d);
+				char* recName = ((char*) &rec->nameOffset) + rec->nameOffset;
+				printf("mat %s\n",recName);
+				std::string txtFilename = std::string(recName);
 				txtFilename = txtFilename + "_c";
+				
+				printf("-- mat name: %s\n",txtFilename.c_str());
+				
 				Material* mat = new Material(txtFilename.c_str());
 				Manager::add(mat);
 				
@@ -138,14 +180,16 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					glGenVertexArrays(1, &sm->VAO);
 				}
 				
-				sm->vertexCount = dc->Find("m_nVertexCount")->AsInt();
-				sm->indexCount = dc->Find("m_nIndexCount")->AsInt();
+				sm->vertexCount = *((emscripten_align1_int*) (dataM + vhOffset + 24*d + 0));
+				sm->indexCount = *((emscripten_align1_int*) (dataM + 8 + ihOffset + 24*d + 0));
 				sm->material = mat;
 				
+				printf("-- vertex count: %d, indexCount: %d\n",sm->vertexCount,sm->indexCount);
+				
 				// Load vertex
-				KeyValue* vbNode = root->Find("m_vertexBuffers")->Get(d);
-				char* vertexData = vbNode->Find("m_pData")->Get(0)->value;
-				int vertexSize = vbNode->Find("m_nElementSizeInBytes")->AsInt();
+				//KeyValue* vbNode = root->Find("m_vertexBuffers")->Get(d);
+				char* vertexData = dataM + vhOffset + 24*d + 16 + *((emscripten_align1_int*) (dataM + vhOffset + 24*d + 16));
+				int vertexSize = *((emscripten_align1_int*) (dataM + vhOffset + 24*d + 4));
 				
 				glBindBuffer(GL_ARRAY_BUFFER, sm->vertexVBO);
 				unsigned int vertexBufferSize = vertexSize * sm->vertexCount;
@@ -153,14 +197,22 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 			
 				// Load strip data
-				KeyValue* ibNode = root->Find("m_indexBuffers")->Get(d);
-				char* indexData = ibNode->Find("m_pData")->Get(0)->value;
-				int indexSize = ibNode->Find("m_nElementSizeInBytes")->AsInt();
+				//KeyValue* ibNode = root->Find("m_indexBuffers")->Get(d);
+				char* indexData = dataM + 8 + ihOffset + 24*d + 16 + *((emscripten_align1_int*) (dataM + 8 + ihOffset + 24*d + 16));
+				int indexSize = *((emscripten_align1_int*) (dataM + 8 + ihOffset + 24*d + 4));
 				unsigned int indexBufferSize = indexSize * sm->indexCount;
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sm->meshVBO);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBufferSize, indexData, GL_STATIC_DRAW);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 				
+				sm->vertexSize = vertexSize;
+				sm->indexSize = indexSize;
+				
+				printf("- data size: vertex: %d, index: %d\n",vertexSize,indexSize);
+				printf("- data loc: vertex: 0x%X, index: 0x%X\n",(unsigned int) vertexData,(unsigned int) indexData);
+				
+				
+				printf("-- Preparing extension data\n");
 				// Prepare vertex data extension
 				VertEx* vertexExData = new VertEx[sm->vertexCount];
 				//for(int v=0;v<sm->vertexCount;v++)	// might consider merging into below loop
@@ -172,7 +224,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				// so, fuck it, just calculate normal from vertex
 				int trisCount = sm->indexCount / 3;
 				glm::vec3* surfaceNormal = new glm::vec3[trisCount];
-				unsigned short* indexes = (unsigned short*) indexData;
+				emscripten_align1_short* indexes = (emscripten_align1_short*) indexData;
 				unsigned short* vertexMeshCount = new unsigned short[sm->vertexCount];
 				unsigned short** vertexMesh = new unsigned short*[sm->vertexCount];
 				for(int v=0;v<sm->vertexCount;v++)
@@ -180,14 +232,36 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					vertexMesh[v] = new unsigned short[8];	// 8 mesh per vertex, might not be enough
 					vertexMeshCount[v] = 0;
 				}
+				
 				for(int t=0;t<trisCount;t++)
 				{
 					unsigned short idx1 = *(indexes + (t*3 + 0));
 					unsigned short idx2 = *(indexes + (t*3 + 1));
 					unsigned short idx3 = *(indexes + (t*3 + 2));
-					glm::vec3 v1 = *((glm::vec3*) (vertexData + (28 * idx1)));
-					glm::vec3 v2 = *((glm::vec3*) (vertexData + (28 * idx2)));
-					glm::vec3 v3 = *((glm::vec3*) (vertexData + (28 * idx3)));
+					
+					//glm::vec3 v1 = *((glm::vec3*) (vertexData + (28 * idx1)));
+					//glm::vec3 v2 = *((glm::vec3*) (vertexData + (28 * idx2)));
+					//glm::vec3 v3 = *((glm::vec3*) (vertexData + (28 * idx3)));
+					
+					//printf("%d %d %d ",idx1,idx2,idx3);
+					
+					emscripten_align1_float* vData = (emscripten_align1_float*) (vertexData + vertexSize * idx1);
+					//vData = vertexData + 28 * idx1;
+					float t1 = *(vData+0);
+					float t2 = *(vData+1);
+					float t3 = *(vData+2);
+					glm::vec3 v1(t1,t2,t3);
+					vData = (emscripten_align1_float*) (vertexData + vertexSize * idx2);
+					t1 = *(vData+0);
+					t2 = *(vData+1);
+					t3 = *(vData+2);
+					glm::vec3 v2(t1,t2,t3);
+					vData = (emscripten_align1_float*) (vertexData + vertexSize * idx3);
+					t1 = *(vData+0);
+					t2 = *(vData+1);
+					t3 = *(vData+2);
+					glm::vec3 v3(t1,t2,t3);
+					
 					surfaceNormal[t] = glm::normalize(glm::cross(v2-v1,v3-v1));
 					vertexMesh[idx1][vertexMeshCount[idx1]] = t;
 					vertexMesh[idx2][vertexMeshCount[idx2]] = t;
@@ -196,6 +270,8 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					vertexMeshCount[idx2]++;
 					vertexMeshCount[idx3]++;
 				}
+				//printf("\n");
+				
 				for(int v=0;v<sm->vertexCount;v++)
 				{
 					//char* nc = (vertexData + (v * vertexSize) + 12);
@@ -223,8 +299,10 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					
 					// unpack uv from half float to single float
 					// (gles2 lacks so many function ...)
-					half_float::half* txtU = (half_float::half*) (vertexData + (v * vertexSize) + 16);
-					half_float::half* txtV = (half_float::half*) (vertexData + (v * vertexSize) + 18);
+					unsigned short tmp1 = *((emscripten_align1_short*) (vertexData + (v * vertexSize) + 16));
+					unsigned short tmp2 = *((emscripten_align1_short*) (vertexData + (v * vertexSize) + 18));
+					half_float::half* txtU = (half_float::half*) (&tmp1);
+					half_float::half* txtV = (half_float::half*) (&tmp2);
 					vertexExData[v].uv = glm::vec2((float) (*txtU),(float) (*txtV));
 				}
 				// tangent calculation moved to fragment shader
@@ -238,7 +316,8 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				
 				for(int v=0;v<sm->vertexCount;v++)
 				{
-					//delete vertexMesh[v];
+					// cause crash for unknown reason
+					//if(vertexMesh[v]) delete vertexMesh[v];
 				}
 				delete vertexMesh;
 				delete surfaceNormal;
@@ -251,6 +330,8 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					this->SetVAO(d);
 					glBindVertexArray(0);
 				}
+				
+				printf("-- Preparing bone data\n");
 				
 				/* printf("draw call %d: %d verts %d indexes\n",d,sm->vertexCount,sm->indexCount);
 				for(int v=0;v<sm->vertexCount;v++)
@@ -268,9 +349,11 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				
 				// calculate bone data
 				// TODO: calculate them
-				sm->boneCount = 1;
-				sm->meshBoneList = new unsigned int[sm->boneCount];
-				sm->meshBoneIndex = new unsigned int[128];	// = MAX_BONE
+				//sm->boneCount = 1;
+				//sm->meshBoneList = new unsigned int[sm->boneCount];
+				//sm->meshBoneIndex = new unsigned int[128];	// = MAX_BONE
+				
+				printf("-- Finished\n");
 				
 			}
 
@@ -534,7 +617,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 
 void Model::Draw(ESContext *esContext)
 {
-	
+	//return;
 	// transform calculation
 	// not sure why it use left-to-right calculation though
 	glm::mat4 m = glm::mat4(1);
@@ -603,9 +686,10 @@ void Model::SetVAO(int i)
 {
 	if(subModel[i]->vertexVBO!=0)
 	{ 
+		unsigned int vts = subModel[i]->vertexSize;
 		glBindBuffer(GL_ARRAY_BUFFER, subModel[i]->vertexVBO);
 		// XYZ pos
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 28, (void*) 0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vts, (void*) 0);
 		glEnableVertexAttribArray(0);
 		// Normal
 		//glVertexAttribPointer(1, 3, GL_UNSIGNED_BYTE, GL_TRUE, 28, (void*) 12);
@@ -614,21 +698,21 @@ void Model::SetVAO(int i)
 		//glVertexAttribPointer(2, 2, GL_HALF_FLOAT, GL_FALSE, 28, (void*) 16);
 		//glEnableVertexAttribArray(2);
 		// num bones
-		glVertexAttribPointer(3, 1, GL_UNSIGNED_BYTE, GL_FALSE, 28, (void*) 23);	// not used anymore?
+		glVertexAttribPointer(3, 1, GL_UNSIGNED_BYTE, GL_FALSE, vts, (void*) 23);	// not used anymore?
 		glEnableVertexAttribArray(3);
 		// bone id
-		glVertexAttribPointer(4, 1, GL_UNSIGNED_BYTE, GL_FALSE, 28, (void*) 20);
+		glVertexAttribPointer(4, 1, GL_UNSIGNED_BYTE, GL_FALSE, vts, (void*) 20);
 		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(5, 1, GL_UNSIGNED_BYTE, GL_FALSE, 28, (void*) 21);
+		glVertexAttribPointer(5, 1, GL_UNSIGNED_BYTE, GL_FALSE, vts, (void*) 21);
 		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(6, 1, GL_UNSIGNED_BYTE, GL_FALSE, 28, (void*) 22);
+		glVertexAttribPointer(6, 1, GL_UNSIGNED_BYTE, GL_FALSE, vts, (void*) 22);
 		glEnableVertexAttribArray(6);
 		// bone weight
-		glVertexAttribPointer(7, 1, GL_UNSIGNED_BYTE, GL_TRUE, 28, (void*) 24);
+		glVertexAttribPointer(7, 1, GL_UNSIGNED_BYTE, GL_TRUE, vts, (void*) 24);
 		glEnableVertexAttribArray(7);
-		glVertexAttribPointer(8, 1, GL_UNSIGNED_BYTE, GL_TRUE, 28, (void*) 25);
+		glVertexAttribPointer(8, 1, GL_UNSIGNED_BYTE, GL_TRUE, vts, (void*) 25);
 		glEnableVertexAttribArray(8);
-		glVertexAttribPointer(9, 1, GL_UNSIGNED_BYTE, GL_TRUE, 28, (void*) 26);
+		glVertexAttribPointer(9, 1, GL_UNSIGNED_BYTE, GL_TRUE, vts, (void*) 26);
 		glEnableVertexAttribArray(9);
 	}
 	

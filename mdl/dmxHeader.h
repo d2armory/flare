@@ -95,7 +95,21 @@ struct vtexSheet
 	emscripten_align1_int seqCount;
 };
 
+// 52 bytes total
 struct vtexHeader
+{
+	unsigned int unused[5];	// 20 byte of sheet offset, reflectivity, and other things
+	emscripten_align1_short width;
+	emscripten_align1_short height;
+	emscripten_align1_short depth;
+	unsigned char format;	// 1=dxt1, 2=dxt5
+	unsigned char mipLevel;
+	unsigned char unknown1[4];
+	unsigned int unused2[4]; // another unknown of 20 byte
+	emscripten_align1_int dataOffset;
+};
+
+/* struct vtexHeader
 {
 	emscripten_align1_short width;
 	emscripten_align1_short height;
@@ -111,7 +125,7 @@ struct vtexHeader
 	// follows by preview data? (if it's the same as mdl, it should be small dxt1 preview data, 1380 char long)
 	// and then texture data (which I assume is in the same format as vtf, 
 	// judging from how https://github.com/tranek/vtex_c2tga/blob/master/vtex_c2tga.cpp did it)
-};
+}; */
 
 struct rerlRecord
 {

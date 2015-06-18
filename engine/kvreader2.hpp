@@ -27,6 +27,7 @@
 
 // File format struct for easy referencing
 #include "../mdl/dmxHeader.h"
+#include "../glm/glm.hpp"
 
 // Direct from https://github.com/Dingf/Source-2-Decompiler/blob/master/ntro.h
 enum NtroValueType
@@ -44,7 +45,9 @@ enum NtroValueType
 	NTRO_DATA_TYPE_UINT64 = 17,
 	NTRO_DATA_TYPE_FLOAT = 18,
 	NTRO_DATA_TYPE_VECTOR3 = 22,
-	NTRO_DATA_TYPE_VECTOR4 = 28,
+	NTRO_DATA_TYPE_QUATERNION = 25,
+	NTRO_DATA_TYPE_VECTOR4 = 27,
+	NTRO_DATA_TYPE_COLOR = 28,
 	NTRO_DATA_TYPE_BOOLEAN = 30,
 	NTRO_DATA_TYPE_NAME = 31,
 };
@@ -66,6 +69,7 @@ public:
 	char* value;
 	
 	char* childCountAddress; // temp debug
+	unsigned int realChildCount;
 	
 	unsigned char depth;
 	unsigned char type;
@@ -122,6 +126,10 @@ public:
 	uint64_t AsUlong() const;
 	// Return value part as float (32)
 	float AsFloat() const;
+	// Return value part as Vector3
+	glm::vec3 AsVec3() const;
+	// Return value part as Vector4
+	glm::vec4 AsVec4() const;
 };
 
 class KVReader2

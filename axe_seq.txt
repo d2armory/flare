@@ -1,0 +1,2392 @@
+Adding directories to PATH:
+PATH += /root/emsdk_portable
+PATH += /root/emsdk_portable/clang/fastcomp/build_master_64/bin
+PATH += /root/emsdk_portable/emscripten/master
+
+Setting environment variables:
+EMSCRIPTEN = /root/emsdk_portable/emscripten/master
+
+Validating pointer size
+- Expected: 4, Runtime: 4
+Openning file
+File size: 16748 bytes
+File data read into memory (0x501038)
+= [] [13] @ R5808
+=== 'm_sName' [173FDC3E] : str:'models/heroes/axe/axe.vseq' @ R5896
+=== 'm_nFlags' [BC2A933E] : uint:0 @ R5812
+=== 'm_localSequenceNameArray' [AE433779] : [100] @ R5820
+===== [] str:'bindpose' @ R15068
+===== [] str:'@bindpose' @ R15077
+===== [] str:'loadout_spawn' @ R15087
+===== [] str:'@loadout_spawn' @ R15101
+===== [] str:'loadout_rare' @ R15116
+===== [] str:'@loadout_rare' @ R15129
+===== [] str:'loadout' @ R15143
+===== [] str:'@loadout' @ R15151
+===== [] str:'run' @ R15160
+===== [] str:'@run' @ R15164
+===== [] str:'run_chase' @ R15169
+===== [] str:'@run_chase' @ R15179
+===== [] str:'run_haste' @ R15190
+===== [] str:'@run_haste' @ R15200
+===== [] str:'run_injured' @ R15211
+===== [] str:'@run_injured' @ R15223
+===== [] str:'run_injured_blood_chaser' @ R15236
+===== [] str:'@run_injured_blood_chaser' @ R15261
+===== [] str:'runn_blood_chaser' @ R15287
+===== [] str:'@runn_blood_chaser' @ R15305
+===== [] str:'run_start2' @ R15324
+===== [] str:'@run_start2' @ R15335
+===== [] str:'runn_end' @ R15347
+===== [] str:'@runn_end' @ R15356
+===== [] str:'idle' @ R15366
+===== [] str:'@idle' @ R15371
+===== [] str:'idle_alt' @ R15377
+===== [] str:'@idle_alt' @ R15386
+===== [] str:'idle_injured' @ R15396
+===== [] str:'@idle_injured' @ R15409
+===== [] str:'idle_injured_blood_chaser' @ R15423
+===== [] str:'@idle_injured_blood_chaser' @ R15449
+===== [] str:'portrait' @ R15476
+===== [] str:'@portrait' @ R15485
+===== [] str:'stun' @ R15495
+===== [] str:'@stun' @ R15500
+===== [] str:'attack_main' @ R15506
+===== [] str:'@attack_main' @ R15518
+===== [] str:'attack_main_injured' @ R15531
+===== [] str:'@attack_main_injured' @ R15551
+===== [] str:'attack_alt' @ R15572
+===== [] str:'@attack_alt' @ R15583
+===== [] str:'berserkers_call' @ R15595
+===== [] str:'@berserkers_call' @ R15611
+===== [] str:'berserkers_call_statue' @ R15628
+===== [] str:'@berserkers_call_statue' @ R15651
+===== [] str:'rampant_berserkers_call' @ R15675
+===== [] str:'@rampant_berserkers_call' @ R15699
+===== [] str:'battle_hunger' @ R15724
+===== [] str:'@battle_hunger' @ R15738
+===== [] str:'counter_helix' @ R15753
+===== [] str:'@counter_helix' @ R15767
+===== [] str:'counter_helix_statue' @ R15782
+===== [] str:'@counter_helix_statue' @ R15803
+===== [] str:'culling_blade' @ R15825
+===== [] str:'@culling_blade' @ R15839
+===== [] str:'death' @ R15854
+===== [] str:'@death' @ R15860
+===== [] str:'flail' @ R15867
+===== [] str:'@flail' @ R15873
+===== [] str:'idle_alt2' @ R15880
+===== [] str:'@idle_alt2' @ R15890
+===== [] str:'counter_helix_blood_chaser' @ R15901
+===== [] str:'@counter_helix_blood_chaser' @ R15928
+===== [] str:'axe_taunt_01_come_get_it' @ R15956
+===== [] str:'@axe_taunt_01_come_get_it' @ R15981
+===== [] str:'axe_taunt_02_good_day_sir' @ R16007
+===== [] str:'@axe_taunt_02_good_day_sir' @ R16033
+===== [] str:'axe_spawn' @ R16060
+===== [] str:'@axe_spawn' @ R16070
+===== [] str:'axe_teleport' @ R16081
+===== [] str:'@axe_teleport' @ R16094
+===== [] str:'axe_teleport_end' @ R16108
+===== [] str:'@axe_teleport_end' @ R16125
+===== [] str:'workshop_anim_00' @ R16143
+===== [] str:'@workshop_anim_00' @ R16160
+===== [] str:'workshop_anim_01' @ R16178
+===== [] str:'@workshop_anim_01' @ R16195
+===== [] str:'workshop_anim_02' @ R16213
+===== [] str:'@workshop_anim_02' @ R16230
+===== [] str:'workshop_anim_03' @ R16248
+===== [] str:'@workshop_anim_03' @ R16265
+===== [] str:'workshop_anim_04' @ R16283
+===== [] str:'@workshop_anim_04' @ R16300
+===== [] str:'workshop_anim_05' @ R16318
+===== [] str:'@workshop_anim_05' @ R16335
+===== [] str:'workshop_anim_06' @ R16353
+===== [] str:'@workshop_anim_06' @ R16370
+===== [] str:'workshop_anim_07' @ R16388
+===== [] str:'@workshop_anim_07' @ R16405
+===== [] str:'workshop_anim_08' @ R16423
+===== [] str:'@workshop_anim_08' @ R16440
+===== [] str:'workshop_anim_09' @ R16458
+===== [] str:'@workshop_anim_09' @ R16475
+===== [] str:'forcestaff' @ R16493
+===== [] str:'@forcestaff' @ R16504
+===== [] str:'axe_forcestaff_end' @ R16516
+===== [] str:'@axe_forcestaff_end' @ R16535
+===== [] str:'forcestaff_enemy' @ R16555
+===== [] str:'@forcestaff_enemy' @ R16572
+=== 'm_localS1SeqDescArray' [37E42759] : [50] @ R5828
+===== [] [9] @ R5924
+======= 'm_sName' [173FDC3E] : str:'bindpose' @ R11524
+======= 'm_flags' [8635CF10] : [10] @ R5928
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R5928
+========= 'm_bSnap' [9F078183] : bool:0 @ R5929
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R5930
+========= 'm_bPost' [9C8697C9] : bool:0 @ R5931
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R5932
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R5933
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R5934
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R5935
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R5936
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R5937
+======= 'm_fetch' [2DF475A3] : [8] @ R5940
+========= 'm_flags' [8635CF10] : [6] @ R5940
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R5940
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R5941
+=========== 'm_b0D' [74CDB840] : bool:1 @ R5942
+=========== 'm_b1D' [5C78248E] : bool:0 @ R5943
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R5944
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R5945
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R5952
+=========== [] short:1 @ R11534
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R5956
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R5964
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R5976
+=========== [] float:0.000000 @ R11536
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R5984
+=========== [] float:0.000000 @ R11540
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R5988
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R5992
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R5996
+======= 'm_autoLayerArray' [17225642] : [0] @ R6004
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R6012
+======= 'm_transition' [F1668852] : [2] @ R6016
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R6016
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R6020
+======= 'm_keyValueText' [87B643E9] : str:'' @ R6024
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R6032
+===== [] [9] @ R6036
+======= 'm_sName' [173FDC3E] : str:'loadout_spawn' @ R11544
+======= 'm_flags' [8635CF10] : [10] @ R6040
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R6040
+========= 'm_bSnap' [9F078183] : bool:0 @ R6041
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R6042
+========= 'm_bPost' [9C8697C9] : bool:0 @ R6043
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R6044
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R6045
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R6046
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R6047
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R6048
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R6049
+======= 'm_fetch' [2DF475A3] : [8] @ R6052
+========= 'm_flags' [8635CF10] : [6] @ R6052
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R6052
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R6053
+=========== 'm_b0D' [74CDB840] : bool:1 @ R6054
+=========== 'm_b1D' [5C78248E] : bool:0 @ R6055
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R6056
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R6057
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R6064
+=========== [] short:3 @ R11558
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R6068
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R6076
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R6088
+=========== [] float:0.000000 @ R11560
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R6096
+=========== [] float:0.000000 @ R11564
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R6100
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R6104
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R6108
+======= 'm_autoLayerArray' [17225642] : [0] @ R6116
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R6124
+======= 'm_transition' [F1668852] : [2] @ R6128
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R6128
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.300000 @ R6132
+======= 'm_keyValueText' [87B643E9] : str:'' @ R6136
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R6144
+========= [] [4] @ R11568
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_SPAWN' @ R11600
+=========== 'm_nActivity' [DE319079] : int:0 @ R11572
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R11576
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R11580
+========= [] [4] @ R11584
+=========== 'm_name' [A565FCC4] : str:'loadout' @ R11615
+=========== 'm_nActivity' [DE319079] : int:0 @ R11588
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R11592
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R11596
+===== [] [9] @ R6148
+======= 'm_sName' [173FDC3E] : str:'loadout_rare' @ R11623
+======= 'm_flags' [8635CF10] : [10] @ R6152
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R6152
+========= 'm_bSnap' [9F078183] : bool:0 @ R6153
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R6154
+========= 'm_bPost' [9C8697C9] : bool:0 @ R6155
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R6156
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R6157
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R6158
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R6159
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R6160
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R6161
+======= 'm_fetch' [2DF475A3] : [8] @ R6164
+========= 'm_flags' [8635CF10] : [6] @ R6164
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R6164
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R6165
+=========== 'm_b0D' [74CDB840] : bool:1 @ R6166
+=========== 'm_b1D' [5C78248E] : bool:0 @ R6167
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R6168
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R6169
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R6176
+=========== [] short:5 @ R11636
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R6180
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R6188
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R6200
+=========== [] float:0.000000 @ R11640
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R6208
+=========== [] float:0.000000 @ R11644
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R6212
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R6216
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R6220
+======= 'm_autoLayerArray' [17225642] : [0] @ R6228
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R6236
+======= 'm_transition' [F1668852] : [2] @ R6240
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R6240
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R6244
+======= 'm_keyValueText' [87B643E9] : str:'' @ R6248
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R6256
+========= [] [4] @ R11648
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_LOADOUT_RARE' @ R11664
+=========== 'm_nActivity' [DE319079] : int:0 @ R11652
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R11656
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R11660
+===== [] [9] @ R6260
+======= 'm_sName' [173FDC3E] : str:'loadout' @ R11686
+======= 'm_flags' [8635CF10] : [10] @ R6264
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R6264
+========= 'm_bSnap' [9F078183] : bool:0 @ R6265
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R6266
+========= 'm_bPost' [9C8697C9] : bool:0 @ R6267
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R6268
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R6269
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R6270
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R6271
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R6272
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R6273
+======= 'm_fetch' [2DF475A3] : [8] @ R6276
+========= 'm_flags' [8635CF10] : [6] @ R6276
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R6276
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R6277
+=========== 'm_b0D' [74CDB840] : bool:1 @ R6278
+=========== 'm_b1D' [5C78248E] : bool:0 @ R6279
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R6280
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R6281
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R6288
+=========== [] short:7 @ R11694
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R6292
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R6300
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R6312
+=========== [] float:0.000000 @ R11696
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R6320
+=========== [] float:0.000000 @ R11700
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R6324
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R6328
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R6332
+======= 'm_autoLayerArray' [17225642] : [0] @ R6340
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R6348
+======= 'm_transition' [F1668852] : [2] @ R6352
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R6352
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R6356
+======= 'm_keyValueText' [87B643E9] : str:'' @ R6360
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R6368
+========= [] [4] @ R11704
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_LOADOUT' @ R11720
+=========== 'm_nActivity' [DE319079] : int:0 @ R11708
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R11712
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R11716
+===== [] [9] @ R6372
+======= 'm_sName' [173FDC3E] : str:'run' @ R11737
+======= 'm_flags' [8635CF10] : [10] @ R6376
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R6376
+========= 'm_bSnap' [9F078183] : bool:0 @ R6377
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R6378
+========= 'm_bPost' [9C8697C9] : bool:0 @ R6379
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R6380
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R6381
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R6382
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R6383
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R6384
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R6385
+======= 'm_fetch' [2DF475A3] : [8] @ R6388
+========= 'm_flags' [8635CF10] : [6] @ R6388
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R6388
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R6389
+=========== 'm_b0D' [74CDB840] : bool:1 @ R6390
+=========== 'm_b1D' [5C78248E] : bool:0 @ R6391
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R6392
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R6393
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R6400
+=========== [] short:9 @ R11742
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R6404
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R6412
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R6424
+=========== [] float:0.000000 @ R11744
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R6432
+=========== [] float:0.000000 @ R11748
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R6436
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R6440
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R6444
+======= 'm_autoLayerArray' [17225642] : [0] @ R6452
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R6460
+======= 'm_transition' [F1668852] : [2] @ R6464
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R6464
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R6468
+======= 'm_keyValueText' [87B643E9] : str:'' @ R6472
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R6480
+========= [] [4] @ R11752
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_RUN' @ R11768
+=========== 'm_nActivity' [DE319079] : int:0 @ R11756
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R11760
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R11764
+===== [] [9] @ R6484
+======= 'm_sName' [173FDC3E] : str:'run_chase' @ R11781
+======= 'm_flags' [8635CF10] : [10] @ R6488
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R6488
+========= 'm_bSnap' [9F078183] : bool:0 @ R6489
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R6490
+========= 'm_bPost' [9C8697C9] : bool:0 @ R6491
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R6492
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R6493
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R6494
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R6495
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R6496
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R6497
+======= 'm_fetch' [2DF475A3] : [8] @ R6500
+========= 'm_flags' [8635CF10] : [6] @ R6500
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R6500
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R6501
+=========== 'm_b0D' [74CDB840] : bool:1 @ R6502
+=========== 'm_b1D' [5C78248E] : bool:0 @ R6503
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R6504
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R6505
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R6512
+=========== [] short:11 @ R11792
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R6516
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R6524
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R6536
+=========== [] float:0.000000 @ R11796
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R6544
+=========== [] float:0.000000 @ R11800
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R6548
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R6552
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R6556
+======= 'm_autoLayerArray' [17225642] : [0] @ R6564
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R6572
+======= 'm_transition' [F1668852] : [2] @ R6576
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R6576
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R6580
+======= 'm_keyValueText' [87B643E9] : str:'' @ R6584
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R6592
+========= [] [4] @ R11804
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_RUN' @ R11836
+=========== 'm_nActivity' [DE319079] : int:0 @ R11808
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R11812
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R11816
+========= [] [4] @ R11820
+=========== 'm_name' [A565FCC4] : str:'chase' @ R11849
+=========== 'm_nActivity' [DE319079] : int:0 @ R11824
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R11828
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R11832
+===== [] [9] @ R6596
+======= 'm_sName' [173FDC3E] : str:'run_haste' @ R11855
+======= 'm_flags' [8635CF10] : [10] @ R6600
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R6600
+========= 'm_bSnap' [9F078183] : bool:0 @ R6601
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R6602
+========= 'm_bPost' [9C8697C9] : bool:0 @ R6603
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R6604
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R6605
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R6606
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R6607
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R6608
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R6609
+======= 'm_fetch' [2DF475A3] : [8] @ R6612
+========= 'm_flags' [8635CF10] : [6] @ R6612
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R6612
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R6613
+=========== 'm_b0D' [74CDB840] : bool:1 @ R6614
+=========== 'm_b1D' [5C78248E] : bool:0 @ R6615
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R6616
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R6617
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R6624
+=========== [] short:13 @ R11866
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R6628
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R6636
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R6648
+=========== [] float:0.000000 @ R11868
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R6656
+=========== [] float:0.000000 @ R11872
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R6660
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R6664
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R6668
+======= 'm_autoLayerArray' [17225642] : [0] @ R6676
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R6684
+======= 'm_transition' [F1668852] : [2] @ R6688
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R6688
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R6692
+======= 'm_keyValueText' [87B643E9] : str:'' @ R6696
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R6704
+========= [] [4] @ R11876
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_RUN' @ R11908
+=========== 'm_nActivity' [DE319079] : int:0 @ R11880
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R11884
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R11888
+========= [] [4] @ R11892
+=========== 'm_name' [A565FCC4] : str:'haste' @ R11921
+=========== 'm_nActivity' [DE319079] : int:0 @ R11896
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R11900
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R11904
+===== [] [9] @ R6708
+======= 'm_sName' [173FDC3E] : str:'run_injured' @ R11927
+======= 'm_flags' [8635CF10] : [10] @ R6712
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R6712
+========= 'm_bSnap' [9F078183] : bool:0 @ R6713
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R6714
+========= 'm_bPost' [9C8697C9] : bool:0 @ R6715
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R6716
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R6717
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R6718
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R6719
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R6720
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R6721
+======= 'm_fetch' [2DF475A3] : [8] @ R6724
+========= 'm_flags' [8635CF10] : [6] @ R6724
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R6724
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R6725
+=========== 'm_b0D' [74CDB840] : bool:1 @ R6726
+=========== 'm_b1D' [5C78248E] : bool:0 @ R6727
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R6728
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R6729
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R6736
+=========== [] short:15 @ R11940
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R6740
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R6748
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R6760
+=========== [] float:0.000000 @ R11944
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R6768
+=========== [] float:0.000000 @ R11948
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R6772
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R6776
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R6780
+======= 'm_autoLayerArray' [17225642] : [0] @ R6788
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R6796
+======= 'm_transition' [F1668852] : [2] @ R6800
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R6800
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R6804
+======= 'm_keyValueText' [87B643E9] : str:'' @ R6808
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R6816
+========= [] [4] @ R11952
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_RUN' @ R11984
+=========== 'm_nActivity' [DE319079] : int:0 @ R11956
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R11960
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R11964
+========= [] [4] @ R11968
+=========== 'm_name' [A565FCC4] : str:'injured' @ R11997
+=========== 'm_nActivity' [DE319079] : int:0 @ R11972
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R11976
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R11980
+===== [] [9] @ R6820
+======= 'm_sName' [173FDC3E] : str:'run_injured_blood_chaser' @ R12005
+======= 'm_flags' [8635CF10] : [10] @ R6824
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R6824
+========= 'm_bSnap' [9F078183] : bool:0 @ R6825
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R6826
+========= 'm_bPost' [9C8697C9] : bool:0 @ R6827
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R6828
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R6829
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R6830
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R6831
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R6832
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R6833
+======= 'm_fetch' [2DF475A3] : [8] @ R6836
+========= 'm_flags' [8635CF10] : [6] @ R6836
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R6836
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R6837
+=========== 'm_b0D' [74CDB840] : bool:1 @ R6838
+=========== 'm_b1D' [5C78248E] : bool:0 @ R6839
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R6840
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R6841
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R6848
+=========== [] short:17 @ R12030
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R6852
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R6860
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R6872
+=========== [] float:0.000000 @ R12032
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R6880
+=========== [] float:0.000000 @ R12036
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R6884
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R6888
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R6892
+======= 'm_autoLayerArray' [17225642] : [0] @ R6900
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R6908
+======= 'm_transition' [F1668852] : [2] @ R6912
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R6912
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R6916
+======= 'm_keyValueText' [87B643E9] : str:'' @ R6920
+======= 'm_activityArray' [DAA5E2CD] : [3] @ R6928
+========= [] [4] @ R12040
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_RUN' @ R12088
+=========== 'm_nActivity' [DE319079] : int:0 @ R12044
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12048
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12052
+========= [] [4] @ R12056
+=========== 'm_name' [A565FCC4] : str:'injured' @ R12101
+=========== 'm_nActivity' [DE319079] : int:0 @ R12060
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12064
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12068
+========= [] [4] @ R12072
+=========== 'm_name' [A565FCC4] : str:'blood_chaser' @ R12109
+=========== 'm_nActivity' [DE319079] : int:0 @ R12076
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12080
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12084
+===== [] [9] @ R6932
+======= 'm_sName' [173FDC3E] : str:'runn_blood_chaser' @ R12122
+======= 'm_flags' [8635CF10] : [10] @ R6936
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R6936
+========= 'm_bSnap' [9F078183] : bool:0 @ R6937
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R6938
+========= 'm_bPost' [9C8697C9] : bool:0 @ R6939
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R6940
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R6941
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R6942
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R6943
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R6944
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R6945
+======= 'm_fetch' [2DF475A3] : [8] @ R6948
+========= 'm_flags' [8635CF10] : [6] @ R6948
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R6948
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R6949
+=========== 'm_b0D' [74CDB840] : bool:1 @ R6950
+=========== 'm_b1D' [5C78248E] : bool:0 @ R6951
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R6952
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R6953
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R6960
+=========== [] short:19 @ R12140
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R6964
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R6972
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R6984
+=========== [] float:0.000000 @ R12144
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R6992
+=========== [] float:0.000000 @ R12148
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R6996
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R7000
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R7004
+======= 'm_autoLayerArray' [17225642] : [0] @ R7012
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R7020
+======= 'm_transition' [F1668852] : [2] @ R7024
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R7024
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R7028
+======= 'm_keyValueText' [87B643E9] : str:'' @ R7032
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R7040
+========= [] [4] @ R12152
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_RUN' @ R12184
+=========== 'm_nActivity' [DE319079] : int:0 @ R12156
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12160
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12164
+========= [] [4] @ R12168
+=========== 'm_name' [A565FCC4] : str:'blood_chaser' @ R12197
+=========== 'm_nActivity' [DE319079] : int:0 @ R12172
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12176
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12180
+===== [] [9] @ R7044
+======= 'm_sName' [173FDC3E] : str:'run_start2' @ R12210
+======= 'm_flags' [8635CF10] : [10] @ R7048
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R7048
+========= 'm_bSnap' [9F078183] : bool:0 @ R7049
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R7050
+========= 'm_bPost' [9C8697C9] : bool:0 @ R7051
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R7052
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R7053
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R7054
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R7055
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R7056
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R7057
+======= 'm_fetch' [2DF475A3] : [8] @ R7060
+========= 'm_flags' [8635CF10] : [6] @ R7060
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R7060
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R7061
+=========== 'm_b0D' [74CDB840] : bool:1 @ R7062
+=========== 'm_b1D' [5C78248E] : bool:0 @ R7063
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R7064
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R7065
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R7072
+=========== [] short:21 @ R12222
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R7076
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R7084
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R7096
+=========== [] float:0.000000 @ R12224
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R7104
+=========== [] float:0.000000 @ R12228
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R7108
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R7112
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R7116
+======= 'm_autoLayerArray' [17225642] : [0] @ R7124
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R7132
+======= 'm_transition' [F1668852] : [2] @ R7136
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R7136
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R7140
+======= 'm_keyValueText' [87B643E9] : str:'' @ R7144
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R7152
+========= [] [4] @ R12232
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_RUN' @ R12264
+=========== 'm_nActivity' [DE319079] : int:0 @ R12236
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12240
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12244
+========= [] [4] @ R12248
+=========== 'm_name' [A565FCC4] : str:'start' @ R12277
+=========== 'm_nActivity' [DE319079] : int:0 @ R12252
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12256
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12260
+===== [] [9] @ R7156
+======= 'm_sName' [173FDC3E] : str:'runn_end' @ R12283
+======= 'm_flags' [8635CF10] : [10] @ R7160
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R7160
+========= 'm_bSnap' [9F078183] : bool:0 @ R7161
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R7162
+========= 'm_bPost' [9C8697C9] : bool:0 @ R7163
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R7164
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R7165
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R7166
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R7167
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R7168
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R7169
+======= 'm_fetch' [2DF475A3] : [8] @ R7172
+========= 'm_flags' [8635CF10] : [6] @ R7172
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R7172
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R7173
+=========== 'm_b0D' [74CDB840] : bool:1 @ R7174
+=========== 'm_b1D' [5C78248E] : bool:0 @ R7175
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R7176
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R7177
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R7184
+=========== [] short:23 @ R12292
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R7188
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R7196
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R7208
+=========== [] float:0.000000 @ R12296
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R7216
+=========== [] float:0.000000 @ R12300
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R7220
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R7224
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R7228
+======= 'm_autoLayerArray' [17225642] : [0] @ R7236
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R7244
+======= 'm_transition' [F1668852] : [2] @ R7248
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R7248
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R7252
+======= 'm_keyValueText' [87B643E9] : str:'' @ R7256
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R7264
+========= [] [4] @ R12304
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_RUN' @ R12336
+=========== 'm_nActivity' [DE319079] : int:0 @ R12308
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12312
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12316
+========= [] [4] @ R12320
+=========== 'm_name' [A565FCC4] : str:'end' @ R12349
+=========== 'm_nActivity' [DE319079] : int:0 @ R12324
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12328
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12332
+===== [] [9] @ R7268
+======= 'm_sName' [173FDC3E] : str:'idle' @ R12353
+======= 'm_flags' [8635CF10] : [10] @ R7272
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R7272
+========= 'm_bSnap' [9F078183] : bool:0 @ R7273
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R7274
+========= 'm_bPost' [9C8697C9] : bool:0 @ R7275
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R7276
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R7277
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R7278
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R7279
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R7280
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R7281
+======= 'm_fetch' [2DF475A3] : [8] @ R7284
+========= 'm_flags' [8635CF10] : [6] @ R7284
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R7284
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R7285
+=========== 'm_b0D' [74CDB840] : bool:1 @ R7286
+=========== 'm_b1D' [5C78248E] : bool:0 @ R7287
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R7288
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R7289
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R7296
+=========== [] short:25 @ R12358
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R7300
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R7308
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R7320
+=========== [] float:0.000000 @ R12360
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R7328
+=========== [] float:0.000000 @ R12364
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R7332
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R7336
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R7340
+======= 'm_autoLayerArray' [17225642] : [0] @ R7348
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R7356
+======= 'm_transition' [F1668852] : [2] @ R7360
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R7360
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R7364
+======= 'm_keyValueText' [87B643E9] : str:'' @ R7368
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R7376
+========= [] [4] @ R12368
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_IDLE' @ R12384
+=========== 'm_nActivity' [DE319079] : int:0 @ R12372
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12376
+=========== 'm_nWeight' [6DD7AEBE] : int:5 @ R12380
+===== [] [9] @ R7380
+======= 'm_sName' [173FDC3E] : str:'idle_alt' @ R12398
+======= 'm_flags' [8635CF10] : [10] @ R7384
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R7384
+========= 'm_bSnap' [9F078183] : bool:0 @ R7385
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R7386
+========= 'm_bPost' [9C8697C9] : bool:0 @ R7387
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R7388
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R7389
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R7390
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R7391
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R7392
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R7393
+======= 'm_fetch' [2DF475A3] : [8] @ R7396
+========= 'm_flags' [8635CF10] : [6] @ R7396
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R7396
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R7397
+=========== 'm_b0D' [74CDB840] : bool:1 @ R7398
+=========== 'm_b1D' [5C78248E] : bool:0 @ R7399
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R7400
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R7401
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R7408
+=========== [] short:27 @ R12408
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R7412
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R7420
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R7432
+=========== [] float:0.000000 @ R12412
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R7440
+=========== [] float:0.000000 @ R12416
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R7444
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R7448
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R7452
+======= 'm_autoLayerArray' [17225642] : [0] @ R7460
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R7468
+======= 'm_transition' [F1668852] : [2] @ R7472
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R7472
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R7476
+======= 'm_keyValueText' [87B643E9] : str:'' @ R7480
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R7488
+========= [] [4] @ R12420
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_IDLE_RARE' @ R12436
+=========== 'm_nActivity' [DE319079] : int:0 @ R12424
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12428
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12432
+===== [] [9] @ R7492
+======= 'm_sName' [173FDC3E] : str:'idle_injured' @ R12455
+======= 'm_flags' [8635CF10] : [10] @ R7496
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R7496
+========= 'm_bSnap' [9F078183] : bool:0 @ R7497
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R7498
+========= 'm_bPost' [9C8697C9] : bool:0 @ R7499
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R7500
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R7501
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R7502
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R7503
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R7504
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R7505
+======= 'm_fetch' [2DF475A3] : [8] @ R7508
+========= 'm_flags' [8635CF10] : [6] @ R7508
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R7508
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R7509
+=========== 'm_b0D' [74CDB840] : bool:1 @ R7510
+=========== 'm_b1D' [5C78248E] : bool:0 @ R7511
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R7512
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R7513
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R7520
+=========== [] short:29 @ R12468
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R7524
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R7532
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R7544
+=========== [] float:0.000000 @ R12472
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R7552
+=========== [] float:0.000000 @ R12476
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R7556
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R7560
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R7564
+======= 'm_autoLayerArray' [17225642] : [0] @ R7572
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R7580
+======= 'm_transition' [F1668852] : [2] @ R7584
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R7584
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R7588
+======= 'm_keyValueText' [87B643E9] : str:'' @ R7592
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R7600
+========= [] [4] @ R12480
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_IDLE' @ R12512
+=========== 'm_nActivity' [DE319079] : int:0 @ R12484
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12488
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12492
+========= [] [4] @ R12496
+=========== 'm_name' [A565FCC4] : str:'injured' @ R12526
+=========== 'm_nActivity' [DE319079] : int:0 @ R12500
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12504
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12508
+===== [] [9] @ R7604
+======= 'm_sName' [173FDC3E] : str:'idle_injured_blood_chaser' @ R12534
+======= 'm_flags' [8635CF10] : [10] @ R7608
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R7608
+========= 'm_bSnap' [9F078183] : bool:0 @ R7609
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R7610
+========= 'm_bPost' [9C8697C9] : bool:0 @ R7611
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R7612
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R7613
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R7614
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R7615
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R7616
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R7617
+======= 'm_fetch' [2DF475A3] : [8] @ R7620
+========= 'm_flags' [8635CF10] : [6] @ R7620
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R7620
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R7621
+=========== 'm_b0D' [74CDB840] : bool:1 @ R7622
+=========== 'm_b1D' [5C78248E] : bool:0 @ R7623
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R7624
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R7625
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R7632
+=========== [] short:31 @ R12560
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R7636
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R7644
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R7656
+=========== [] float:0.000000 @ R12564
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R7664
+=========== [] float:0.000000 @ R12568
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R7668
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R7672
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R7676
+======= 'm_autoLayerArray' [17225642] : [0] @ R7684
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R7692
+======= 'm_transition' [F1668852] : [2] @ R7696
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R7696
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R7700
+======= 'm_keyValueText' [87B643E9] : str:'' @ R7704
+======= 'm_activityArray' [DAA5E2CD] : [3] @ R7712
+========= [] [4] @ R12572
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_IDLE' @ R12620
+=========== 'm_nActivity' [DE319079] : int:0 @ R12576
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12580
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12584
+========= [] [4] @ R12588
+=========== 'm_name' [A565FCC4] : str:'injured' @ R12634
+=========== 'm_nActivity' [DE319079] : int:0 @ R12592
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12596
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12600
+========= [] [4] @ R12604
+=========== 'm_name' [A565FCC4] : str:'blood_chaser' @ R12642
+=========== 'm_nActivity' [DE319079] : int:0 @ R12608
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12612
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12616
+===== [] [9] @ R7716
+======= 'm_sName' [173FDC3E] : str:'portrait' @ R12655
+======= 'm_flags' [8635CF10] : [10] @ R7720
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R7720
+========= 'm_bSnap' [9F078183] : bool:0 @ R7721
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R7722
+========= 'm_bPost' [9C8697C9] : bool:0 @ R7723
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R7724
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R7725
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R7726
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R7727
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R7728
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R7729
+======= 'm_fetch' [2DF475A3] : [8] @ R7732
+========= 'm_flags' [8635CF10] : [6] @ R7732
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R7732
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R7733
+=========== 'm_b0D' [74CDB840] : bool:1 @ R7734
+=========== 'm_b1D' [5C78248E] : bool:0 @ R7735
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R7736
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R7737
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R7744
+=========== [] short:33 @ R12664
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R7748
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R7756
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R7768
+=========== [] float:0.000000 @ R12668
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R7776
+=========== [] float:0.000000 @ R12672
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R7780
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R7784
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R7788
+======= 'm_autoLayerArray' [17225642] : [0] @ R7796
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R7804
+======= 'm_transition' [F1668852] : [2] @ R7808
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R7808
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R7812
+======= 'm_keyValueText' [87B643E9] : str:'' @ R7816
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R7824
+========= [] [4] @ R12676
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_CAPTURE' @ R12692
+=========== 'm_nActivity' [DE319079] : int:0 @ R12680
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12684
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12688
+===== [] [9] @ R7828
+======= 'm_sName' [173FDC3E] : str:'stun' @ R12709
+======= 'm_flags' [8635CF10] : [10] @ R7832
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R7832
+========= 'm_bSnap' [9F078183] : bool:0 @ R7833
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R7834
+========= 'm_bPost' [9C8697C9] : bool:0 @ R7835
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R7836
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R7837
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R7838
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R7839
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R7840
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R7841
+======= 'm_fetch' [2DF475A3] : [8] @ R7844
+========= 'm_flags' [8635CF10] : [6] @ R7844
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R7844
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R7845
+=========== 'm_b0D' [74CDB840] : bool:1 @ R7846
+=========== 'm_b1D' [5C78248E] : bool:0 @ R7847
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R7848
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R7849
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R7856
+=========== [] short:35 @ R12714
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R7860
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R7868
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R7880
+=========== [] float:0.000000 @ R12716
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R7888
+=========== [] float:0.000000 @ R12720
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R7892
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R7896
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R7900
+======= 'm_autoLayerArray' [17225642] : [0] @ R7908
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R7916
+======= 'm_transition' [F1668852] : [2] @ R7920
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R7920
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R7924
+======= 'm_keyValueText' [87B643E9] : str:'' @ R7928
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R7936
+========= [] [4] @ R12724
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_DISABLED' @ R12740
+=========== 'm_nActivity' [DE319079] : int:0 @ R12728
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12732
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12736
+===== [] [9] @ R7940
+======= 'm_sName' [173FDC3E] : str:'attack_main' @ R12758
+======= 'm_flags' [8635CF10] : [10] @ R7944
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R7944
+========= 'm_bSnap' [9F078183] : bool:0 @ R7945
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R7946
+========= 'm_bPost' [9C8697C9] : bool:0 @ R7947
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R7948
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R7949
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R7950
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R7951
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R7952
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R7953
+======= 'm_fetch' [2DF475A3] : [8] @ R7956
+========= 'm_flags' [8635CF10] : [6] @ R7956
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R7956
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R7957
+=========== 'm_b0D' [74CDB840] : bool:1 @ R7958
+=========== 'm_b1D' [5C78248E] : bool:0 @ R7959
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R7960
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R7961
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R7968
+=========== [] short:37 @ R12770
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R7972
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R7980
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R7992
+=========== [] float:0.000000 @ R12772
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R8000
+=========== [] float:0.000000 @ R12776
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R8004
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R8008
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R8012
+======= 'm_autoLayerArray' [17225642] : [0] @ R8020
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R8028
+======= 'm_transition' [F1668852] : [2] @ R8032
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R8032
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R8036
+======= 'm_keyValueText' [87B643E9] : str:'' @ R8040
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R8048
+========= [] [4] @ R12780
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_ATTACK' @ R12796
+=========== 'm_nActivity' [DE319079] : int:0 @ R12784
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12788
+=========== 'm_nWeight' [6DD7AEBE] : int:5 @ R12792
+===== [] [9] @ R8052
+======= 'm_sName' [173FDC3E] : str:'attack_main_injured' @ R12812
+======= 'm_flags' [8635CF10] : [10] @ R8056
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R8056
+========= 'm_bSnap' [9F078183] : bool:0 @ R8057
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R8058
+========= 'm_bPost' [9C8697C9] : bool:0 @ R8059
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R8060
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R8061
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R8062
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R8063
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R8064
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R8065
+======= 'm_fetch' [2DF475A3] : [8] @ R8068
+========= 'm_flags' [8635CF10] : [6] @ R8068
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R8068
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R8069
+=========== 'm_b0D' [74CDB840] : bool:1 @ R8070
+=========== 'm_b1D' [5C78248E] : bool:0 @ R8071
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R8072
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R8073
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R8080
+=========== [] short:39 @ R12832
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R8084
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R8092
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R8104
+=========== [] float:0.000000 @ R12836
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R8112
+=========== [] float:0.000000 @ R12840
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R8116
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R8120
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R8124
+======= 'm_autoLayerArray' [17225642] : [0] @ R8132
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R8140
+======= 'm_transition' [F1668852] : [2] @ R8144
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R8144
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R8148
+======= 'm_keyValueText' [87B643E9] : str:'' @ R8152
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R8160
+========= [] [4] @ R12844
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_ATTACK' @ R12876
+=========== 'm_nActivity' [DE319079] : int:0 @ R12848
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12852
+=========== 'm_nWeight' [6DD7AEBE] : int:5 @ R12856
+========= [] [4] @ R12860
+=========== 'm_name' [A565FCC4] : str:'injured' @ R12892
+=========== 'm_nActivity' [DE319079] : int:0 @ R12864
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12868
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12872
+===== [] [9] @ R8164
+======= 'm_sName' [173FDC3E] : str:'attack_alt' @ R12900
+======= 'm_flags' [8635CF10] : [10] @ R8168
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R8168
+========= 'm_bSnap' [9F078183] : bool:0 @ R8169
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R8170
+========= 'm_bPost' [9C8697C9] : bool:0 @ R8171
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R8172
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R8173
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R8174
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R8175
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R8176
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R8177
+======= 'm_fetch' [2DF475A3] : [8] @ R8180
+========= 'm_flags' [8635CF10] : [6] @ R8180
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R8180
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R8181
+=========== 'm_b0D' [74CDB840] : bool:1 @ R8182
+=========== 'm_b1D' [5C78248E] : bool:0 @ R8183
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R8184
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R8185
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R8192
+=========== [] short:41 @ R12912
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R8196
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R8204
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R8216
+=========== [] float:0.000000 @ R12916
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R8224
+=========== [] float:0.000000 @ R12920
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R8228
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R8232
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R8236
+======= 'm_autoLayerArray' [17225642] : [0] @ R8244
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R8252
+======= 'm_transition' [F1668852] : [2] @ R8256
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R8256
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R8260
+======= 'm_keyValueText' [87B643E9] : str:'' @ R8264
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R8272
+========= [] [4] @ R12924
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_ATTACK' @ R12940
+=========== 'm_nActivity' [DE319079] : int:0 @ R12928
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12932
+=========== 'm_nWeight' [6DD7AEBE] : int:2 @ R12936
+===== [] [9] @ R8276
+======= 'm_sName' [173FDC3E] : str:'berserkers_call' @ R12956
+======= 'm_flags' [8635CF10] : [10] @ R8280
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R8280
+========= 'm_bSnap' [9F078183] : bool:0 @ R8281
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R8282
+========= 'm_bPost' [9C8697C9] : bool:0 @ R8283
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R8284
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R8285
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R8286
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R8287
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R8288
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R8289
+======= 'm_fetch' [2DF475A3] : [8] @ R8292
+========= 'm_flags' [8635CF10] : [6] @ R8292
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R8292
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R8293
+=========== 'm_b0D' [74CDB840] : bool:1 @ R8294
+=========== 'm_b1D' [5C78248E] : bool:0 @ R8295
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R8296
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R8297
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R8304
+=========== [] short:43 @ R12972
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R8308
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R8316
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R8328
+=========== [] float:0.000000 @ R12976
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R8336
+=========== [] float:0.000000 @ R12980
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R8340
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R8344
+======= 'm_nLocalWeightlist' [8383BDE8] : int:1 @ R8348
+======= 'm_autoLayerArray' [17225642] : [0] @ R8356
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R8364
+======= 'm_transition' [F1668852] : [2] @ R8368
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R8368
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R8372
+======= 'm_keyValueText' [87B643E9] : str:'' @ R8376
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R8384
+========= [] [4] @ R12984
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_OVERRIDE_ABILITY_1' @ R13000
+=========== 'm_nActivity' [DE319079] : int:0 @ R12988
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R12992
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R12996
+===== [] [9] @ R8388
+======= 'm_sName' [173FDC3E] : str:'berserkers_call_statue' @ R13028
+======= 'm_flags' [8635CF10] : [10] @ R8392
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R8392
+========= 'm_bSnap' [9F078183] : bool:0 @ R8393
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R8394
+========= 'm_bPost' [9C8697C9] : bool:0 @ R8395
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R8396
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R8397
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R8398
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R8399
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R8400
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R8401
+======= 'm_fetch' [2DF475A3] : [8] @ R8404
+========= 'm_flags' [8635CF10] : [6] @ R8404
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R8404
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R8405
+=========== 'm_b0D' [74CDB840] : bool:1 @ R8406
+=========== 'm_b1D' [5C78248E] : bool:0 @ R8407
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R8408
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R8409
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R8416
+=========== [] short:45 @ R13052
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R8420
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R8428
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R8440
+=========== [] float:0.000000 @ R13056
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R8448
+=========== [] float:0.000000 @ R13060
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R8452
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R8456
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R8460
+======= 'm_autoLayerArray' [17225642] : [0] @ R8468
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R8476
+======= 'm_transition' [F1668852] : [2] @ R8480
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R8480
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R8484
+======= 'm_keyValueText' [87B643E9] : str:'' @ R8488
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R8496
+===== [] [9] @ R8500
+======= 'm_sName' [173FDC3E] : str:'rampant_berserkers_call' @ R13064
+======= 'm_flags' [8635CF10] : [10] @ R8504
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R8504
+========= 'm_bSnap' [9F078183] : bool:0 @ R8505
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R8506
+========= 'm_bPost' [9C8697C9] : bool:0 @ R8507
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R8508
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R8509
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R8510
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R8511
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R8512
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R8513
+======= 'm_fetch' [2DF475A3] : [8] @ R8516
+========= 'm_flags' [8635CF10] : [6] @ R8516
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R8516
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R8517
+=========== 'm_b0D' [74CDB840] : bool:1 @ R8518
+=========== 'm_b1D' [5C78248E] : bool:0 @ R8519
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R8520
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R8521
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R8528
+=========== [] short:47 @ R13088
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R8532
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R8540
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R8552
+=========== [] float:0.000000 @ R13092
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R8560
+=========== [] float:0.000000 @ R13096
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R8564
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R8568
+======= 'm_nLocalWeightlist' [8383BDE8] : int:1 @ R8572
+======= 'm_autoLayerArray' [17225642] : [0] @ R8580
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R8588
+======= 'm_transition' [F1668852] : [2] @ R8592
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R8592
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R8596
+======= 'm_keyValueText' [87B643E9] : str:'' @ R8600
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R8608
+========= [] [4] @ R13100
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_OVERRIDE_ABILITY_1' @ R13132
+=========== 'm_nActivity' [DE319079] : int:0 @ R13104
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13108
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13112
+========= [] [4] @ R13116
+=========== 'm_name' [A565FCC4] : str:'rampant' @ R13160
+=========== 'm_nActivity' [DE319079] : int:0 @ R13120
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13124
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13128
+===== [] [9] @ R8612
+======= 'm_sName' [173FDC3E] : str:'battle_hunger' @ R13168
+======= 'm_flags' [8635CF10] : [10] @ R8616
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R8616
+========= 'm_bSnap' [9F078183] : bool:0 @ R8617
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R8618
+========= 'm_bPost' [9C8697C9] : bool:0 @ R8619
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R8620
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R8621
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R8622
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R8623
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R8624
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R8625
+======= 'm_fetch' [2DF475A3] : [8] @ R8628
+========= 'm_flags' [8635CF10] : [6] @ R8628
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R8628
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R8629
+=========== 'm_b0D' [74CDB840] : bool:1 @ R8630
+=========== 'm_b1D' [5C78248E] : bool:0 @ R8631
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R8632
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R8633
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R8640
+=========== [] short:49 @ R13182
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R8644
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R8652
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R8664
+=========== [] float:0.000000 @ R13184
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R8672
+=========== [] float:0.000000 @ R13188
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R8676
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R8680
+======= 'm_nLocalWeightlist' [8383BDE8] : int:1 @ R8684
+======= 'm_autoLayerArray' [17225642] : [0] @ R8692
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R8700
+======= 'm_transition' [F1668852] : [2] @ R8704
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R8704
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R8708
+======= 'm_keyValueText' [87B643E9] : str:'' @ R8712
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R8720
+========= [] [4] @ R13192
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_OVERRIDE_ABILITY_2' @ R13208
+=========== 'm_nActivity' [DE319079] : int:0 @ R13196
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13200
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13204
+===== [] [9] @ R8724
+======= 'm_sName' [173FDC3E] : str:'counter_helix' @ R13236
+======= 'm_flags' [8635CF10] : [10] @ R8728
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R8728
+========= 'm_bSnap' [9F078183] : bool:0 @ R8729
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R8730
+========= 'm_bPost' [9C8697C9] : bool:1 @ R8731
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R8732
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R8733
+========= 'm_bLegacyDelta' [EB48D622] : bool:1 @ R8734
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R8735
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R8736
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R8737
+======= 'm_fetch' [2DF475A3] : [8] @ R8740
+========= 'm_flags' [8635CF10] : [6] @ R8740
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R8740
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R8741
+=========== 'm_b0D' [74CDB840] : bool:1 @ R8742
+=========== 'm_b1D' [5C78248E] : bool:0 @ R8743
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R8744
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R8745
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R8752
+=========== [] short:51 @ R13250
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R8756
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R8764
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R8776
+=========== [] float:0.000000 @ R13252
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R8784
+=========== [] float:0.000000 @ R13256
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R8788
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R8792
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R8796
+======= 'm_autoLayerArray' [17225642] : [0] @ R8804
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R8812
+======= 'm_transition' [F1668852] : [2] @ R8816
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R8816
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R8820
+======= 'm_keyValueText' [87B643E9] : str:'mdlkeyvalue
+{
+	faceposer
+	{
+		"type" "gesture"
+	}
+}
+' @ R13260
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R8832
+========= [] [4] @ R13316
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_CAST_ABILITY_3' @ R13332
+=========== 'm_nActivity' [DE319079] : int:0 @ R13320
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13324
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13328
+===== [] [9] @ R8836
+======= 'm_sName' [173FDC3E] : str:'counter_helix_statue' @ R13356
+======= 'm_flags' [8635CF10] : [10] @ R8840
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R8840
+========= 'm_bSnap' [9F078183] : bool:0 @ R8841
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R8842
+========= 'm_bPost' [9C8697C9] : bool:0 @ R8843
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R8844
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R8845
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R8846
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R8847
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R8848
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R8849
+======= 'm_fetch' [2DF475A3] : [8] @ R8852
+========= 'm_flags' [8635CF10] : [6] @ R8852
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R8852
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R8853
+=========== 'm_b0D' [74CDB840] : bool:1 @ R8854
+=========== 'm_b1D' [5C78248E] : bool:0 @ R8855
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R8856
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R8857
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R8864
+=========== [] short:53 @ R13378
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R8868
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R8876
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R8888
+=========== [] float:0.000000 @ R13380
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R8896
+=========== [] float:0.000000 @ R13384
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R8900
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R8904
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R8908
+======= 'm_autoLayerArray' [17225642] : [0] @ R8916
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R8924
+======= 'm_transition' [F1668852] : [2] @ R8928
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R8928
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R8932
+======= 'm_keyValueText' [87B643E9] : str:'' @ R8936
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R8944
+===== [] [9] @ R8948
+======= 'm_sName' [173FDC3E] : str:'culling_blade' @ R13388
+======= 'm_flags' [8635CF10] : [10] @ R8952
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R8952
+========= 'm_bSnap' [9F078183] : bool:0 @ R8953
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R8954
+========= 'm_bPost' [9C8697C9] : bool:0 @ R8955
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R8956
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R8957
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R8958
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R8959
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R8960
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R8961
+======= 'm_fetch' [2DF475A3] : [8] @ R8964
+========= 'm_flags' [8635CF10] : [6] @ R8964
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R8964
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R8965
+=========== 'm_b0D' [74CDB840] : bool:1 @ R8966
+=========== 'm_b1D' [5C78248E] : bool:0 @ R8967
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R8968
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R8969
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R8976
+=========== [] short:55 @ R13402
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R8980
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R8988
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R9000
+=========== [] float:0.000000 @ R13404
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R9008
+=========== [] float:0.000000 @ R13408
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R9012
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R9016
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R9020
+======= 'm_autoLayerArray' [17225642] : [0] @ R9028
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R9036
+======= 'm_transition' [F1668852] : [2] @ R9040
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R9040
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R9044
+======= 'm_keyValueText' [87B643E9] : str:'' @ R9048
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R9056
+========= [] [4] @ R13412
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_CAST_ABILITY_4' @ R13428
+=========== 'm_nActivity' [DE319079] : int:0 @ R13416
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13420
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13424
+===== [] [9] @ R9060
+======= 'm_sName' [173FDC3E] : str:'death' @ R13452
+======= 'm_flags' [8635CF10] : [10] @ R9064
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R9064
+========= 'm_bSnap' [9F078183] : bool:0 @ R9065
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R9066
+========= 'm_bPost' [9C8697C9] : bool:0 @ R9067
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R9068
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R9069
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R9070
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R9071
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R9072
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R9073
+======= 'm_fetch' [2DF475A3] : [8] @ R9076
+========= 'm_flags' [8635CF10] : [6] @ R9076
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R9076
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R9077
+=========== 'm_b0D' [74CDB840] : bool:1 @ R9078
+=========== 'm_b1D' [5C78248E] : bool:0 @ R9079
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R9080
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R9081
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R9088
+=========== [] short:57 @ R13458
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R9092
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R9100
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R9112
+=========== [] float:0.000000 @ R13460
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R9120
+=========== [] float:0.000000 @ R13464
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R9124
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R9128
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R9132
+======= 'm_autoLayerArray' [17225642] : [0] @ R9140
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R9148
+======= 'm_transition' [F1668852] : [2] @ R9152
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R9152
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R9156
+======= 'm_keyValueText' [87B643E9] : str:'' @ R9160
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R9168
+========= [] [4] @ R13468
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_DIE' @ R13484
+=========== 'm_nActivity' [DE319079] : int:0 @ R13472
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13476
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13480
+===== [] [9] @ R9172
+======= 'm_sName' [173FDC3E] : str:'flail' @ R13497
+======= 'm_flags' [8635CF10] : [10] @ R9176
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R9176
+========= 'm_bSnap' [9F078183] : bool:0 @ R9177
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R9178
+========= 'm_bPost' [9C8697C9] : bool:0 @ R9179
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R9180
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R9181
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R9182
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R9183
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R9184
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R9185
+======= 'm_fetch' [2DF475A3] : [8] @ R9188
+========= 'm_flags' [8635CF10] : [6] @ R9188
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R9188
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R9189
+=========== 'm_b0D' [74CDB840] : bool:1 @ R9190
+=========== 'm_b1D' [5C78248E] : bool:0 @ R9191
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R9192
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R9193
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R9200
+=========== [] short:59 @ R13504
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R9204
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R9212
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R9224
+=========== [] float:0.000000 @ R13508
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R9232
+=========== [] float:0.000000 @ R13512
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R9236
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R9240
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R9244
+======= 'm_autoLayerArray' [17225642] : [0] @ R9252
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R9260
+======= 'm_transition' [F1668852] : [2] @ R9264
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R9264
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R9268
+======= 'm_keyValueText' [87B643E9] : str:'' @ R9272
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R9280
+========= [] [4] @ R13516
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_FLAIL' @ R13532
+=========== 'm_nActivity' [DE319079] : int:0 @ R13520
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13524
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13528
+===== [] [9] @ R9284
+======= 'm_sName' [173FDC3E] : str:'idle_alt2' @ R13547
+======= 'm_flags' [8635CF10] : [10] @ R9288
+========= 'm_bLooping' [3FDD977A] : bool:1 @ R9288
+========= 'm_bSnap' [9F078183] : bool:0 @ R9289
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R9290
+========= 'm_bPost' [9C8697C9] : bool:0 @ R9291
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R9292
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R9293
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R9294
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R9295
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R9296
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R9297
+======= 'm_fetch' [2DF475A3] : [8] @ R9300
+========= 'm_flags' [8635CF10] : [6] @ R9300
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R9300
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R9301
+=========== 'm_b0D' [74CDB840] : bool:1 @ R9302
+=========== 'm_b1D' [5C78248E] : bool:0 @ R9303
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R9304
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R9305
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R9312
+=========== [] short:61 @ R13558
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R9316
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R9324
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R9336
+=========== [] float:0.000000 @ R13560
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R9344
+=========== [] float:0.000000 @ R13564
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R9348
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R9352
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R9356
+======= 'm_autoLayerArray' [17225642] : [0] @ R9364
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R9372
+======= 'm_transition' [F1668852] : [2] @ R9376
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R9376
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R9380
+======= 'm_keyValueText' [87B643E9] : str:'' @ R9384
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R9392
+========= [] [4] @ R13568
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_IDLE_RARE' @ R13584
+=========== 'm_nActivity' [DE319079] : int:0 @ R13572
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13576
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13580
+===== [] [9] @ R9396
+======= 'm_sName' [173FDC3E] : str:'counter_helix_blood_chaser' @ R13603
+======= 'm_flags' [8635CF10] : [10] @ R9400
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R9400
+========= 'm_bSnap' [9F078183] : bool:0 @ R9401
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R9402
+========= 'm_bPost' [9C8697C9] : bool:1 @ R9403
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R9404
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R9405
+========= 'm_bLegacyDelta' [EB48D622] : bool:1 @ R9406
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R9407
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R9408
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R9409
+======= 'm_fetch' [2DF475A3] : [8] @ R9412
+========= 'm_flags' [8635CF10] : [6] @ R9412
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R9412
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R9413
+=========== 'm_b0D' [74CDB840] : bool:1 @ R9414
+=========== 'm_b1D' [5C78248E] : bool:0 @ R9415
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R9416
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R9417
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R9424
+=========== [] short:63 @ R13630
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R9428
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R9436
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R9448
+=========== [] float:0.000000 @ R13632
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R9456
+=========== [] float:0.000000 @ R13636
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R9460
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R9464
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R9468
+======= 'm_autoLayerArray' [17225642] : [0] @ R9476
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R9484
+======= 'm_transition' [F1668852] : [2] @ R9488
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R9488
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R9492
+======= 'm_keyValueText' [87B643E9] : str:'mdlkeyvalue
+{
+	faceposer
+	{
+		"type" "gesture"
+	}
+}
+' @ R13640
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R9504
+========= [] [4] @ R13696
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_CAST_ABILITY_3' @ R13728
+=========== 'm_nActivity' [DE319079] : int:0 @ R13700
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13704
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13708
+========= [] [4] @ R13712
+=========== 'm_name' [A565FCC4] : str:'blood_chaser' @ R13752
+=========== 'm_nActivity' [DE319079] : int:0 @ R13716
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13720
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13724
+===== [] [9] @ R9508
+======= 'm_sName' [173FDC3E] : str:'axe_taunt_01_come_get_it' @ R13765
+======= 'm_flags' [8635CF10] : [10] @ R9512
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R9512
+========= 'm_bSnap' [9F078183] : bool:0 @ R9513
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R9514
+========= 'm_bPost' [9C8697C9] : bool:0 @ R9515
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R9516
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R9517
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R9518
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R9519
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R9520
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R9521
+======= 'm_fetch' [2DF475A3] : [8] @ R9524
+========= 'm_flags' [8635CF10] : [6] @ R9524
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R9524
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R9525
+=========== 'm_b0D' [74CDB840] : bool:1 @ R9526
+=========== 'm_b1D' [5C78248E] : bool:0 @ R9527
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R9528
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R9529
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R9536
+=========== [] short:65 @ R13790
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R9540
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R9548
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R9560
+=========== [] float:0.000000 @ R13792
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R9568
+=========== [] float:0.000000 @ R13796
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R9572
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R9576
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R9580
+======= 'm_autoLayerArray' [17225642] : [0] @ R9588
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R9596
+======= 'm_transition' [F1668852] : [2] @ R9600
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R9600
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R9604
+======= 'm_keyValueText' [87B643E9] : str:'' @ R9608
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R9616
+========= [] [4] @ R13800
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_TAUNT' @ R13832
+=========== 'm_nActivity' [DE319079] : int:0 @ R13804
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13808
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13812
+========= [] [4] @ R13816
+=========== 'm_name' [A565FCC4] : str:'come_get_it' @ R13847
+=========== 'm_nActivity' [DE319079] : int:0 @ R13820
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13824
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13828
+===== [] [9] @ R9620
+======= 'm_sName' [173FDC3E] : str:'axe_taunt_02_good_day_sir' @ R13859
+======= 'm_flags' [8635CF10] : [10] @ R9624
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R9624
+========= 'm_bSnap' [9F078183] : bool:0 @ R9625
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R9626
+========= 'm_bPost' [9C8697C9] : bool:0 @ R9627
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R9628
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R9629
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R9630
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R9631
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R9632
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R9633
+======= 'm_fetch' [2DF475A3] : [8] @ R9636
+========= 'm_flags' [8635CF10] : [6] @ R9636
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R9636
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R9637
+=========== 'm_b0D' [74CDB840] : bool:1 @ R9638
+=========== 'm_b1D' [5C78248E] : bool:0 @ R9639
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R9640
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R9641
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R9648
+=========== [] short:67 @ R13886
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R9652
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R9660
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R9672
+=========== [] float:0.000000 @ R13888
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R9680
+=========== [] float:0.000000 @ R13892
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R9684
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R9688
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R9692
+======= 'm_autoLayerArray' [17225642] : [0] @ R9700
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R9708
+======= 'm_transition' [F1668852] : [2] @ R9712
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R9712
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R9716
+======= 'm_keyValueText' [87B643E9] : str:'' @ R9720
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R9728
+========= [] [4] @ R13896
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_TAUNT' @ R13928
+=========== 'm_nActivity' [DE319079] : int:0 @ R13900
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13904
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13908
+========= [] [4] @ R13912
+=========== 'm_name' [A565FCC4] : str:'good_day_sir' @ R13943
+=========== 'm_nActivity' [DE319079] : int:0 @ R13916
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13920
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13924
+===== [] [9] @ R9732
+======= 'm_sName' [173FDC3E] : str:'axe_spawn' @ R13956
+======= 'm_flags' [8635CF10] : [10] @ R9736
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R9736
+========= 'm_bSnap' [9F078183] : bool:0 @ R9737
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R9738
+========= 'm_bPost' [9C8697C9] : bool:0 @ R9739
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R9740
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R9741
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R9742
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R9743
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R9744
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R9745
+======= 'm_fetch' [2DF475A3] : [8] @ R9748
+========= 'm_flags' [8635CF10] : [6] @ R9748
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R9748
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R9749
+=========== 'm_b0D' [74CDB840] : bool:1 @ R9750
+=========== 'm_b1D' [5C78248E] : bool:0 @ R9751
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R9752
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R9753
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R9760
+=========== [] short:69 @ R13966
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R9764
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R9772
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R9784
+=========== [] float:0.000000 @ R13968
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R9792
+=========== [] float:0.000000 @ R13972
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R9796
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R9800
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R9804
+======= 'm_autoLayerArray' [17225642] : [0] @ R9812
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R9820
+======= 'm_transition' [F1668852] : [2] @ R9824
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R9824
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R9828
+======= 'm_keyValueText' [87B643E9] : str:'' @ R9832
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R9840
+========= [] [4] @ R13976
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_SPAWN' @ R13992
+=========== 'm_nActivity' [DE319079] : int:0 @ R13980
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R13984
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R13988
+===== [] [9] @ R9844
+======= 'm_sName' [173FDC3E] : str:'axe_teleport' @ R14007
+======= 'm_flags' [8635CF10] : [10] @ R9848
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R9848
+========= 'm_bSnap' [9F078183] : bool:0 @ R9849
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R9850
+========= 'm_bPost' [9C8697C9] : bool:0 @ R9851
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R9852
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R9853
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R9854
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R9855
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R9856
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R9857
+======= 'm_fetch' [2DF475A3] : [8] @ R9860
+========= 'm_flags' [8635CF10] : [6] @ R9860
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R9860
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R9861
+=========== 'm_b0D' [74CDB840] : bool:1 @ R9862
+=========== 'm_b1D' [5C78248E] : bool:0 @ R9863
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R9864
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R9865
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R9872
+=========== [] short:71 @ R14020
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R9876
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R9884
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R9896
+=========== [] float:0.000000 @ R14024
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R9904
+=========== [] float:0.000000 @ R14028
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R9908
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R9912
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R9916
+======= 'm_autoLayerArray' [17225642] : [0] @ R9924
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R9932
+======= 'm_transition' [F1668852] : [2] @ R9936
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R9936
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R9940
+======= 'm_keyValueText' [87B643E9] : str:'' @ R9944
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R9952
+========= [] [4] @ R14032
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_TELEPORT' @ R14048
+=========== 'm_nActivity' [DE319079] : int:0 @ R14036
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R14040
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R14044
+===== [] [9] @ R9956
+======= 'm_sName' [173FDC3E] : str:'axe_teleport_end' @ R14066
+======= 'm_flags' [8635CF10] : [10] @ R9960
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R9960
+========= 'm_bSnap' [9F078183] : bool:0 @ R9961
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R9962
+========= 'm_bPost' [9C8697C9] : bool:0 @ R9963
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R9964
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R9965
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R9966
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R9967
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R9968
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R9969
+======= 'm_fetch' [2DF475A3] : [8] @ R9972
+========= 'm_flags' [8635CF10] : [6] @ R9972
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R9972
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R9973
+=========== 'm_b0D' [74CDB840] : bool:1 @ R9974
+=========== 'm_b1D' [5C78248E] : bool:0 @ R9975
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R9976
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R9977
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R9984
+=========== [] short:73 @ R14084
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R9988
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R9996
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R10008
+=========== [] float:0.000000 @ R14088
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R10016
+=========== [] float:0.000000 @ R14092
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R10020
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R10024
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R10028
+======= 'm_autoLayerArray' [17225642] : [0] @ R10036
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R10044
+======= 'm_transition' [F1668852] : [2] @ R10048
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R10048
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R10052
+======= 'm_keyValueText' [87B643E9] : str:'' @ R10056
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R10064
+========= [] [4] @ R14096
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_TELEPORT_END' @ R14112
+=========== 'm_nActivity' [DE319079] : int:0 @ R14100
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R14104
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R14108
+===== [] [9] @ R10068
+======= 'm_sName' [173FDC3E] : str:'workshop_anim_00' @ R14134
+======= 'm_flags' [8635CF10] : [10] @ R10072
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R10072
+========= 'm_bSnap' [9F078183] : bool:0 @ R10073
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R10074
+========= 'm_bPost' [9C8697C9] : bool:0 @ R10075
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R10076
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R10077
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R10078
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R10079
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R10080
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R10081
+======= 'm_fetch' [2DF475A3] : [8] @ R10084
+========= 'm_flags' [8635CF10] : [6] @ R10084
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R10084
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R10085
+=========== 'm_b0D' [74CDB840] : bool:1 @ R10086
+=========== 'm_b1D' [5C78248E] : bool:0 @ R10087
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R10088
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R10089
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R10096
+=========== [] short:75 @ R14152
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R10100
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R10108
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R10120
+=========== [] float:0.000000 @ R14156
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R10128
+=========== [] float:0.000000 @ R14160
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R10132
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R10136
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R10140
+======= 'm_autoLayerArray' [17225642] : [0] @ R10148
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R10156
+======= 'm_transition' [F1668852] : [2] @ R10160
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R10160
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R10164
+======= 'm_keyValueText' [87B643E9] : str:'' @ R10168
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R10176
+===== [] [9] @ R10180
+======= 'm_sName' [173FDC3E] : str:'workshop_anim_01' @ R14164
+======= 'm_flags' [8635CF10] : [10] @ R10184
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R10184
+========= 'm_bSnap' [9F078183] : bool:0 @ R10185
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R10186
+========= 'm_bPost' [9C8697C9] : bool:0 @ R10187
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R10188
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R10189
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R10190
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R10191
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R10192
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R10193
+======= 'm_fetch' [2DF475A3] : [8] @ R10196
+========= 'm_flags' [8635CF10] : [6] @ R10196
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R10196
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R10197
+=========== 'm_b0D' [74CDB840] : bool:1 @ R10198
+=========== 'm_b1D' [5C78248E] : bool:0 @ R10199
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R10200
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R10201
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R10208
+=========== [] short:77 @ R14182
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R10212
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R10220
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R10232
+=========== [] float:0.000000 @ R14184
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R10240
+=========== [] float:0.000000 @ R14188
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R10244
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R10248
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R10252
+======= 'm_autoLayerArray' [17225642] : [0] @ R10260
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R10268
+======= 'm_transition' [F1668852] : [2] @ R10272
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R10272
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R10276
+======= 'm_keyValueText' [87B643E9] : str:'' @ R10280
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R10288
+===== [] [9] @ R10292
+======= 'm_sName' [173FDC3E] : str:'workshop_anim_02' @ R14192
+======= 'm_flags' [8635CF10] : [10] @ R10296
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R10296
+========= 'm_bSnap' [9F078183] : bool:0 @ R10297
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R10298
+========= 'm_bPost' [9C8697C9] : bool:0 @ R10299
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R10300
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R10301
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R10302
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R10303
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R10304
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R10305
+======= 'm_fetch' [2DF475A3] : [8] @ R10308
+========= 'm_flags' [8635CF10] : [6] @ R10308
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R10308
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R10309
+=========== 'm_b0D' [74CDB840] : bool:1 @ R10310
+=========== 'm_b1D' [5C78248E] : bool:0 @ R10311
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R10312
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R10313
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R10320
+=========== [] short:79 @ R14210
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R10324
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R10332
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R10344
+=========== [] float:0.000000 @ R14212
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R10352
+=========== [] float:0.000000 @ R14216
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R10356
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R10360
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R10364
+======= 'm_autoLayerArray' [17225642] : [0] @ R10372
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R10380
+======= 'm_transition' [F1668852] : [2] @ R10384
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R10384
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R10388
+======= 'm_keyValueText' [87B643E9] : str:'' @ R10392
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R10400
+===== [] [9] @ R10404
+======= 'm_sName' [173FDC3E] : str:'workshop_anim_03' @ R14220
+======= 'm_flags' [8635CF10] : [10] @ R10408
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R10408
+========= 'm_bSnap' [9F078183] : bool:0 @ R10409
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R10410
+========= 'm_bPost' [9C8697C9] : bool:0 @ R10411
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R10412
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R10413
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R10414
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R10415
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R10416
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R10417
+======= 'm_fetch' [2DF475A3] : [8] @ R10420
+========= 'm_flags' [8635CF10] : [6] @ R10420
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R10420
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R10421
+=========== 'm_b0D' [74CDB840] : bool:1 @ R10422
+=========== 'm_b1D' [5C78248E] : bool:0 @ R10423
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R10424
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R10425
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R10432
+=========== [] short:81 @ R14238
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R10436
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R10444
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R10456
+=========== [] float:0.000000 @ R14240
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R10464
+=========== [] float:0.000000 @ R14244
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R10468
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R10472
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R10476
+======= 'm_autoLayerArray' [17225642] : [0] @ R10484
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R10492
+======= 'm_transition' [F1668852] : [2] @ R10496
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R10496
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R10500
+======= 'm_keyValueText' [87B643E9] : str:'' @ R10504
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R10512
+===== [] [9] @ R10516
+======= 'm_sName' [173FDC3E] : str:'workshop_anim_04' @ R14248
+======= 'm_flags' [8635CF10] : [10] @ R10520
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R10520
+========= 'm_bSnap' [9F078183] : bool:0 @ R10521
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R10522
+========= 'm_bPost' [9C8697C9] : bool:0 @ R10523
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R10524
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R10525
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R10526
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R10527
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R10528
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R10529
+======= 'm_fetch' [2DF475A3] : [8] @ R10532
+========= 'm_flags' [8635CF10] : [6] @ R10532
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R10532
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R10533
+=========== 'm_b0D' [74CDB840] : bool:1 @ R10534
+=========== 'm_b1D' [5C78248E] : bool:0 @ R10535
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R10536
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R10537
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R10544
+=========== [] short:83 @ R14266
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R10548
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R10556
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R10568
+=========== [] float:0.000000 @ R14268
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R10576
+=========== [] float:0.000000 @ R14272
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R10580
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R10584
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R10588
+======= 'm_autoLayerArray' [17225642] : [0] @ R10596
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R10604
+======= 'm_transition' [F1668852] : [2] @ R10608
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R10608
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R10612
+======= 'm_keyValueText' [87B643E9] : str:'' @ R10616
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R10624
+===== [] [9] @ R10628
+======= 'm_sName' [173FDC3E] : str:'workshop_anim_05' @ R14276
+======= 'm_flags' [8635CF10] : [10] @ R10632
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R10632
+========= 'm_bSnap' [9F078183] : bool:0 @ R10633
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R10634
+========= 'm_bPost' [9C8697C9] : bool:0 @ R10635
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R10636
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R10637
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R10638
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R10639
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R10640
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R10641
+======= 'm_fetch' [2DF475A3] : [8] @ R10644
+========= 'm_flags' [8635CF10] : [6] @ R10644
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R10644
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R10645
+=========== 'm_b0D' [74CDB840] : bool:1 @ R10646
+=========== 'm_b1D' [5C78248E] : bool:0 @ R10647
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R10648
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R10649
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R10656
+=========== [] short:85 @ R14294
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R10660
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R10668
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R10680
+=========== [] float:0.000000 @ R14296
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R10688
+=========== [] float:0.000000 @ R14300
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R10692
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R10696
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R10700
+======= 'm_autoLayerArray' [17225642] : [0] @ R10708
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R10716
+======= 'm_transition' [F1668852] : [2] @ R10720
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R10720
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R10724
+======= 'm_keyValueText' [87B643E9] : str:'' @ R10728
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R10736
+===== [] [9] @ R10740
+======= 'm_sName' [173FDC3E] : str:'workshop_anim_06' @ R14304
+======= 'm_flags' [8635CF10] : [10] @ R10744
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R10744
+========= 'm_bSnap' [9F078183] : bool:0 @ R10745
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R10746
+========= 'm_bPost' [9C8697C9] : bool:0 @ R10747
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R10748
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R10749
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R10750
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R10751
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R10752
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R10753
+======= 'm_fetch' [2DF475A3] : [8] @ R10756
+========= 'm_flags' [8635CF10] : [6] @ R10756
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R10756
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R10757
+=========== 'm_b0D' [74CDB840] : bool:1 @ R10758
+=========== 'm_b1D' [5C78248E] : bool:0 @ R10759
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R10760
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R10761
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R10768
+=========== [] short:87 @ R14322
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R10772
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R10780
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R10792
+=========== [] float:0.000000 @ R14324
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R10800
+=========== [] float:0.000000 @ R14328
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R10804
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R10808
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R10812
+======= 'm_autoLayerArray' [17225642] : [0] @ R10820
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R10828
+======= 'm_transition' [F1668852] : [2] @ R10832
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R10832
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R10836
+======= 'm_keyValueText' [87B643E9] : str:'' @ R10840
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R10848
+===== [] [9] @ R10852
+======= 'm_sName' [173FDC3E] : str:'workshop_anim_07' @ R14332
+======= 'm_flags' [8635CF10] : [10] @ R10856
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R10856
+========= 'm_bSnap' [9F078183] : bool:0 @ R10857
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R10858
+========= 'm_bPost' [9C8697C9] : bool:0 @ R10859
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R10860
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R10861
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R10862
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R10863
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R10864
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R10865
+======= 'm_fetch' [2DF475A3] : [8] @ R10868
+========= 'm_flags' [8635CF10] : [6] @ R10868
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R10868
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R10869
+=========== 'm_b0D' [74CDB840] : bool:1 @ R10870
+=========== 'm_b1D' [5C78248E] : bool:0 @ R10871
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R10872
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R10873
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R10880
+=========== [] short:89 @ R14350
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R10884
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R10892
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R10904
+=========== [] float:0.000000 @ R14352
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R10912
+=========== [] float:0.000000 @ R14356
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R10916
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R10920
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R10924
+======= 'm_autoLayerArray' [17225642] : [0] @ R10932
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R10940
+======= 'm_transition' [F1668852] : [2] @ R10944
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R10944
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R10948
+======= 'm_keyValueText' [87B643E9] : str:'' @ R10952
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R10960
+===== [] [9] @ R10964
+======= 'm_sName' [173FDC3E] : str:'workshop_anim_08' @ R14360
+======= 'm_flags' [8635CF10] : [10] @ R10968
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R10968
+========= 'm_bSnap' [9F078183] : bool:0 @ R10969
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R10970
+========= 'm_bPost' [9C8697C9] : bool:0 @ R10971
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R10972
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R10973
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R10974
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R10975
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R10976
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R10977
+======= 'm_fetch' [2DF475A3] : [8] @ R10980
+========= 'm_flags' [8635CF10] : [6] @ R10980
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R10980
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R10981
+=========== 'm_b0D' [74CDB840] : bool:1 @ R10982
+=========== 'm_b1D' [5C78248E] : bool:0 @ R10983
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R10984
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R10985
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R10992
+=========== [] short:91 @ R14378
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R10996
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R11004
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R11016
+=========== [] float:0.000000 @ R14380
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R11024
+=========== [] float:0.000000 @ R14384
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R11028
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R11032
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R11036
+======= 'm_autoLayerArray' [17225642] : [0] @ R11044
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R11052
+======= 'm_transition' [F1668852] : [2] @ R11056
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R11056
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R11060
+======= 'm_keyValueText' [87B643E9] : str:'' @ R11064
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R11072
+===== [] [9] @ R11076
+======= 'm_sName' [173FDC3E] : str:'workshop_anim_09' @ R14388
+======= 'm_flags' [8635CF10] : [10] @ R11080
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R11080
+========= 'm_bSnap' [9F078183] : bool:0 @ R11081
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R11082
+========= 'm_bPost' [9C8697C9] : bool:0 @ R11083
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R11084
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R11085
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R11086
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R11087
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R11088
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R11089
+======= 'm_fetch' [2DF475A3] : [8] @ R11092
+========= 'm_flags' [8635CF10] : [6] @ R11092
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R11092
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R11093
+=========== 'm_b0D' [74CDB840] : bool:1 @ R11094
+=========== 'm_b1D' [5C78248E] : bool:0 @ R11095
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R11096
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R11097
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R11104
+=========== [] short:93 @ R14406
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R11108
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R11116
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R11128
+=========== [] float:0.000000 @ R14408
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R11136
+=========== [] float:0.000000 @ R14412
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R11140
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R11144
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R11148
+======= 'm_autoLayerArray' [17225642] : [0] @ R11156
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R11164
+======= 'm_transition' [F1668852] : [2] @ R11168
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R11168
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R11172
+======= 'm_keyValueText' [87B643E9] : str:'' @ R11176
+======= 'm_activityArray' [DAA5E2CD] : [0] @ R11184
+===== [] [9] @ R11188
+======= 'm_sName' [173FDC3E] : str:'forcestaff' @ R14416
+======= 'm_flags' [8635CF10] : [10] @ R11192
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R11192
+========= 'm_bSnap' [9F078183] : bool:0 @ R11193
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R11194
+========= 'm_bPost' [9C8697C9] : bool:0 @ R11195
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R11196
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R11197
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R11198
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R11199
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R11200
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R11201
+======= 'm_fetch' [2DF475A3] : [8] @ R11204
+========= 'm_flags' [8635CF10] : [6] @ R11204
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R11204
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R11205
+=========== 'm_b0D' [74CDB840] : bool:1 @ R11206
+=========== 'm_b1D' [5C78248E] : bool:0 @ R11207
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R11208
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R11209
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R11216
+=========== [] short:95 @ R14428
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R11220
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R11228
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R11240
+=========== [] float:0.000000 @ R14432
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R11248
+=========== [] float:0.000000 @ R14436
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R11252
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R11256
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R11260
+======= 'm_autoLayerArray' [17225642] : [0] @ R11268
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R11276
+======= 'm_transition' [F1668852] : [2] @ R11280
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R11280
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R11284
+======= 'm_keyValueText' [87B643E9] : str:'' @ R11288
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R11296
+========= [] [4] @ R14440
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_FLAIL' @ R14472
+=========== 'm_nActivity' [DE319079] : int:0 @ R14444
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R14448
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R14452
+========= [] [4] @ R14456
+=========== 'm_name' [A565FCC4] : str:'forcestaff_friendly' @ R14487
+=========== 'm_nActivity' [DE319079] : int:0 @ R14460
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R14464
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R14468
+===== [] [9] @ R11300
+======= 'm_sName' [173FDC3E] : str:'axe_forcestaff_end' @ R14507
+======= 'm_flags' [8635CF10] : [10] @ R11304
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R11304
+========= 'm_bSnap' [9F078183] : bool:0 @ R11305
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R11306
+========= 'm_bPost' [9C8697C9] : bool:0 @ R11307
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R11308
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R11309
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R11310
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R11311
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R11312
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R11313
+======= 'm_fetch' [2DF475A3] : [8] @ R11316
+========= 'm_flags' [8635CF10] : [6] @ R11316
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R11316
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R11317
+=========== 'm_b0D' [74CDB840] : bool:1 @ R11318
+=========== 'm_b1D' [5C78248E] : bool:0 @ R11319
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R11320
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R11321
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R11328
+=========== [] short:97 @ R14526
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R11332
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R11340
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R11352
+=========== [] float:0.000000 @ R14528
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R11360
+=========== [] float:0.000000 @ R14532
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R11364
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R11368
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R11372
+======= 'm_autoLayerArray' [17225642] : [0] @ R11380
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R11388
+======= 'm_transition' [F1668852] : [2] @ R11392
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R11392
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R11396
+======= 'm_keyValueText' [87B643E9] : str:'' @ R11400
+======= 'm_activityArray' [DAA5E2CD] : [1] @ R11408
+========= [] [4] @ R14536
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_FORCESTAFF_END' @ R14552
+=========== 'm_nActivity' [DE319079] : int:0 @ R14540
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R14544
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R14548
+===== [] [9] @ R11412
+======= 'm_sName' [173FDC3E] : str:'forcestaff_enemy' @ R14576
+======= 'm_flags' [8635CF10] : [10] @ R11416
+========= 'm_bLooping' [3FDD977A] : bool:0 @ R11416
+========= 'm_bSnap' [9F078183] : bool:0 @ R11417
+========= 'm_bAutoplay' [32E5E21D] : bool:0 @ R11418
+========= 'm_bPost' [9C8697C9] : bool:0 @ R11419
+========= 'm_bHidden' [F79B29EC] : bool:0 @ R11420
+========= 'm_bMulti' [C1961FD2] : bool:0 @ R11421
+========= 'm_bLegacyDelta' [EB48D622] : bool:0 @ R11422
+========= 'm_bLegacyWorldspace' [9529F0C8] : bool:0 @ R11423
+========= 'm_bLegacyCyclepose' [2B600BBA] : bool:0 @ R11424
+========= 'm_bLegacyRealtime' [7FCBDD04] : bool:0 @ R11425
+======= 'm_fetch' [2DF475A3] : [8] @ R11428
+========= 'm_flags' [8635CF10] : [6] @ R11428
+=========== 'm_bRealtime' [DA482BA3] : bool:0 @ R11428
+=========== 'm_bCylepose' [2063DB8C] : bool:0 @ R11429
+=========== 'm_b0D' [74CDB840] : bool:1 @ R11430
+=========== 'm_b1D' [5C78248E] : bool:0 @ R11431
+=========== 'm_b2D' [7C823EE8] : bool:0 @ R11432
+=========== 'm_b2D_TRI' [CB3E61] : bool:0 @ R11433
+========= 'm_localReferenceArray' [3A8D585] : [1] @ R11440
+=========== [] short:99 @ R14594
+========= 'm_nGroupSize' [D9F52838] : int:1 @ R11444
+========= 'm_nLocalPose' [D49D42F9] : int:-1 @ R11452
+========= 'm_poseKeyArray0' [69C9121C] : [1] @ R11464
+=========== [] float:0.000000 @ R14596
+========= 'm_poseKeyArray1' [F064766C] : [1] @ R11472
+=========== [] float:0.000000 @ R14600
+========= 'm_nLocalCyclePoseParameter' [686E4965] : int:-1 @ R11476
+========= 'm_bCalculatePoseParameters' [A8D2F29C] : bool:0 @ R11480
+======= 'm_nLocalWeightlist' [8383BDE8] : int:0 @ R11484
+======= 'm_autoLayerArray' [17225642] : [0] @ R11492
+======= 'm_IKLockArray' [2B72B1AA] : [0] @ R11500
+======= 'm_transition' [F1668852] : [2] @ R11504
+========= 'm_flFadeInTime' [CF8E86A4] : float:0.200000 @ R11504
+========= 'm_flFadeOutTime' [C5AAB5F3] : float:0.200000 @ R11508
+======= 'm_keyValueText' [87B643E9] : str:'' @ R11512
+======= 'm_activityArray' [DAA5E2CD] : [2] @ R11520
+========= [] [4] @ R14604
+=========== 'm_name' [A565FCC4] : str:'ACT_DOTA_FLAIL' @ R14636
+=========== 'm_nActivity' [DE319079] : int:0 @ R14608
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R14612
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R14616
+========= [] [4] @ R14620
+=========== 'm_name' [A565FCC4] : str:'forcestaff_enemy' @ R14651
+=========== 'm_nActivity' [DE319079] : int:0 @ R14624
+=========== 'm_nFlags' [BC2A933E] : int:0 @ R14628
+=========== 'm_nWeight' [6DD7AEBE] : int:1 @ R14632
+=== 'm_localMultiSeqDescArray' [C5BEE9F] : [0] @ R5836
+=== 'm_localSynthAnimDescArray' [F882F817] : [0] @ R5844
+=== 'm_localCmdSeqDescArray' [2BD543B3] : [0] @ R5852
+=== 'm_localBoneMaskArray' [36D792C7] : [2] @ R5860
+===== [] [3] @ R16592
+======= 'm_sName' [173FDC3E] : str:'default' @ R16632
+======= 'm_nLocalBoneArray' [E0BBF737] : [0] @ R16600
+======= 'm_flBoneWeightArray' [A1D1B4CC] : [0] @ R16608
+===== [] [3] @ R16612
+======= 'm_sName' [173FDC3E] : str:'Bonemask_heroes_axe_axe_mdl_0006fc64' @ R16640
+======= 'm_nLocalBoneArray' [E0BBF737] : [4] @ R16620
+========= [] short:0 @ R16678
+========= [] short:1 @ R16680
+========= [] short:2 @ R16682
+========= [] short:3 @ R16684
+======= 'm_flBoneWeightArray' [A1D1B4CC] : [4] @ R16628
+========= [] float:0.250000 @ R16688
+========= [] float:1.000000 @ R16692
+========= [] float:0.000000 @ R16696
+========= [] float:0.000000 @ R16700
+=== 'm_localBoneNameArray' [4740B44A] : [4] @ R5868
+===== [] str:'root' @ R16720
+===== [] str:'spine1' @ R16725
+===== [] str:'thigh_R' @ R16732
+===== [] str:'thigh_L' @ R16740
+=== 'm_localNodeName' [CD6C0222] : str:'' @ R5872
+=== 'm_localPoseParamArray' [3C058AA0] : [0] @ R5880
+=== 'm_keyValueText' [87B643E9] : str:'' @ R5884
+=== 'm_localIKAutoplayLockArray' [9F17F325] : [0] @ R5892
+ 

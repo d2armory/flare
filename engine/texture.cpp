@@ -65,9 +65,17 @@ void Texture::Update()
 				return;
 			}
 			
+			/* for(int x=0;x<52;x++)
+			{
+				printf("%X ",*(((unsigned char*)(vtexH)) + x));
+			}
+			printf("\n"); */
+			
 			printf("- size: WxH =  %dx%d\n",vtexH->width,vtexH->height);
-			//printf("- mipmap count: %d\n",vtexH->mipLevel);
-			//printf("- format: %d\n",vtexH->format);
+			printf("- mipmap count: %d\n",vtexH->mipLevel);
+			printf("- format: %d\n",vtexH->format);
+			
+			//return;
 			
 			// variable preparation
 			isCubemap = false; // TODO: accept cubemap
@@ -77,10 +85,10 @@ void Texture::Update()
 			unsigned int sqImageType = squish::kDxt1;	// format in squish type
 			switch(vtexH->format)
 			{
-				case IMAGE_FORMAT_DXT1:
+				case 1://IMAGE_FORMAT_DXT1:
 					sqImageType = squish::kDxt1;
 					break;
-				case IMAGE_FORMAT_DXT5:
+				case 2://IMAGE_FORMAT_DXT5:
 					sqImageType = squish::kDxt5;
 					break;
 				default:
@@ -133,13 +141,13 @@ void Texture::Update()
 			
 			// load data into gpu here
 			char* entry = ((char*) txtData) + dmxH->fileSize;
-			for(int m=0;m<numMip;m++)
+			for(int m=0;m<numMip && m <=0;m++)
 			{
 				for(int f=0;f<numFaces;f++)
 				{
 					// get data pointer
 					char* data = entry + imgSize[m*4+3];
-					//printf("----- mm #%d : %dx%d , dxtSize: %d, startAt: %d (%d from SoF, %d from entry)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],(unsigned int) data,(unsigned int) (data-txtData),imgSize[m*4+3]);
+					printf("----- mm #%d : %dx%d , dxtSize: %d, startAt: %d (%d from SoF, %d from entry)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],(unsigned int) data,(unsigned int) (data-txtData),imgSize[m*4+3]);
 					
 					unsigned int txtTypeFS = txtType;
 					
@@ -149,11 +157,11 @@ void Texture::Update()
 					{
 						// Use compressed texture if possible
 						const GLenum COMPRESSED_RGBA_S3TC_DXT5_EXT = 0x83F3;
-						if(vtexH->format == IMAGE_FORMAT_DXT1)
+						if(vtexH->format == 1)//IMAGE_FORMAT_DXT1)
 						{
 							glCompressedTexImage2D(	txtTypeFS, m, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
 						}
-						else if(vtexH->format == IMAGE_FORMAT_DXT5)
+						else if(vtexH->format == 2)//IMAGE_FORMAT_DXT5)
 						{
 							glCompressedTexImage2D(	txtTypeFS, m, COMPRESSED_RGBA_S3TC_DXT5_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
 						}

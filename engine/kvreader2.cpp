@@ -14,6 +14,7 @@ KeyValue::KeyValue()
 	depth = 0;
 	type = 0;
 	childCount = 0;
+	realChildCount = 0;
 	
 }
 
@@ -139,11 +140,21 @@ float KeyValue::AsFloat() const
 	return *((float*) value);
 }
 
+glm::vec3 KeyValue::AsVec3() const
+{
+	return *((glm::vec3*) value);
+}
+
+glm::vec4 KeyValue::AsVec4() const
+{
+	return *((glm::vec4*) value);
+}
+
 KeyValue* KVReader2::Parse(char* data)
 {
 	dmxHeader* dmxH = (dmxHeader*) data;
 	// Signature check
-	if(dmxH->sig != 0x0c) return 0;
+	//if(dmxH->sig != 0x0c) return 0;
 	
 	// Reference prepare
 	rerlHeader* rerlH = 0;
@@ -171,8 +182,11 @@ KeyValue* KVReader2::Parse(char* data)
 		}
 	}
 	
-	//printf("rerlH = %X, ntroH = %X, dataH = %X\n",(unsigned int) rerlH,(unsigned int) ntroH,(unsigned int) dataH);
+	printf("rerlH = %X, ntroH = %X, dataH = %X\n",(unsigned int) rerlH,(unsigned int) ntroH,(unsigned int) dataH);
 	// Assuming file format is correct (NOT a good idea, should add assert)
+	
+	if(ntroH==0) return 0;
+	if(dataH==0) return 0;
 	
 	// Create root node
 	KeyValue* root = new KeyValue();
@@ -247,13 +261,15 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 				node->childCountAddress = dataF;
 			}
 			
+			node->realChildCount = elemCount;
+			
 			if(elemPointerOffset == 0)
 			{
-				printf("Indirect pointer is 0, skippping\n");
+				//printf("Indirect pointer is 0, skippping\n");
 				continue;
 			}
 			
-			printf("%s is %d deep with i[0] = %d and have %d child\n",node->key,f->indirectLevel,indirect[0],elemCount);
+			//printf("%s is %d deep with i[0] = %d and have %d child\n",node->key,f->indirectLevel,indirect[0],elemCount);
 			
 			if(elemCount<=0)
 			{
@@ -261,10 +277,10 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 				continue;
 			}
 			
-			if(elemCount>100)
+			if(elemCount>1000)
 			{
 				// why it has to put all vertex in structure ...
-				elemCount = 100;
+				elemCount = 1000;
 			}
 			
 			node->value = 0;
@@ -317,9 +333,17 @@ void KVReader2::ApplyStruct(KeyValue* parent, ntroStruct* str, char* dataH, rerl
 				{
 					fieldSize = 4;
 				}
-				else if(f->type==NTRO_DATA_TYPE_BYTE)
+				else if(f->type==NTRO_DATA_TYPE_BYTE || f->type==NTRO_DATA_TYPE_BOOLEAN)
 				{
 					fieldSize = 1;
+				}
+				else if(f->type==NTRO_DATA_TYPE_VECTOR3)
+				{
+					fieldSize = 12;
+				}
+				else if(f->type==NTRO_DATA_TYPE_VECTOR4 || f->type==NTRO_DATA_TYPE_QUATERNION || f->type==NTRO_DATA_TYPE_COLOR)
+				{
+					fieldSize = 16;
 				}
 				if(fieldSize==0)
 				{
@@ -460,6 +484,10 @@ void KVReader2::Dump(KeyValue* inNode, unsigned int startAddress)
 			{
 				printf(" char:%u",cur->AsByte());
 			}
+			else if(cur->type==NTRO_DATA_TYPE_BOOLEAN)
+			{
+				printf(" bool:%u",cur->AsByte());
+			}
 			else if(cur->type==NTRO_DATA_TYPE_FLOAT)
 			{
 				printf(" float:%f",cur->AsFloat());
@@ -467,6 +495,26 @@ void KVReader2::Dump(KeyValue* inNode, unsigned int startAddress)
 			else if(cur->type==10)	// not sure what it is, but it's used as image format
 			{
 				printf(" format:%u",cur->AsByte());
+			}
+			else if(cur->type==NTRO_DATA_TYPE_VECTOR3)
+			{
+				glm::vec3 v(cur->AsVec3());
+				printf(" vec3: %f %f %f",v[0],v[1],v[2]);
+			}
+			else if(cur->type==NTRO_DATA_TYPE_VECTOR4)
+			{
+				glm::vec4 v(cur->AsVec4());
+				printf(" vec4: %f %f %f %f",v[0],v[1],v[2],v[3]);
+			}
+			else if(cur->type==NTRO_DATA_TYPE_QUATERNION)
+			{
+				glm::vec4 v(cur->AsVec4());
+				printf(" quat: %f %f %f %f",v[0],v[1],v[2],v[3]);
+			}
+			else if(cur->type==NTRO_DATA_TYPE_COLOR)
+			{
+				glm::vec4 v(cur->AsVec4());
+				printf(" color: %f %f %f %f",v[0],v[1],v[2],v[3]);
 			}
 			else
 			{
@@ -477,7 +525,7 @@ void KVReader2::Dump(KeyValue* inNode, unsigned int startAddress)
 		}
 		else
 		{
-			printf(" [%d]",cur->childCount);
+			printf(" [%d/%d]",cur->childCount,cur->realChildCount);
 			printf(" @ R%d",(((unsigned int)cur->childCountAddress)-startAddress));
 		}
 		printf("\n");

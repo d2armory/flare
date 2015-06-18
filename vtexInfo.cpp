@@ -23,11 +23,11 @@ int main()
 	
 	if(pointerSize!=pointerSizeExpected) return 1;
 	
-	
 	// main code is here
-	printf("Openning vmat_c file\n");
+	printf("Openning file\n");
 	//const char* fileName = "testbin/axe_bg_default_lod0.vmesh_c";
-	const char* fileName = "testbin/pedestal_spotlight_bg_default_lod0.vmesh_c";
+	const char* fileName = "testbin/ancient_apparition_bg_default_lod0.vmesh_c";
+	
 	FILE* fp = fopen(fileName,"rb");
 	fseek(fp, 0, SEEK_END);
 	int fileSize = ftell(fp);
@@ -42,6 +42,23 @@ int main()
 	}
 	printf("File data read into memory (0x%X)\n",(unsigned int) fileData);
 	fclose(fp);
+
+	/*	
+	const char* fileName2 = "testbin/pedestal_spotlight_bg_default_lod0.vmesh_c";
+	FILE* fp2 = fopen(fileName2,"rb");
+	fseek(fp2, 0, SEEK_END);
+	int fileSize2 = ftell(fp2);
+	fseek(fp2, 0, SEEK_SET);
+	printf("File size: %d bytes\n",fileSize2);
+	char* origFileData2 = (char*) malloc(fileSize2+4);
+	char* fileData2 = (char*) ((((unsigned int) origFileData2) + 3) & (~0x3));	// safe align pad, might not needed
+	int frrt2 = fread(fileData2,fileSize2,fileSize2,fp2);
+	if(frrt2==0) {
+		printf("File read failed!\n");
+		return 1;
+	}
+	printf("File data read into memory (0x%X)\n",(unsigned int) fileData2);
+	fclose(fp2);*/
 	
 	// Parsing
 	KeyValue* root = KVReader2::Parse(fileData);
@@ -70,6 +87,28 @@ int main()
 		{
 			printf("Mask 2 material: %s\n",txt->Find("m_pValue")->AsHandle());
 		}
+	} */
+	
+	/* KeyValue* segmentArray = root->Find("m_segmentArray");
+	for(int i=0;i<649;i++)
+	{
+		KeyValue* segment = segmentArray->Get(i);
+		//printf("Segment %d\n",i);
+		//printf("- Unique Frame Index: %d\n",segment->Find("m_nUniqueFrameIndex")->AsInt());
+		//printf("- Local Channel/Element Masks: %d / %u\n",segment->Find("m_nLocalChannel")->AsInt(),segment->Find("m_nLocalElementMasks")->AsUint());
+		char* container = segment->Find("m_container")->Get(0)->value;
+		short type1 = *((short*)(container+0)); // data type as in decode array?
+		short type2 = *((short*)(container+2));	// size of some kind? may be number of elements?
+		short count = *((short*)(container+4));
+		short containerSize = *((short*)(container+6));
+		printf("%d - Type1: %d , Type2: %d , Count: %d , Size: %d\n",i,type1,type2,count,containerSize);
+		for(int j=0;j<count;j++)
+		{
+			//printf("--- IDX %d : %d\n",j,*((short*)(container+8+(j*2))));
+		}
+		char* containerData = container + 8 + count*2;
+		int containerDataSize = containerSize - 8 - count*2;
+		//printf("- Left over data: %d or %d per count\n",containerDataSize,containerDataSize/count);
 	} */
 	
 	// Clean up

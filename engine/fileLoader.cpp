@@ -52,7 +52,8 @@ void FileLoader::Load(const char* fileName)
 		l = l->nextFile;
 	}
 	
-	std::string baseUrl = "http://dota2-assets.yearbeast.com/dota2/";
+	std::string baseUrl = "http://data-1.mantastyle.com/dota2/";
+	//std::string baseUrl = "http://dota2-assets.yearbeast.com/dota2/";
 	//std::string baseUrl = "http://104.236.208.106:8080/";
 	
 	std::string fileUrl = baseUrl + fName;
