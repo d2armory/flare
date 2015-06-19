@@ -314,8 +314,8 @@ int main ( int argc, char *argv[] )
 	printf("Starting Flare DotA Model Viewer Engine ..\n");
 	
 	// don't change it after you set it here
-	Scene::screenWidth = 960.0f;
-	Scene::screenHeight = 960.0f;
+	Scene::screenWidth = 2048.0f;
+	Scene::screenHeight = 2048.0f;
 	
 	context = new ESContext();
 	context->userData = new UserData();
