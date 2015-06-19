@@ -41,8 +41,16 @@ struct ModelDrawCall
 	
 	unsigned int vertexCount;
 	unsigned int indexCount;
+	
 	unsigned int vertexSize;
 	unsigned int indexSize;
+	
+	unsigned int vtOffset_Pos;
+	unsigned int vtOffset_Norm;
+	unsigned int vtOffset_UV;
+	unsigned int vtOffset_bIndex;
+	unsigned int vtOffset_bWeight;
+	
 	Material* material;
 	
 	unsigned int boneCount;

@@ -141,13 +141,21 @@ void Texture::Update()
 			
 			// load data into gpu here
 			char* entry = ((char*) txtData) + dmxH->fileSize;
-			for(int m=0;m<numMip && m <=0;m++)
+			for(int m=0;m<numMip;m++)
 			{
 				for(int f=0;f<numFaces;f++)
 				{
 					// get data pointer
 					char* data = entry + imgSize[m*4+3];
 					printf("----- mm #%d : %dx%d , dxtSize: %d, startAt: %d (%d from SoF, %d from entry)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],(unsigned int) data,(unsigned int) (data-txtData),imgSize[m*4+3]);
+					
+					/* if(m==numMip-1)
+					{
+						for(int b=0;b<imgSize[m*4+2];b++) printf("%X ",(unsigned char) *(data+b));
+					
+						printf("\n");
+					} */
+					
 					
 					unsigned int txtTypeFS = txtType;
 					
@@ -178,6 +186,16 @@ void Texture::Update()
 						squish::DecompressImage( unpacked, imgSize[m*4 + 1], imgSize[m*4 + 0], data, sqImageType );
 						
 						glTexImage2D(txtTypeFS, m, GL_RGBA, imgSize[m*4 + 1], imgSize[m*4 + 0], 0, GL_RGBA, GL_UNSIGNED_BYTE, unpacked);
+						
+						/* if(m==numMip-3)
+						{
+							for(int b=0;b<allocSize;b+=4) 
+							{
+								if(b % (imgSize[m*4 + 1]*4) == 0) printf("<br />");
+								printf("<span style=\"background: rgba(%d,%d,%d,%f);\">&nbsp;&nbsp;&nbsp;</span>",*(unpacked+b),*(unpacked+b+1),*(unpacked+b+2),*(unpacked+b+3)/255.0);
+							}
+							printf("\n");
+						} */
 						
 						free(unpacked);
 					}

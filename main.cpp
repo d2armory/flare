@@ -150,10 +150,10 @@ void Update ( ESContext *esContext, float deltaTime )
 		for(int i=0;i<modelCount;i++)
 		{
 			
-			Model* m = Manager::createModel(modelName[i]);
-			m->shader = userData->heroShader;
-			m->shaderShadow = userData->shadowShader;
-			m->rotation[0] = - M_PI / 2.0f;
+			//Model* m = Manager::createModel(modelName[i]);
+			//m->shader = userData->heroShader;
+			//m->shaderShadow = userData->shadowShader;
+			//m->rotation[0] = - M_PI / 2.0f;
 		}
 		
 		//mx[0]->useAnimation = true; // enable animation for model in index 0

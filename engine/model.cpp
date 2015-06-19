@@ -208,9 +208,45 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				sm->vertexSize = vertexSize;
 				sm->indexSize = indexSize;
 				
+				sm->vtOffset_Pos = 0;
+				sm->vtOffset_Norm = 0;
+				sm->vtOffset_UV = 0;
+				sm->vtOffset_bIndex = 0;
+				sm->vtOffset_bWeight = 0;
+				
+				// attribute pointer preparation
+				int vaCount = *((emscripten_align1_int*) (dataM + vhOffset + 24*d + 12));
+				char* vaLabelF = dataM + vhOffset + 24*d + 8 + *((emscripten_align1_int*) (dataM + vhOffset + 24*d + 8));
+				
+				for(int va=0;va<vaCount;va++)
+				{
+					char* vaLabel = vaLabelF + (va * 56);	// label size seem to always be 56 char long
+					if(strcmp("POSITION",vaLabel)==0)
+					{
+						sm->vtOffset_Pos = *((emscripten_align1_int*) (vaLabel + 40)); // the offset is at 40 from start of text
+					}
+					else if(strcmp("NORMAL",vaLabel)==0)
+					{
+						sm->vtOffset_Norm = *((emscripten_align1_int*) (vaLabel + 40));
+					}
+					else if(strcmp("TEXCOORD",vaLabel)==0)
+					{
+						sm->vtOffset_UV = *((emscripten_align1_int*) (vaLabel + 40));
+					}
+					else if(strcmp("BLENDINDICE",vaLabel)==0)
+					{
+						sm->vtOffset_bIndex = *((emscripten_align1_int*) (vaLabel + 40));
+					}
+					else if(strcmp("BLENDWEIGHT",vaLabel)==0)
+					{
+						sm->vtOffset_bWeight = *((emscripten_align1_int*) (vaLabel + 40));
+					}
+				}
+				
 				printf("- data size: vertex: %d, index: %d\n",vertexSize,indexSize);
 				printf("- data loc: vertex: 0x%X, index: 0x%X\n",(unsigned int) vertexData,(unsigned int) indexData);
 				
+				printf("- attrib layout: pos: %d, norm: %d, uv: %d, bInx: %d, bWght: %d\n",sm->vtOffset_Pos,sm->vtOffset_Norm,sm->vtOffset_UV,sm->vtOffset_bIndex,sm->vtOffset_bWeight);
 				
 				printf("-- Preparing extension data\n");
 				// Prepare vertex data extension
@@ -245,7 +281,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					
 					//printf("%d %d %d ",idx1,idx2,idx3);
 					
-					emscripten_align1_float* vData = (emscripten_align1_float*) (vertexData + vertexSize * idx1);
+					emscripten_align1_float* vData = (emscripten_align1_float*) (vertexData + vertexSize * idx1 + sm->vtOffset_Pos);	// just in case position is not first..
 					//vData = vertexData + 28 * idx1;
 					float t1 = *(vData+0);
 					float t2 = *(vData+1);
@@ -271,6 +307,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					vertexMeshCount[idx3]++;
 				}
 				//printf("\n");
+				//int alert = 0;
 				
 				for(int v=0;v<sm->vertexCount;v++)
 				{
@@ -299,12 +336,17 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					
 					// unpack uv from half float to single float
 					// (gles2 lacks so many function ...)
-					unsigned short tmp1 = *((emscripten_align1_short*) (vertexData + (v * vertexSize) + 16));
-					unsigned short tmp2 = *((emscripten_align1_short*) (vertexData + (v * vertexSize) + 18));
+					unsigned short tmp1 = *((emscripten_align1_short*) (vertexData + (v * vertexSize) + sm->vtOffset_UV));
+					unsigned short tmp2 = *((emscripten_align1_short*) (vertexData + (v * vertexSize) + sm->vtOffset_UV + 2));
 					half_float::half* txtU = (half_float::half*) (&tmp1);
 					half_float::half* txtV = (half_float::half*) (&tmp2);
-					vertexExData[v].uv = glm::vec2((float) (*txtU),(float) (*txtV));
+					float tU = *txtU;
+					float tV = *txtV;
+					vertexExData[v].uv = glm::vec2(tU,tV);
+					
+					if(tU<0 || tU>1 || tV<0 || tV>1) printf("- vertex %d: UV out of bound - %f %f\n",v,tU,tV);
 				}
+				//if(alert==1) printf("UV out of bound [0-1]\n");
 				// tangent calculation moved to fragment shader
 				
 				// transfer data
@@ -689,7 +731,7 @@ void Model::SetVAO(int i)
 		unsigned int vts = subModel[i]->vertexSize;
 		glBindBuffer(GL_ARRAY_BUFFER, subModel[i]->vertexVBO);
 		// XYZ pos
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vts, (void*) 0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vts, (void*) subModel[i]->vtOffset_Pos);
 		glEnableVertexAttribArray(0);
 		// Normal
 		//glVertexAttribPointer(1, 3, GL_UNSIGNED_BYTE, GL_TRUE, 28, (void*) 12);
@@ -698,21 +740,21 @@ void Model::SetVAO(int i)
 		//glVertexAttribPointer(2, 2, GL_HALF_FLOAT, GL_FALSE, 28, (void*) 16);
 		//glEnableVertexAttribArray(2);
 		// num bones
-		glVertexAttribPointer(3, 1, GL_UNSIGNED_BYTE, GL_FALSE, vts, (void*) 23);	// not used anymore?
+		glVertexAttribPointer(3, 1, GL_UNSIGNED_BYTE, GL_FALSE, vts, (void*) (subModel[i]->vtOffset_bIndex + 3));	// not used anymore?
 		glEnableVertexAttribArray(3);
 		// bone id
-		glVertexAttribPointer(4, 1, GL_UNSIGNED_BYTE, GL_FALSE, vts, (void*) 20);
+		glVertexAttribPointer(4, 1, GL_UNSIGNED_BYTE, GL_FALSE, vts, (void*) (subModel[i]->vtOffset_bIndex));
 		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(5, 1, GL_UNSIGNED_BYTE, GL_FALSE, vts, (void*) 21);
+		glVertexAttribPointer(5, 1, GL_UNSIGNED_BYTE, GL_FALSE, vts, (void*) (subModel[i]->vtOffset_bIndex + 1));
 		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(6, 1, GL_UNSIGNED_BYTE, GL_FALSE, vts, (void*) 22);
+		glVertexAttribPointer(6, 1, GL_UNSIGNED_BYTE, GL_FALSE, vts, (void*) (subModel[i]->vtOffset_bIndex + 2));
 		glEnableVertexAttribArray(6);
 		// bone weight
-		glVertexAttribPointer(7, 1, GL_UNSIGNED_BYTE, GL_TRUE, vts, (void*) 24);
+		glVertexAttribPointer(7, 1, GL_UNSIGNED_BYTE, GL_TRUE, vts, (void*) (subModel[i]->vtOffset_bWeight));
 		glEnableVertexAttribArray(7);
-		glVertexAttribPointer(8, 1, GL_UNSIGNED_BYTE, GL_TRUE, vts, (void*) 25);
+		glVertexAttribPointer(8, 1, GL_UNSIGNED_BYTE, GL_TRUE, vts, (void*) (subModel[i]->vtOffset_bWeight + 1));
 		glEnableVertexAttribArray(8);
-		glVertexAttribPointer(9, 1, GL_UNSIGNED_BYTE, GL_TRUE, vts, (void*) 26);
+		glVertexAttribPointer(9, 1, GL_UNSIGNED_BYTE, GL_TRUE, vts, (void*) (subModel[i]->vtOffset_bWeight + 2));
 		glEnableVertexAttribArray(9);
 	}
 	
