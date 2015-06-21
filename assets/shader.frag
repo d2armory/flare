@@ -6,7 +6,7 @@ precision mediump float;
 
 // vs input
 varying vec2 fUV;
-varying vec3 fPos;
+varying highp vec3 fPos;
 varying vec3 fNormal;
 varying vec4 fTangent;
 

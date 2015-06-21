@@ -26,7 +26,7 @@ int main()
 	// main code is here
 	printf("Openning file\n");
 	//const char* fileName = "testbin/axe_bg_default_lod0.vmesh_c";
-	const char* fileName = "testbin/ancient_apparition_bg_default_lod0.vmesh_c";
+	const char* fileName = "testbin/loadout_spawn.vanim_c";
 	
 	FILE* fp = fopen(fileName,"rb");
 	fseek(fp, 0, SEEK_END);

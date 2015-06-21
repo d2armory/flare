@@ -2,7 +2,7 @@
 precision mediump float;
 
 // vertex data
-attribute vec3 vPosition;
+attribute highp vec3 vPosition;
 attribute vec3 vNormal;
 attribute vec2 vUV;
 attribute vec4 vTangent;
@@ -21,8 +21,8 @@ attribute float vBoneweight3;
 //uniform mat4 projTransform;
 uniform mat4 depthBiasMvpTransform;
 
-uniform mat4 mvTransform;
-uniform mat4 mvpTransform;
+uniform highp mat4 mvTransform;
+uniform highp mat4 mvpTransform;
 uniform mat3 nTransform;
 
 // 12 1/4 vec4
@@ -43,7 +43,7 @@ uniform mat3 nTransform;
 
 // fs output
 varying vec2 fUV;
-varying vec3 fPos;
+varying highp vec3 fPos;
 
 varying vec3 fNormal;
 varying vec4 fTangent;
@@ -93,7 +93,7 @@ mat3 q4tom3(vec4 q)
 void main()
 {
 	
-	vec3 vaPos = vPosition;
+	highp vec3 vaPos = vPosition;
 	
 	/* vec3 vaPos = vec3(0,0,0);
 	vec3 vaPos1 = (boneTransform[boneIndex[int(vBone1)]] * vec4(vaPosIn,1)).xyz;
