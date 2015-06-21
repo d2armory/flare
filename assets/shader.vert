@@ -1,5 +1,9 @@
 
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
 precision mediump float;
+#endif
 
 // vertex data
 attribute highp vec3 vPosition;

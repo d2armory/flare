@@ -2,7 +2,11 @@
 #extension GL_OES_standard_derivatives : enable
 
 // settings
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
 precision mediump float;
+#endif
 
 // vs input
 varying vec2 fUV;
