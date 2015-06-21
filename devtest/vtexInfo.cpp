@@ -2,12 +2,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "glm/glm.hpp"
-#include "glm/gtc/quaternion.hpp"
-#include "glm/gtx/quaternion.hpp"
+#include "../glm/glm.hpp"
+#include "../glm/gtc/quaternion.hpp"
+#include "../glm/gtx/quaternion.hpp"
 
-#include "mdl/dmxHeader.h"
-#include "engine/kvreader2.hpp"
+#include "../mdl/dmxHeader.h"
+#include "../engine/kvreader2.hpp"
 
 int main()
 {
