@@ -30,6 +30,10 @@ GLuint Scene::finalRenderVBO = 0;
 
 float Scene::shadowMapCoverage = 200.0f;
 
+glm::vec3 Scene::camXAxis = glm::vec3(1.0f,0.0f,0.0f);
+glm::vec3 Scene::camRotationSpeed = glm::vec3(0.0f,0.0f,0.0f);
+glm::vec3 Scene::camRotationAcc = glm::vec3(0.0f,0.0f,0.0f);
+
 glm::vec3 Scene::camPosition = glm::vec3(0.0f,100.0f,250.0f);
 glm::vec3 Scene::camTarget = glm::vec3(0.0f,100.0f,0.0f);
 float Scene::fov = 45.0f;
