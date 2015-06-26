@@ -118,21 +118,25 @@ void Update ( ESContext *esContext, float deltaTime )
 		//Scene::camRotationAcc.y = 0.0f;
 		Scene::camRotationSpeed.y = 0.0f;
 	}else{
-		Scene::camRotationSpeed.y+=Scene::camRotationAcc.y;
+		Scene::camRotationSpeed.y=(Scene::camRotationSpeed.y>0 ? 
+			Scene::camRotationSpeed.y+=Scene::camRotationAcc.y : 
+			Scene::camRotationSpeed.y-=Scene::camRotationAcc.y);
 	}
 	if(fabs(Scene::camRotationAcc.x)>fabs(Scene::camRotationSpeed.x)){
 		//Scene::camRotationAcc.x = 0.0f;
 		Scene::camRotationSpeed.x = 0.0f;
 	}else{
-		Scene::camRotationSpeed.x+=Scene::camRotationAcc.x;
+		Scene::camRotationSpeed.x=(Scene::camRotationSpeed.x>0 ? 
+			Scene::camRotationSpeed.x+=Scene::camRotationAcc.x : 
+			Scene::camRotationSpeed.x-=Scene::camRotationAcc.x);
 	}
 	
 	//camera rotation
-	if(Scene::camRotationSpeed.y>0){
+	if(fabs(Scene::camRotationSpeed.y)>0){
 		Scene::camPosition = glm::rotateY(Scene::camPosition, Scene::camRotationSpeed.y); //yaw
 		Scene::camXAxis = glm::rotateY(Scene::camXAxis, Scene::camRotationSpeed.y);
 	}
-	if(Scene::camRotationSpeed.x>0){
+	if(fabs(Scene::camRotationSpeed.x)>0){
 		Scene::camPosition = glm::rotate(Scene::camPosition, Scene::camRotationSpeed.x, Scene::camXAxis ); //pitch
 	}
 	
@@ -456,6 +460,9 @@ std::string GetModel(int index)
 void setCamPosition(float x, float y, float z)
 {
 	Scene::camPosition = glm::vec3(x,y,z);
+	Scene::camXAxis = glm::triangleNormal(Scene::camPosition, Scene::camTarget, 
+		glm::vec3(Scene::camTarget.x,Scene::camTarget.y+1000.0f,Scene::camTarget.z));
+	Scene::camXAxis = glm::rotateY(Scene::camXAxis, 0.06f);
 }
 void setCamTarget(float x, float y, float z)
 {
@@ -471,6 +478,7 @@ void setcamRotationAcc(float x, float y, float z)
 }
 void setcamZoom(float zoom)
 {
+	//camera dolly
 	Scene::camPosition += (Scene::camPosition-Scene::camTarget)/glm::l2Norm(Scene::camPosition-Scene::camTarget)*zoom;
 }
 
