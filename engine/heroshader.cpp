@@ -138,12 +138,12 @@ void HeroShader::Populate(Model* m, int index)
 	}
 	
 	// Light
-	glm::vec3 lightDir = glm::normalize(Scene::lightDir);//glm::vec3(-1.0,-10.0,-1.0);
-	lightDir = glm::mat3(v) * lightDir;
+	glm::vec3 lightDirWorld = glm::normalize(Scene::lightDir);//glm::vec3(-1.0,-10.0,-1.0);
+	glm::vec3 lightDir = glm::mat3(v) * lightDirWorld;
 	if(!renderInLightSpace) glUniform3fv(locLightDir, 1, &lightDir[0] );
 	
 	// Shadowmap Transform
-	glm::vec3 lightInvDir = lightDir * -1.0f;
+	glm::vec3 lightInvDir = lightDirWorld * -1.0f;
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-Scene::shadowMapCoverage,Scene::shadowMapCoverage,-Scene::shadowMapCoverage,Scene::shadowMapCoverage,-Scene::shadowMapCoverage,Scene::shadowMapCoverage);
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
 	glm::mat4 depthMvp = depthProjectionMatrix * depthViewMatrix * m->modelTransform;

@@ -90,7 +90,7 @@ void ShadowShader::Populate(Model* m, int index)
 	glm::mat4 v = glm::lookAt(Scene::camPosition, Scene::camTarget, glm::vec3(0,1,0));
 	
 	glm::vec3 lightDir = glm::normalize(Scene::lightDir);//glm::vec3(-1.0,-10.0,-1.0);
-	lightDir = glm::mat3(v) * lightDir;
+	//lightDir = glm::mat3(v) * lightDir;
 	glm::vec3 lightInvDir = lightDir * -1.0f;
 	
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-Scene::shadowMapCoverage,Scene::shadowMapCoverage,-Scene::shadowMapCoverage,Scene::shadowMapCoverage,-Scene::shadowMapCoverage,Scene::shadowMapCoverage);
