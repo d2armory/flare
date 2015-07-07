@@ -53,6 +53,10 @@ public:
 	static glm::vec3 lightDir;
 	static float shadowMapCoverage;
 	
+	static glm::vec3 camXAxis;
+	static glm::vec3 camRotationSpeed;
+	static glm::vec3 camRotationAcc;
+	
 	static glm::vec3 camPosition;
 	static glm::vec3 camTarget;
 	

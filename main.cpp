@@ -94,6 +94,14 @@ int Init ( ESContext *esContext )
 	// Create shadowmap buffer and texture
 	Scene::InitShadowmap();
 	
+	Scene::camXAxis = glm::vec3(1.0f,0.0f,0.05f); //avoid point (0,y,0)
+	Scene::camRotationSpeed = glm::vec3(-M_PI/9000,M_PI/900,0.0f);//M_PI/900;
+	Scene::camRotationAcc = glm::vec3(0.0f,0.0f,0.0f);
+	
+	Scene::lightDir = glm::vec3(-1.0,-2.0,-1.0);
+	Scene::camPosition = glm::vec3(0.0f,100.0f,300.0f);
+	Scene::camTarget = glm::vec3(0.0f,100.0f,0.0f);
+	
 	return engineSuccess;
 }
 
@@ -102,12 +110,37 @@ void Update ( ESContext *esContext, float deltaTime )
 	Manager::Update( esContext, deltaTime );
 	
 	// model rotation
-	UserData *userData = (UserData*) esContext->userData;
-	userData->deg += M_PI/90 / 10;
+	//UserData *userData = (UserData*) esContext->userData;
+	//userData->deg += M_PI/90;
 	
-	Scene::lightDir = glm::vec3(-1.0,-2.0,-1.0);
-	Scene::camPosition = glm::vec3(0.0f,100.0f,250.0f);
-	Scene::camTarget = glm::vec3(0.0f,100.0f,0.0f);
+	//camera rotation deceleration
+	if(fabs(Scene::camRotationAcc.y)>fabs(Scene::camRotationSpeed.y)){
+		//Scene::camRotationAcc.y = 0.0f;
+		Scene::camRotationSpeed.y = 0.0f;
+	}else{
+		Scene::camRotationSpeed.y=(Scene::camRotationSpeed.y>0 ? 
+			Scene::camRotationSpeed.y+=Scene::camRotationAcc.y : 
+			Scene::camRotationSpeed.y-=Scene::camRotationAcc.y);
+	}
+	if(fabs(Scene::camRotationAcc.x)>fabs(Scene::camRotationSpeed.x)){
+		//Scene::camRotationAcc.x = 0.0f;
+		Scene::camRotationSpeed.x = 0.0f;
+	}else{
+		Scene::camRotationSpeed.x=(Scene::camRotationSpeed.x>0 ? 
+			Scene::camRotationSpeed.x+=Scene::camRotationAcc.x : 
+			Scene::camRotationSpeed.x-=Scene::camRotationAcc.x);
+	}
+	
+	//camera rotation
+	if(fabs(Scene::camRotationSpeed.y)>0){
+		Scene::camPosition = glm::rotateY(Scene::camPosition, Scene::camRotationSpeed.y); //yaw
+		Scene::camXAxis = glm::rotateY(Scene::camXAxis, Scene::camRotationSpeed.y);
+	}
+	if(fabs(Scene::camRotationSpeed.x)>0){
+		Scene::camPosition = glm::rotate(Scene::camPosition, Scene::camRotationSpeed.x, Scene::camXAxis ); //pitch
+	}
+	
+	
 	
 	// data loading
 	if(totaltime > 0.1f && !bounty_data)
@@ -140,9 +173,9 @@ void Update ( ESContext *esContext, float deltaTime )
 			//"models/heroes/tidehunter/tidehunter_belt.mdl",
 			//"models/heroes/tidehunter/tidehunter_bracer.mdl",
 			//"models/heroes/tidehunter/tidehunter_fish.mdl"
-			////"models/heroes/tidehunter/tidehunter_hook.mdl"
+			//"models/heroes/tidehunter/tidehunter_hook.mdl"
 			//"models/heroes/enigma/enigma.mdl"
-			"models/heroes/pedestal/pedestal_small.vmdl_c"
+			"models/heroes/pedestal/pedestal_1_small.vmdl_c"
 		};
 
 		//mx = new Model*[modelCount];
@@ -187,7 +220,7 @@ void Update ( ESContext *esContext, float deltaTime )
 		Model* m = Manager::headModel;
 		while(m!=0)
 		{
-			m->rotation[1] = userData->deg;
+			//m->rotation[1] = userData->deg;
 			m = m->nextModel;
 		}
 	}
@@ -415,7 +448,7 @@ int ModelCount()
 std::string GetModel(int index)
 {
 	// TODO: move all of these into manager
-	Model* cur = Manager::headModel;	
+	Model* cur = Manager::headModel;
 	for(int i = 0;i<=index && cur!=0;i++)
 	{
 		if(i == index) return std::string(cur->fileName);
@@ -424,10 +457,40 @@ std::string GetModel(int index)
 	return std::string("");
 }
 
+void setCamPosition(float x, float y, float z)
+{
+	Scene::camPosition = glm::vec3(x,y,z);
+	Scene::camXAxis = glm::triangleNormal(Scene::camPosition, Scene::camTarget, 
+		glm::vec3(Scene::camTarget.x,Scene::camTarget.y+1000.0f,Scene::camTarget.z));
+	Scene::camXAxis = glm::rotateY(Scene::camXAxis, 0.06f);
+}
+void setCamTarget(float x, float y, float z)
+{
+	Scene::camTarget = glm::vec3(x,y,z);
+}
+void setcamRotationSpeed(float x, float y, float z)
+{
+	Scene::camRotationSpeed = glm::vec3(x,y,z);
+}
+void setcamRotationAcc(float x, float y, float z)
+{
+	Scene::camRotationAcc = glm::vec3(x,y,z);
+}
+void setcamZoom(float zoom)
+{
+	//camera dolly
+	Scene::camPosition += (Scene::camPosition-Scene::camTarget)/glm::l2Norm(Scene::camPosition-Scene::camTarget)*zoom;
+}
+
 EMSCRIPTEN_BINDINGS(model_control)
 {
 	function("MC_AddModel",&AddModel);
 	function("MC_RemoveModel",&RemoveModel);
 	function("MC_ModelCount",&ModelCount);
 	function("MC_GetModel",&GetModel);
+	function("SC_SetCamPosition",&setCamPosition);
+	function("SC_SetCamTarget",&setCamTarget);
+	function("SC_SetCamRotationSpeed",&setcamRotationSpeed);
+	function("SC_SetCamRotationAcc",&setcamRotationAcc);
+	function("SC_SetCamZoom",&setcamZoom);
 }
