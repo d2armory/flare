@@ -9,6 +9,9 @@
 #include "../mdl/dmxHeader.h"
 #include "../engine/kvreader2.hpp"
 
+#include "../engine/half.hpp"
+#include <cfloat>
+
 int main()
 {
 	
@@ -64,7 +67,7 @@ int main()
 	KeyValue* root = KVReader2::Parse(fileData);
 	
 	// Dump all
-	KVReader2::Dump(root, (unsigned int) fileData);
+	//KVReader2::Dump(root, (unsigned int) fileData);
 	
 	// Sample Usage
 	/* KeyValue* txtParams = root->Find("m_textureParams");
@@ -89,8 +92,13 @@ int main()
 		}
 	} */
 	
-	/* KeyValue* segmentArray = root->Find("m_segmentArray");
-	for(int i=0;i<649;i++)
+	KeyValue* animDesc = root->Find("m_frameData")->Get(0);
+	int numFrame = animDesc->Find("m_nFrames")->AsInt();
+	int framePerBlock = animDesc->Find("m_nFramesPerBlock")->AsInt();
+	
+	KeyValue* segmentArray = root->Find("m_segmentArray");
+	KeyValue* decoder = root->Find("m_decoderArray");
+	for(int i=0;i<16;i++)
 	{
 		KeyValue* segment = segmentArray->Get(i);
 		//printf("Segment %d\n",i);
@@ -101,15 +109,182 @@ int main()
 		short type2 = *((short*)(container+2));	// size of some kind? may be number of elements?
 		short count = *((short*)(container+4));
 		short containerSize = *((short*)(container+6));
-		printf("%d - Type1: %d , Type2: %d , Count: %d , Size: %d\n",i,type1,type2,count,containerSize);
-		for(int j=0;j<count;j++)
-		{
-			//printf("--- IDX %d : %d\n",j,*((short*)(container+8+(j*2))));
-		}
+		const char* keyType = decoder->Get(type1)->Find("m_szName")->AsName();
+		printf("%d , Type1: %d , Type2: %d , Count: %d , Size: %d\n",i,type1,type2,count,containerSize);
+		printf("--- %s with %d elements per key\n",keyType,type2);
+		
 		char* containerData = container + 8 + count*2;
 		int containerDataSize = containerSize - 8 - count*2;
-		//printf("- Left over data: %d or %d per count\n",containerDataSize,containerDataSize/count);
-	} */
+		
+		int perKey = containerDataSize/count;
+		int perKeyPerFrame = containerDataSize/count/numFrame;
+		
+		printf("- Left over data: %d / %d per key / %d per key per frame\n",containerDataSize,perKey,perKeyPerFrame);
+		if(perKeyPerFrame==0) printf("- Static Data Mode\n");
+		
+		for(int j=0;j<count;j++)
+		{
+			printf("--- IDX %d : %d\n",j,*((short*)(container+8+(j*2))));
+			int eFrame = numFrame;
+			if(perKeyPerFrame==0)
+			{
+				eFrame = 1;
+			}
+			for(int k=0;k<eFrame;k++)
+			{
+				char* fkData = containerData + perKeyPerFrame * count * k + perKeyPerFrame * j;
+				if(perKeyPerFrame==0)
+				{
+					fkData = containerData + perKey * j;
+				}
+				if(strcmp(keyType,"CCompressedStaticFullVector3")==0)
+				{
+					float x = *((emscripten_align1_float*) (fkData));
+					float y = *((emscripten_align1_float*) (fkData + 4));
+					float z = *((emscripten_align1_float*) (fkData + 8));
+					printf("----- %d: S.Vect3: %f, %f, %f\n",k,x,y,z);
+				}
+				else if(strcmp(keyType,"CCompressedStaticVector3")==0)
+				{
+					// Vector48
+					unsigned short ix = *((emscripten_align1_short*) (fkData));
+					unsigned short iy = *((emscripten_align1_short*) (fkData + 2));
+					unsigned short iz = *((emscripten_align1_short*) (fkData + 4));
+					half_float::half* px = (half_float::half*) (&ix);
+					half_float::half* py = (half_float::half*) (&iy);
+					half_float::half* pz = (half_float::half*) (&iz);
+					float x = *px;
+					float y = *py;
+					float z = *pz;
+					printf("----- %d: S.Vect3C: %f, %f, %f\n",k,x,y,z);
+				}
+				else if(strcmp(keyType,"CCompressedFullVector3")==0)
+				{
+					float x = *((emscripten_align1_float*) (fkData));
+					float y = *((emscripten_align1_float*) (fkData + 4));
+					float z = *((emscripten_align1_float*) (fkData + 8));
+					printf("----- %d: Vect3: %f, %f, %f\n",k,x,y,z);
+				}
+				else if(strcmp(keyType,"CCompressedAnimVector3")==0)
+				{
+					// Vector48
+					unsigned short ix = *((emscripten_align1_short*) (fkData));
+					unsigned short iy = *((emscripten_align1_short*) (fkData + 2));
+					unsigned short iz = *((emscripten_align1_short*) (fkData + 4));
+					half_float::half* px = (half_float::half*) (&ix);
+					half_float::half* py = (half_float::half*) (&iy);
+					half_float::half* pz = (half_float::half*) (&iz);
+					float x = *px;
+					float y = *py;
+					float z = *pz;
+					printf("----- %d: Vect3C: %f, %f, %f\n",k,x,y,z);
+				}
+				else if(strcmp(keyType,"CCompressedStaticQuaternion")==0)
+				{
+					// Quat48
+					printf("----- %d: S.QuatC: \n",k);
+				}
+				else if(strcmp(keyType,"CCompressedAnimQuaternion")==0)
+				{
+					// Quat48
+					short ix = *((emscripten_align1_short*) (fkData));
+					short iy = *((emscripten_align1_short*) (fkData + 2));
+					short iz = *((emscripten_align1_short*) (fkData + 4));
+					//unsigned short iw = iz & 0x00000001;
+					//iz = iz >> 1;
+					
+					printf("----- %d: QuatC: %d, %d, %d\n",k,ix,iy,iz);
+					
+					//float x = ((int)(ix) - 16384) * (1.0 / 16384.0);
+					//float y = ((int)(iy) - 16384) * (1.0 / 16384.0);
+					//float z = ((int)(iz) - 16384) * (1.0 / 16384.0);
+					float x = ((int)(ix) - 16384) / 32768.0;
+					float y = ((int)(iy) - 16384) / 32768.0;
+					float z = ((int)(iz) - 16384) / 32768.0;
+					float w = sqrtf(1 - x*x - y*y - z*z);
+					//if(iw) w = -w; 
+					
+					/*unsigned short ix = *((emscripten_align1_short*) (fkData));
+					unsigned short iy = *((emscripten_align1_short*) (fkData + 2));
+					unsigned short iz = *((emscripten_align1_short*) (fkData + 4));
+					half_float::half* px = (half_float::half*) (&ix);
+					half_float::half* py = (half_float::half*) (&iy);
+					half_float::half* pz = (half_float::half*) (&iz);
+					float x = *px;
+					float y = *py;
+					float z = *pz;
+					float w = 0.0f;
+					float x = ix;
+					float y = iy;
+					float z = iz;
+					float w = 0.0f;*/
+					//printf("----- %d: QuatC: %f, %f, %f, %f\n",k,x,y,z,w);
+					/*printf("----- %d: QuatC: ",k);
+					for(int l=0;l<48;l++)
+					{
+						printf("%d",(*(fkData + l/8) >> (7 - l%8)) & 1);
+						if(l%8==7) printf(" ");
+					}
+					printf("\n");*/
+					
+					// Quaternion deceompression from
+					// http://svn.gna.org/svn/cal3d/branches/TRY-IMVU_merge/src/cal3d/quaternion.cpp
+					//
+					// which is from this book 
+					// http://www.amazon.com/Game-Programming-GEMS-Gems-Series/dp/1584502339/
+					
+					short s0 = ix;
+					short s1 = iy;
+					short s2 = iz;
+					
+					int which = ((s1 & 1) << 1) | (s2 & 1);
+					s1 &= 0xfffe;
+					s2 &= 0xfffe;
+				
+					static const float scale = 1.0f / 32767.0f / 1.41421f;
+				
+					if (which == 3) {
+						x = s0 * scale;
+						y = s1 * scale;
+						z = s2 * scale;
+				
+						w = 1 - (x*x) - (y*y) - (z*z);
+						if (w > FLT_EPSILON)
+							w = sqrt(w);
+					}
+					else if (which == 2) {
+						x = s0 * scale;
+						y = s1 * scale;
+						w = s2 * scale;
+				
+						z = 1 - (x*x) - (y*y) - (w*w);
+						if (z > FLT_EPSILON)
+							z = sqrt(z);
+					}
+					else if (which == 1) {
+						x = s0 * scale;
+						z = s1 * scale;
+						w = s2 * scale;
+				
+						y = 1 - (x*x) - (z*z) - (w*w);
+						if (y > FLT_EPSILON)
+							y = sqrt(y);
+					}
+					else {
+						y = s0 * scale;
+						z = s1 * scale;
+						w = s2 * scale;
+				
+						x = 1 - (y*y) - (z*z) - (w*w);
+						if (x > FLT_EPSILON)
+							x = sqrt(x);
+					}
+					
+					//printf("----- %d: QuatC: %f, %f, %f, %f - %d\n",k,x,y,z,w,which);
+				}
+			}
+		}
+	}
 	
 	// Clean up
 	KVReader2::Clean(root);
