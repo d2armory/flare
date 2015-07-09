@@ -4,7 +4,7 @@ DotA 2 Web-based Model Viewer
 
 ## I found a bug / Can you add this feature?
 
-Thanks for letting us know! [Head over here](https://github.com/bongikairu/flare/issues) and create a new issue. Be sure to stick to the posting guidelines.
+Thanks for letting us know! [Head over here](https://github.com/d2armory/flare/issues) and create a new issue. Be sure to stick to the posting guidelines.
 
 ## So, what's this page?
 
@@ -14,14 +14,15 @@ This page is a code repository of the engine. The [part](https://www.youtube.com
 
 Flare uses multiple repositories to host distinct parts of the application.
 
-* [Flare Static](https://github.com/bongikairu/flare-static) - Compiled version of everything, ready to be put on server
-* [Flare Engine](https://github.com/bongikairu/flare) - This page. Contains code of the renderer.
+* [Flare Static](https://github.com/d2armory/flare-static) - Compiled version of everything, ready to be put on server
+* [Flare Engine](https://github.com/d2armory/flare) - This page. Contains code of the renderer.
 * [Flare Frontend](https://github.com/wq9/flare-frontend) - Contains code of frontend skin.
-* [Donkey](https://github.com/bongikairu/donkey) - Contains code related to file server.
+* [Donkey](https://github.com/d2armory/donkey) - Contains code related to file server.
 
 ## Links
 
-* [Compiled version](http://flare.yearbeast.com/)
+* [Live site](http://d2armory.com/)
+* [Latest static site](http://beta.d2armory.com/)
 
 ## Teams
 

@@ -29,7 +29,7 @@ int main()
 	// main code is here
 	printf("Openning file\n");
 	//const char* fileName = "testbin/axe_bg_default_lod0.vmesh_c";
-	const char* fileName = "testbin/loadout_spawn.vanim_c";
+	const char* fileName = "testbin/loadout.vanim_c";
 	
 	FILE* fp = fopen(fileName,"rb");
 	fseek(fp, 0, SEEK_END);
@@ -98,7 +98,7 @@ int main()
 	
 	KeyValue* segmentArray = root->Find("m_segmentArray");
 	KeyValue* decoder = root->Find("m_decoderArray");
-	for(int i=0;i<16;i++)
+	for(int i=0;i<17;i++)
 	{
 		KeyValue* segment = segmentArray->Get(i);
 		//printf("Segment %d\n",i);
@@ -117,7 +117,7 @@ int main()
 		int containerDataSize = containerSize - 8 - count*2;
 		
 		int perKey = containerDataSize/count;
-		int perKeyPerFrame = containerDataSize/count/numFrame;
+		int perKeyPerFrame = containerDataSize/count/framePerBlock;	// TODO: change to block specific value
 		
 		printf("- Left over data: %d / %d per key / %d per key per frame\n",containerDataSize,perKey,perKeyPerFrame);
 		if(perKeyPerFrame==0) printf("- Static Data Mode\n");
@@ -125,7 +125,7 @@ int main()
 		for(int j=0;j<count;j++)
 		{
 			printf("--- IDX %d : %d\n",j,*((short*)(container+8+(j*2))));
-			int eFrame = numFrame;
+			int eFrame = framePerBlock;	// TODO: use block specific frame count
 			if(perKeyPerFrame==0)
 			{
 				eFrame = 1;
@@ -187,38 +187,47 @@ int main()
 				else if(strcmp(keyType,"CCompressedAnimQuaternion")==0)
 				{
 					// Quat48
-					short ix = *((emscripten_align1_short*) (fkData));
-					short iy = *((emscripten_align1_short*) (fkData + 2));
-					short iz = *((emscripten_align1_short*) (fkData + 4));
+					//short ix = *((emscripten_align1_short*) (fkData));
+					//short iy = *((emscripten_align1_short*) (fkData + 2));
+					//short iz = *((emscripten_align1_short*) (fkData + 4));
 					//unsigned short iw = iz & 0x00000001;
 					//iz = iz >> 1;
 					
-					printf("----- %d: QuatC: %d, %d, %d\n",k,ix,iy,iz);
+					//printf("----- %d: QuatC: %d, %d, %d\n",k,ix,iy,iz);
 					
 					//float x = ((int)(ix) - 16384) * (1.0 / 16384.0);
 					//float y = ((int)(iy) - 16384) * (1.0 / 16384.0);
 					//float z = ((int)(iz) - 16384) * (1.0 / 16384.0);
-					float x = ((int)(ix) - 16384) / 32768.0;
-					float y = ((int)(iy) - 16384) / 32768.0;
-					float z = ((int)(iz) - 16384) / 32768.0;
-					float w = sqrtf(1 - x*x - y*y - z*z);
+					//float x = ((int)(ix) - 16384) / 32768.0;
+					//float y = ((int)(iy) - 16384) / 32768.0;
+					//float z = ((int)(iz) - 16384) / 32768.0;
+					//float w = sqrtf(1 - x*x - y*y - z*z);
 					//if(iw) w = -w; 
 					
-					/*unsigned short ix = *((emscripten_align1_short*) (fkData));
+					unsigned short ix = *((emscripten_align1_short*) (fkData));
 					unsigned short iy = *((emscripten_align1_short*) (fkData + 2));
 					unsigned short iz = *((emscripten_align1_short*) (fkData + 4));
-					half_float::half* px = (half_float::half*) (&ix);
-					half_float::half* py = (half_float::half*) (&iy);
-					half_float::half* pz = (half_float::half*) (&iz);
-					float x = *px;
-					float y = *py;
-					float z = *pz;
-					float w = 0.0f;
-					float x = ix;
-					float y = iy;
-					float z = iz;
-					float w = 0.0f;*/
-					//printf("----- %d: QuatC: %f, %f, %f, %f\n",k,x,y,z,w);
+					//half_float::half* px = (half_float::half*) (&ix);
+					//half_float::half* py = (half_float::half*) (&iy);
+					//half_float::half* pz = (half_float::half*) (&iz);
+					//float x = *px;
+					//float y = *py;
+					//float z = *pz;
+					//float w = 0.0f;
+					//float x = ix;
+					//float y = iy;
+					//float z = iz;
+					//float w = 0.0f;
+					
+					float x = ((float) ((ix & 0x7FFF) - 0x4000)) * 4.3162985E-5;
+					float y = ((float) ((iy & 0x7FFF) - 0x4000)) * 4.3162985E-5;
+					float z = ((float) ((iz & 0x7FFF) - 0x4000)) * 4.3162985E-5;
+					float w = 1 - (x*x) - (y*y) - (z*z);
+					if(w>FLT_EPSILON) w = sqrtf(w);
+					if((((iz & 0x8000) >> 15) & 1)) w = -w;
+					int pos = ((((ix & 0x8000) >> 15) & 1) *100) | ((((iy & 0x8000) >> 15) & 1) *10) | ((((iz & 0x8000) >> 15) & 1) *1);
+					
+					printf("----- %d: QuatC: %f, %f, %f, %f - %d\n",k,x,y,z,w,pos);
 					/*printf("----- %d: QuatC: ",k);
 					for(int l=0;l<48;l++)
 					{
@@ -233,7 +242,7 @@ int main()
 					// which is from this book 
 					// http://www.amazon.com/Game-Programming-GEMS-Gems-Series/dp/1584502339/
 					
-					short s0 = ix;
+					/*short s0 = ix;
 					short s1 = iy;
 					short s2 = iz;
 					
@@ -278,7 +287,9 @@ int main()
 						x = 1 - (y*y) - (z*z) - (w*w);
 						if (x > FLT_EPSILON)
 							x = sqrt(x);
-					}
+					}*/
+					
+					
 					
 					//printf("----- %d: QuatC: %f, %f, %f, %f - %d\n",k,x,y,z,w,which);
 				}
