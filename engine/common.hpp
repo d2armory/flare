@@ -5,6 +5,7 @@
 #include "texture.hpp"
 #include "material.hpp"
 #include "model.hpp"
+#include "modelanimation.hpp"
 #include "manager.hpp"
 #include "shader.hpp"
 #include "heroshader.hpp"

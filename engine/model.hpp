@@ -8,6 +8,7 @@
 #include "heroshader.hpp"
 #include "shadowshader.hpp"
 #include "scene.hpp"
+#include "modelanimation.hpp"
 #include <string>
 #include <math.h>
 #include "half.hpp"
@@ -17,6 +18,7 @@
 
 // forward dec
 class KeyValue;
+class ModelAnimation;
 
 struct PackedNorm {
 	int z:8;
@@ -98,22 +100,20 @@ public:
 	ModelDrawCall** subModel;
 	
 	int numBone;
-	glm::vec3* bonePos;	// array of position and rotation (in quat)
-	glm::quat* boneRot;
-	glm::mat4* boneTransform;
+	int* boneMap;	// only when using other model anim
 	
 	// animation
-	bool posePrepared;
+	ModelAnimation* anim;
 	bool useAnimation;
-	
-	int curFrame;
-	float frameTime;
+	Model* animParent;	// use animation from which model, compute mapping on this too
 	
 	HeroShader* shader;
 	ShadowShader* shaderShadow;
 	
 	// manager
 	Model* nextModel;
+	
+	void SetAnimationParent(Model* mdlanimp);
 
 private:
 

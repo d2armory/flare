@@ -24,13 +24,13 @@ Model::Model(const char* fileName)
 	shaderShadow = 0;
 	
 	numBone = 0;
-	bonePos = 0;	// init after we know exact number
-	boneRot = 0;
+	//bonePos = 0;	// init after we know exact number
+	//boneRot = 0;
 	
-	posePrepared = false;
+	//posePrepared = false;
 	useAnimation = false;
-	curFrame = -1;
-	frameTime = 99999.0f;
+	//curFrame = -1;
+	//frameTime = 99999.0f;
 }
 
 Model::~Model()
@@ -47,8 +47,8 @@ Model::~Model()
 		}
 		delete subModel;
 	}
-	if(bonePos) delete bonePos;
-	if(boneRot) delete boneRot;
+	//if(bonePos) delete bonePos;
+	//if(boneRot) delete boneRot;
 }
 
 void Model::Update(ESContext *esContext, float deltaTime)
@@ -88,15 +88,15 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			printf("- Num bones: %d\n",numBone);
 			
 			int tNumBone = numBone + 1;
-			bonePos = new glm::vec3[tNumBone];
-			boneRot = new glm::quat[tNumBone];
-			boneTransform = new glm::mat4[tNumBone];
+			//bonePos = new glm::vec3[tNumBone];
+			//boneRot = new glm::quat[tNumBone];
+			//boneTransform = new glm::mat4[tNumBone];
 		
 			KeyValue* boneNameList = skeleton->Find("m_boneName");
 		
 			for(int i=0;i<numBone;i++)
 			{
-				boneTransform[i] = glm::mat4(1);
+				//boneTransform[i] = glm::mat4(1);
 				printf("--- %i: %s\n",i,boneNameList->Get(i)->AsName());
 			}
 			
