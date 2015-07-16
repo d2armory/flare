@@ -482,6 +482,13 @@ void setcamZoom(float zoom)
 	Scene::camPosition += (Scene::camPosition-Scene::camTarget)/glm::l2Norm(Scene::camPosition-Scene::camTarget)*zoom;
 }
 
+void setViewPort(float w,float h)
+{
+	Scene::screenWidth = w;
+	Scene::screenHeight = h;
+	glViewport(0, 0, floor(Scene::screenWidth), floor(Scene::screenHeight));
+}
+
 EMSCRIPTEN_BINDINGS(model_control)
 {
 	function("MC_AddModel",&AddModel);
@@ -493,4 +500,5 @@ EMSCRIPTEN_BINDINGS(model_control)
 	function("SC_SetCamRotationSpeed",&setcamRotationSpeed);
 	function("SC_SetCamRotationAcc",&setcamRotationAcc);
 	function("SC_SetCamZoom",&setcamZoom);
+	function("GL_SetViewPort",&setViewPort);
 }
