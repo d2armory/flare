@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+        <title>Console</title>
+        <meta name="description" content=""/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<style>
+			body{
+				white-space: pre;
+				font-family: monospace;
+			  	font-size: 0.95em;
+				letter-spacing: 0.015em;
+			}
+		</style>
+    </head>
+    <body>
+		<script>
+			console.log = function(msg){
+				document.body.insertAdjacentHTML('beforeend',msg+'\n');
+			};
+		</script>
+		<script src="test.js"></script>
+    </body>
+</html>
+

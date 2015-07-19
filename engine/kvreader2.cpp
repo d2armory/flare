@@ -180,9 +180,17 @@ KeyValue* KVReader2::Parse(char* data)
 			// RERL
 			rerlH = blockH->rerlData();
 		}
+		else if(blockH->name[0] == 'R' && blockH->name[2] == 'D')
+		{
+			// REDI???
+		}
 	}
 	
-	printf("rerlH = %X, ntroH = %X, dataH = %X\n",(unsigned int) rerlH,(unsigned int) ntroH,(unsigned int) dataH);
+	printf("RERL = %X, NTRO = %X, DATA = %X, ADDR = %X\n",
+		(unsigned int) rerlH - (unsigned int)data,
+		(unsigned int) ntroH - (unsigned int)data,
+		(unsigned int) dataH - (unsigned int)data, 
+		(unsigned int) data);
 	// Assuming file format is correct (NOT a good idea, should add assert)
 	
 	if(ntroH==0) return 0;
@@ -448,85 +456,86 @@ void KVReader2::Dump(KeyValue* inNode, unsigned int startAddress)
 	
 		for(int i=0;i<cur->depth;i++)
 		{
-			printf("==");
+			printf("    ");
 		}
 		if(cur->key!=0)
 		{
-			printf("= '%s' [%X] :",cur->key,cur->keyHash);
+			//printf("= '%s' [%X] :",cur->key,cur->keyHash);
+			printf("'%s' : ",cur->key);
 		}
 		else 
 		{
-			printf("= []");
+			//printf(" : ");
 		}
 		if(cur->value != 0)
 		{
 			if(cur->type==NTRO_DATA_TYPE_HANDLE || cur->type==NTRO_DATA_TYPE_NAME)
 			{
-				printf(" str:'%s'",cur->AsHandle());
+				printf("(str) '%s'",cur->AsHandle());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_INTEGER)
 			{
-				printf(" int:%d",cur->AsInt());
+				printf("(int) %d",cur->AsInt());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_UINTEGER)
 			{
-				printf(" uint:%u",cur->AsUint());
+				printf("(uint) %u",cur->AsUint());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_SHORT)
 			{
-				printf(" short:%d",cur->AsShort());
+				printf("(short) %d",cur->AsShort());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_USHORT)
 			{
-				printf(" ushort:%u",cur->AsUshort());
+				printf("(ushort) %u",cur->AsUshort());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_BYTE)
 			{
-				printf(" char:%u",cur->AsByte());
+				printf("(byte) %2X",cur->AsByte());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_BOOLEAN)
 			{
-				printf(" bool:%u",cur->AsByte());
+				printf("(bool) %2X",cur->AsByte());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_FLOAT)
 			{
-				printf(" float:%f",cur->AsFloat());
+				printf("(float) %f",cur->AsFloat());
 			}
 			else if(cur->type==10)	// not sure what it is, but it's used as image format
 			{
-				printf(" format:%u",cur->AsByte());
+				printf("(format 10) %u",cur->AsByte());
 			}
 			else if(cur->type==NTRO_DATA_TYPE_VECTOR3)
 			{
 				glm::vec3 v(cur->AsVec3());
-				printf(" vec3: %f %f %f",v[0],v[1],v[2]);
+				printf("(vec3) [%f, %f, %f]",v[0],v[1],v[2]);
 			}
 			else if(cur->type==NTRO_DATA_TYPE_VECTOR4)
 			{
 				glm::vec4 v(cur->AsVec4());
-				printf(" vec4: %f %f %f %f",v[0],v[1],v[2],v[3]);
+				printf("(vec4) [%f, %f, %f, %f]",v[0],v[1],v[2],v[3]);
 			}
 			else if(cur->type==NTRO_DATA_TYPE_QUATERNION)
 			{
 				glm::vec4 v(cur->AsVec4());
-				printf(" quat: %f %f %f %f",v[0],v[1],v[2],v[3]);
+				printf("(quat) [%f, %f, %f, %f]",v[0],v[1],v[2],v[3]);
 			}
 			else if(cur->type==NTRO_DATA_TYPE_COLOR)
 			{
 				glm::vec4 v(cur->AsVec4());
-				printf(" color: %f %f %f %f",v[0],v[1],v[2],v[3]);
+				printf("(color) [%f, %f, %f, %f]",v[0],v[1],v[2],v[3]);
 			}
 			else
 			{
-				printf(" 0x%X [t=%d]",(unsigned int) cur->value, cur->type);
+				printf("(unknown %d) %2X",cur->type, (unsigned int) cur->value);
 			}
 			
-			printf(" @ R%d",(((unsigned int)cur->value)-startAddress));
+			printf(" @%X",(unsigned int)cur->value - (unsigned int)startAddress);
 		}
 		else
 		{
-			printf(" [%d/%d]",cur->childCount,cur->realChildCount);
-			printf(" @ R%d",(((unsigned int)cur->childCountAddress)-startAddress));
+			printf("[%d/%d]",cur->childCount,cur->realChildCount);
+			printf(" @%X",(unsigned int)cur->childCountAddress - (unsigned int)startAddress);
 		}
 		printf("\n");
 		
