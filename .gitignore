@@ -5,3 +5,4 @@
 *.diff
 *.pyc
 *.bc
+out
