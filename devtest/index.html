@@ -14,14 +14,19 @@
 				letter-spacing: 0.015em;
 			}
 		</style>
-    </head>
-    <body>
 		<script>
-			console.log = function(msg){
-				document.body.insertAdjacentHTML('beforeend',msg+'\n');
+			var Module = {
+				'arguments':['bin/axe.vmdl_c'],
+				'print': function(x){
+					document.body.insertAdjacentHTML('beforeend',x+'\n');
+				},
+				'setStatus': function(x){
+					console.log(x);
+				}
 			};
 		</script>
 		<script src="test.js"></script>
-    </body>
+    </head>
+    <body></body>
 </html>
 

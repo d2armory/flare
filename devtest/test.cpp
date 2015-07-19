@@ -12,7 +12,7 @@
 #include "../engine/half.hpp"
 #include <cfloat>
 
-int main()
+int main(int argc, char** argv)
 {
 	const int pointerSize = sizeof(void*);
 	if(pointerSize!=4){
@@ -20,9 +20,12 @@ int main()
         return 1;
     } 
 	
+	//emcc test.cpp ../engine/kvreader2.cpp -O2 -o test.js --embed-file bin/
+	
 	//const char* fileName = "axe/axe.vmdl_c";
 	//const char* fileName = "axe/asset_sequences_c588a788.vagrp_c";
-	const char* fileName = "bin/culling_blade.vanim_c";
+	char* fileName = argv[1];
+	
 	//const char* fileName = "axe/c588a788/loadout.vanim_c";
 	//const char* fileName = "";
 	
@@ -30,9 +33,9 @@ int main()
 	fseek(fp, 0, SEEK_END);
 	int fileSize = ftell(fp);
 	fseek(fp, 0, SEEK_SET);
-	printf("File: %s | Size: %d bytes\n",fileName,fileSize);
-	char* origFileData = (char*) malloc(fileSize+4);
-	char* fileData = (char*) ((((unsigned int) origFileData) + 3) & (~0x3));	// safe align pad, might not needed
+	printf("File: %s | Size: %X bytes\n",fileName,fileSize);
+	char* fileData = (char*) malloc(fileSize);
+	//char* fileData = (char*) ((((unsigned int) origFileData)));	// safe align pad, might not needed
 	int frrt = fread(fileData,fileSize,fileSize,fp);
 	if(frrt==0) {
 		printf("File read failed!\n");
@@ -52,7 +55,7 @@ int main()
 	// Clean up
 	KVReader2::Clean(root);
 	
-	free(origFileData);
+	free(fileData);
     printf("Done\n");
 	return 0;
 }

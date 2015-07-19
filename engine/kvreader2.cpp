@@ -530,12 +530,12 @@ void KVReader2::Dump(KeyValue* inNode, unsigned int startAddress)
 				printf("(unknown %d) %2X",cur->type, (unsigned int) cur->value);
 			}
 			
-			printf(" @%X",(unsigned int)cur->value - (unsigned int)startAddress);
+			printf(" @%X",(unsigned int)cur->value+16 - (unsigned int)startAddress);
 		}
 		else
 		{
 			printf("[%d/%d]",cur->childCount,cur->realChildCount);
-			printf(" @%X",(unsigned int)cur->childCountAddress - (unsigned int)startAddress);
+			printf(" @%X",(unsigned int)cur->childCountAddress+16 - (unsigned int)startAddress);
 		}
 		printf("\n");
 		
