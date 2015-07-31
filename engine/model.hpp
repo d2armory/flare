@@ -101,6 +101,10 @@ public:
 	
 	int numBone;
 	int* boneMap;	// only when using other model anim
+	glm::mat4* boneTransform;
+	glm::mat4* invBoneTransform;
+	
+	GLuint boneTransformTexture;
 	
 	// animation
 	ModelAnimation* anim;

@@ -4,27 +4,130 @@
 
 ModelAnimation::ModelAnimation(const char* fileName)
 {
+	// load file
+	strncpy(this->fileName,fileName,MODEL_ANIMATION_NAME_LENGTH);
+	state = FS_UNINIT;
+	animRoot = 0;
+	parent = 0;
+	
+	boneCount = 1;
+	
+	frameCount = 0;
+	fps = 0;
+	curTime = 0.0f;
+	speed = 1.0f;
+	
+	frameC = 0;
+	frameN = 0;
+	frameB = 0;
 	
 }
 ModelAnimation::~ModelAnimation()
 {
-	
+	// unload data
+	if(animRoot)
+	{
+		KVReader2::Clean(animRoot);
+	}
+	if(frameC)
+	{
+		delete frameC;
+		delete frameN;
+		delete frameB;
+	}
 }
 	
 void ModelAnimation::Update(ESContext *esContext, float deltaTime)
 {
+	if(state==FS_UNINIT)
+	{
+		state = FS_LOADING;
+		FileLoader::Load(fileName);
+	}
+	else if(state==FS_LOADING)
+	{
+		if(FileLoader::FileExist(fileName))
+		{
+			// load files
+			state = FS_READY;
+			fileData = FileLoader::ReadFile(fileName);
+			animRoot = KVReader2::Parse(fileData);
+			
+			// prepare variable
+			KeyValue* animDesc = animRoot->Find("m_animArray")->Get(0);
+			fps = animDesc->Find("fps")->AsFloat();
+			KeyValue* animBlockDesc = animDesc->Find("m_pData")->Get(0);
+			frameCount = animBlockDesc->Find("m_nFrames")->AsInt();
+			
+			// allocate bone data space
+			frameC = new BoneData[boneCount];	// bone count set from parent
+			frameN = new BoneData[boneCount];
+			frameB = new BoneData[boneCount];
+		}
+	}
+	else if(state==FS_READY)
+	{
+		// calculate frame number
+		curTime += deltaTime * speed;
+		
+		float maxTime = fps * (frameCount-1);	// not for seamless lopp
+		if(curTime > maxTime) curTime -= maxTime;
+		
+		float fVal = curTime / fps;
+		int fNum = floor(fVal);
+		float bNum = fVal - fNum * fps;
+		
+		int nfNum = fNum + 1;
+		if(nfNum == frameCount) nfNum = 0;
+		
+		// prepare current frame
+		ExtractFrame(frameC,fNum);
+		
+		// prepare next frame
+		ExtractFrame(frameC,fNum);
+		
+		// blend frame
+		for(int i=0;i<boneCount;i++)
+		{
+			frameB[i].pos = glm::lerp(frameC[i].pos,frameN[i].pos,bNum);
+			frameB[i].rot = glm::slerp(frameC[i].rot,frameN[i].rot,bNum);
+		}
+	}
 	
 }
 void ModelAnimation::Draw(ESContext *esContext, Model* model)
 {
-
+	// copy data by bone mapping
+	for(int i=0;i<model->numBone;i++)
+	{
+		glm::mat4 frameTransform = glm::mat4(1);
+		if(model->boneMap[i] >= 0)
+		{
+			frameTransform = glm::mat4_cast(frameB[model->boneMap[i]].rot) * frameTransform;
+			frameTransform = glm::translate(frameTransform,frameB[model->boneMap[i]].pos);
+			model->boneTransform[i] = frameTransform * model->invBoneTransform[i];
+		}
+		else
+		{
+			model->boneTransform[i] = glm::mat4(1);
+		}
+		
+	}
 	
+	if(model->boneTransformTexture != 0)
+	{
+		// put bone transform on GPU
+		glActiveTexture(GL_TEXTURE0 + 5);
+		glBindTexture(GL_TEXTURE_2D, model->boneTransformTexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 4, model->numBone, 0, GL_RGBA, GL_FLOAT, &model->boneTransform[0]);
+	}
 }
 // need model to compute inverse bind pose, and bone name mapping
 	
 void ModelAnimation::ExtractFrame(BoneData*& output, int frame)
 {
 	// find block contains that frame
+	// might move these to constructor
 	KeyValue* root = animRoot;
 	KeyValue* animDesc = root->Find("m_animArray")->Get(0);
 	KeyValue* animBlockDesc = animDesc->Find("m_pData")->Get(0);
@@ -33,6 +136,8 @@ void ModelAnimation::ExtractFrame(BoneData*& output, int frame)
 	int totalFrame = animBlockDesc->Find("m_nFrames")->AsInt();
 	int block = frame / perBlock;
 	if(totalFrame>100 && frame==totalFrame-1) block = blockArray->childCount - 1; // last frame is stored separately
+	// TODO: change to linear search?
+	
 	// loop over each segment
 	KeyValue* blockObj = blockArray->Get(block);
 	KeyValue* segIdxArray = blockObj->Find("m_segmentIndexArray");
@@ -92,7 +197,7 @@ void ModelAnimation::ExtractFrame(BoneData*& output, int frame)
 			int eFrame = frameInBlock;
 			if(perKeyPerFrame==0)
 			{
-				eFrame = 1;
+				eFrame = 0;
 			}
 			char* fkData = containerData + perKeyPerFrame * count * eFrame + perKeyPerFrame * j;
 			((*this).*Extract)(output[boneIdx],fkData);
