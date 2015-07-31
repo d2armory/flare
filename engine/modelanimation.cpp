@@ -63,6 +63,7 @@ void ModelAnimation::Update(ESContext *esContext, float deltaTime)
 			frameC = new BoneData[boneCount];	// bone count set from parent
 			frameN = new BoneData[boneCount];
 			frameB = new BoneData[boneCount];
+			boneTransform = new glm::mat4[boneCount];
 		}
 	}
 	else if(state==FS_READY)
@@ -87,11 +88,26 @@ void ModelAnimation::Update(ESContext *esContext, float deltaTime)
 		ExtractFrame(frameC,fNum);
 		
 		// blend frame
+		KeyValue* skeleton = parent->mdlRoot->Find("m_modelSkeleton");
+		KeyValue* boneParent = skeleton->Find("m_nParent");
+			
 		for(int i=0;i<boneCount;i++)
 		{
 			frameB[i].pos = glm::lerp(frameC[i].pos,frameN[i].pos,bNum);
 			frameB[i].rot = glm::slerp(frameC[i].rot,frameN[i].rot,bNum);
+			
+			short bparent = boneParent->Get(i)->AsShort();
+			
+			boneTransform[i] = glm::mat4(1);
+			boneTransform[i] = glm::mat4_cast(frameB[i].rot) * boneTransform[i];
+			boneTransform[i] = glm::translate(boneTransform[i],frameB[i].pos);
+			if(bparent >= 0)
+			{
+				boneTransform[i] = boneTransform[bparent] * boneTransform[i];
+			} 
+			
 		}
+		
 	}
 	
 }
@@ -100,12 +116,9 @@ void ModelAnimation::Draw(ESContext *esContext, Model* model)
 	// copy data by bone mapping
 	for(int i=0;i<model->numBone;i++)
 	{
-		glm::mat4 frameTransform = glm::mat4(1);
 		if(model->boneMap[i] >= 0)
 		{
-			frameTransform = glm::mat4_cast(frameB[model->boneMap[i]].rot) * frameTransform;
-			frameTransform = glm::translate(frameTransform,frameB[model->boneMap[i]].pos);
-			model->boneTransform[i] = frameTransform * model->invBoneTransform[i];
+			model->boneTransform[i] = boneTransform[model->boneMap[i]] * model->invBoneTransform[i];
 		}
 		else
 		{
@@ -114,7 +127,7 @@ void ModelAnimation::Draw(ESContext *esContext, Model* model)
 		
 	}
 	
-	if(model->boneTransformTexture != 0)
+	if(model->boneTransformTexture != 0 && Scene::enableFloatTexture)
 	{
 		// put bone transform on GPU
 		glActiveTexture(GL_TEXTURE0 + 5);

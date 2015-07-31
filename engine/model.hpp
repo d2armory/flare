@@ -87,13 +87,16 @@ public:
 	// data
 	char fileName[MODEL_NAME_LENGTH];
 	char meshFileName[MODEL_NAME_LENGTH];
+	char vagrpFileName[MODEL_NAME_LENGTH];
 	FILE_STATE mdlState;
 	FILE_STATE meshState;
+	FILE_STATE vagrpState;
 	
 	char* vmdlData;
 	char* vmeshData;
 	char* vanimData;
 	
+	KeyValue* mdlRoot;
 	KeyValue* meshRoot;
 	
 	unsigned int subModelCount;
@@ -104,7 +107,7 @@ public:
 	glm::mat4* boneTransform;
 	glm::mat4* invBoneTransform;
 	
-	GLuint boneTransformTexture;
+	GLuint boneTransformTexture;	// 4*numBone Float Texture (numBone ceil to 2^n)
 	
 	// animation
 	ModelAnimation* anim;

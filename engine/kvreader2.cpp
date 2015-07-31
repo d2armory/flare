@@ -150,6 +150,11 @@ glm::vec4 KeyValue::AsVec4() const
 	return *((glm::vec4*) value);
 }
 
+glm::quat KeyValue::AsQuat() const
+{
+	return *((glm::quat*) value);
+}
+
 KeyValue* KVReader2::Parse(char* data)
 {
 	dmxHeader* dmxH = (dmxHeader*) data;

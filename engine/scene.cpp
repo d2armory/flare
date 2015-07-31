@@ -10,12 +10,14 @@ bool Scene::supportTextureCompression = true;
 bool Scene::supportVAO = true;
 bool Scene::supportFragDepth = true;
 bool Scene::supportFragTangent = true;
+bool Scene::supportFloatTexture = true;
 
 bool Scene::enableShadow = true;
 bool Scene::enableTextureCompression = true;
 bool Scene::enableVAO = true;
 bool Scene::enableFragDepth = true;
 bool Scene::enableFragTangent = true;
+bool Scene::enableFloatTexture = true;
 
 GLuint Scene::shadowFrameBuffer = 0;
 GLuint Scene::shadowDepthTexture = 0;
@@ -57,18 +59,21 @@ void Scene::InitFeatures()
 	Scene::supportVAO = emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(),"OES_vertex_array_object");
 	Scene::supportFragDepth = emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(),"EXT_frag_depth");
 	Scene::supportFragTangent = emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(),"OES_standard_derivatives");
+	Scene::supportFloatTexture = emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(),"OES_texture_float");
 	
 	printf("- Shadow Map (WEBGL_depth_texture): %d\n",Scene::supportShadow);
 	printf("- Compressed Texture (WEBGL_compressed_texture_s3tc): %d\n",Scene::supportTextureCompression);
 	printf("- Vertex Array Object (OES_vertex_array_object): %d\n",Scene::supportVAO);
 	printf("- Fragment depth test (EXT_frag_depth): %d\n",Scene::supportFragDepth);
 	printf("- Tangent calculation (OES_standard_derivatives): %d\n",Scene::supportFragTangent);
+	printf("- Hardware Skinning (OES_texture_float): %d\n",Scene::supportFloatTexture);
 	
 	Scene::enableShadow = Scene::supportShadow;
 	Scene::enableTextureCompression = Scene::supportTextureCompression;
 	Scene::enableVAO = Scene::supportVAO;
 	Scene::enableFragDepth = Scene::supportFragDepth;
 	Scene::enableFragTangent = Scene::supportFragTangent;
+	Scene::enableFloatTexture = Scene::supportFloatTexture;
 }
 
 void Scene::InitDefaultTextures()

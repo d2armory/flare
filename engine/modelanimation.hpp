@@ -50,6 +50,7 @@ public:
 	BoneData* frameC;	// current frame
 	BoneData* frameN;	// next frame
 	BoneData* frameB;	// blended frame
+	glm::mat4* boneTransform;	// final transform for each bone
 	
 	void ExtractFrame(BoneData*& output, int frame);
 	void ExtractDataFullVector(BoneData& output, const char* data);

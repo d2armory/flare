@@ -28,6 +28,9 @@
 // File format struct for easy referencing
 #include "../mdl/dmxHeader.h"
 #include "../glm/glm.hpp"
+#include "../glm/gtc/quaternion.hpp"
+#include "../glm/gtx/quaternion.hpp"
+#include "../glm/gtx/compatibility.hpp"
 
 // Direct from https://github.com/Dingf/Source-2-Decompiler/blob/master/ntro.h
 enum NtroValueType
@@ -130,6 +133,8 @@ public:
 	glm::vec3 AsVec3() const;
 	// Return value part as Vector4
 	glm::vec4 AsVec4() const;
+	// Return value part as Quat
+	glm::quat AsQuat() const;
 };
 
 class KVReader2

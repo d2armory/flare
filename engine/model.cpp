@@ -10,6 +10,7 @@ Model::Model(const char* fileName)
 	state = FS_UNINIT;
 	mdlState = FS_UNINIT;
 	meshState = FS_UNINIT;
+	vagrpState = FS_UNINIT;
 	
 	vmdlData = 0;
 	vmeshData = 0;
@@ -68,6 +69,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			
 			vmdlData = FileLoader::ReadFile(fileName);
 			KeyValue* root = KVReader2::Parse(vmdlData);
+			mdlRoot = root;
 			
 			KeyValue* modelRefs = root->Find("m_refMeshes");
 			KeyValue* lod0 = modelRefs->Get(0);
@@ -80,24 +82,82 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			
 			// Read vagrps
 			
+			KeyValue* animGrp = root->Find("m_refAnimGroups");
+			if(animGrp)
+			{
+				std::string vaFilename = std::string(animGrp->Get(0)->AsName()) + "_c";
+				strncpy(this->vagrpFileName,vaFilename.c_str(),MODEL_NAME_LENGTH);
+				FileLoader::Load(vagrpFileName);
+				vagrpState = FS_LOADING;
+				
+				printf("VAGRP: %s\n",vaFilename.c_str());
+			}
+			else
+			{
+				vagrpState = FS_READY;
+				useAnimation = 0;
+				anim = 0;
+				animParent = 0;
+			}
+			
 			// Prepare bone data
 			
 			//printf("- Num bones: %d\n",mh->numbones);
-			KeyValue* skeleton = root->Find("m_modelSkeleton")->Get(0);
-			numBone = skeleton->Find("m_boneName")->childCount;
-			printf("- Num bones: %d\n",numBone);
-			
-			int tNumBone = numBone + 1;
-			//bonePos = new glm::vec3[tNumBone];
-			//boneRot = new glm::quat[tNumBone];
-			//boneTransform = new glm::mat4[tNumBone];
-		
-			KeyValue* boneNameList = skeleton->Find("m_boneName");
-		
-			for(int i=0;i<numBone;i++)
+			KeyValue* skeleton = root->Find("m_modelSkeleton");
+			if(skeleton)
 			{
-				//boneTransform[i] = glm::mat4(1);
-				printf("--- %i: %s\n",i,boneNameList->Get(i)->AsName());
+				numBone = skeleton->Find("m_boneName")->childCount;
+				printf("- Num bones: %d\n",numBone);
+			
+				KeyValue* boneNameList = skeleton->Find("m_boneName");
+			
+				for(int i=0;i<numBone;i++)
+				{
+					//boneTransform[i] = glm::mat4(1);
+					printf("--- %i: %s\n",i,boneNameList->Get(i)->AsName());
+				}
+				
+				if(numBone==0) numBone = 1;
+				
+				boneMap = new int[numBone];
+				boneTransform = new glm::mat4[numBone];
+				invBoneTransform = new glm::mat4[numBone];
+				KeyValue* boneParent = skeleton->Find("m_nParent");
+				KeyValue* bonePos = skeleton->Find("m_bonePosParent");
+				KeyValue* boneRot = skeleton->Find("m_boneRotParent");
+				for(int i=0;i<numBone;i++)
+				{
+					boneMap[i] = -1;
+					// note: store temp bone transform to calc inv transform
+					
+					//boneTransform[i] = glm::mat4(1);
+					//invBoneTransform[i] = glm::mat4(1);
+					boneTransform[i] = glm::mat4(1);
+					short bparent = boneParent->Get(i)->AsShort();
+					
+					boneTransform[i] = glm::mat4_cast(boneRot->Get(i)->AsQuat()) * boneTransform[i];
+					boneTransform[i] = glm::translate(boneTransform[i],bonePos->Get(i)->AsVec3());
+					if(bparent >= 0)
+					{
+						boneTransform[i] = boneTransform[bparent] * boneTransform[i];
+					}
+					
+					invBoneTransform[i] = glm::inverse(boneTransform[i]);
+				}
+				
+				glGenTextures(1, &boneTransformTexture);
+				glActiveTexture(GL_TEXTURE0 + 5);
+				glBindTexture(GL_TEXTURE_2D, boneTransformTexture);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glBindTexture(GL_TEXTURE_2D, 0);
+			}
+			else
+			{
+				// no skeleton data
+				numBone = 0;
 			}
 			
 			KVReader2::Clean(root);
@@ -106,6 +166,23 @@ void Model::Update(ESContext *esContext, float deltaTime)
 		if(meshState == FS_LOADING && FileLoader::FileExist(meshFileName))
 		{
 			meshState = FS_READY;
+		}
+		if(vagrpState == FS_LOADING && FileLoader::FileExist(vagrpFileName))
+		{
+			// TODO: complete this
+			bool loadoutFound = 0;
+			if(loadoutFound)
+			{
+				anim = 0;
+				useAnimation = 1;
+				animParent = 0;
+			}
+			else
+			{
+				useAnimation = 0;
+				anim = 0;
+				animParent = 0;
+			}
 		}
 		if(mdlState == FS_READY && meshState == FS_READY)
 		{
