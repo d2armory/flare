@@ -1,0 +1,96 @@
+Adding directories to PATH:
+PATH += /root/emsdk_portable
+PATH += /root/emsdk_portable/clang/fastcomp/build_master_64/bin
+PATH += /root/emsdk_portable/emscripten/master
+
+Setting environment variables:
+EMSCRIPTEN = /root/emsdk_portable/emscripten/master
+
+Validating pointer size
+- Expected: 4, Runtime: 4
+Openning file
+File size: 4844 bytes
+File data read into memory (0x501040)
+RERL = 40, NTRO = 698, DATA = 1080, ADDR = 501040
+[19/0] @1090
+    'm_name' : (str) 'models/items/wards/bane_ward/bane_ward.vmdl' @1198
+    'm_modelInfo' : [10/0] @1094
+        'm_nFlags' : (uint) 4195328 @1094
+        'm_vHullMin' : (vec3) [0.000000, 0.000000, 0.000000] @1098
+        'm_vHullMax' : (vec3) [0.000000, 0.000000, 0.000000] @10A4
+        'm_vViewMin' : (vec3) [0.000000, 0.000000, 0.000000] @10B0
+        'm_vViewMax' : (vec3) [0.000000, 0.000000, 0.000000] @10BC
+        'm_flMass' : (float) 0.000000 @10C8
+        'm_vEyePosition' : (vec3) [0.000000, 0.000000, 0.000000] @10CC
+        'm_flMaxEyeDeflection' : (float) 0.000000 @10D8
+        'm_sSurfaceProperty' : (str) '' @10DC
+        'm_keyValueText' : (str) '' @10E0
+    'm_ExtParts' : [0/0] @10E8
+    'm_refMeshes' : [1/1] @10F0
+        (str) 'models/items/wards/bane_ward/bane_ward_model.vmesh' @98
+    'm_refMeshGroupMasks' : [1/1] @10F8
+        (unknown 17) 502208 @11D8
+    'm_refPhysGroupMasks' : [0/0] @1100
+    'm_refLODGroupMasks' : [1/1] @1108
+        (byte) FF @11E0
+    'm_lodGroupSwitchDistances' : [8/8] @1110
+        (float) 0.000000 @12DC
+        (float) 1.000000 @12E0
+        (float) 1.000000 @12E4
+        (float) 1.000000 @12E8
+        (float) 1.000000 @12EC
+        (float) 1.000000 @12F0
+        (float) 1.000000 @12F4
+        (float) 1.000000 @12F8
+    'm_refPhysicsData' : [0/0] @1118
+    'm_refPhysicsHitboxData' : [0/0] @1120
+    'm_refAnimGroups' : [1/1] @1128
+        (str) 'models/items/wards/bane_ward/asset_sequences_3b9cef43.vagrp' @CB
+    'm_refSequenceGroups' : [0/0] @1130
+    'm_meshGroups' : [1/1] @1138
+        (str) 'default' @11F4
+    'm_materialGroups' : [2/2] @1140
+        [2/0] @11FC
+            'm_name' : (str) '0' @1214
+            'm_materials' : [1/1] @1204
+                (str) 'materials/models/items/wards/bane_ward/bane_ward_color.vmat' @107
+        [2/0] @1208
+            'm_name' : (str) '1' @1220
+            'm_materials' : [1/1] @1210
+                (str) 'materials/models/items/wards/bane_ward/bane_sentry_color.vmat' @143
+    'm_nDefaultMeshGroupMask' : (unknown 17) 502178 @1148
+    'm_modelSkeleton' : [6/0] @1150
+        'm_boneName' : [3/3] @1154
+            (str) 'ward_root' @12B0
+            (str) 'ward_elbow' @12BA
+            (str) 'ward_wrist' @12C5
+        'm_nParent' : [3/3] @115C
+            (short) -1 @123C
+            (short) 0 @123E
+            (short) 1 @1240
+        'm_boneSphere' : [3/3] @1164
+            (float) 73.205284 @1244
+            (float) 41.513515 @1248
+            (float) 34.353859 @124C
+        'm_nFlag' : [3/3] @116C
+            (uint) 261600 @1250
+            (uint) 261312 @1254
+            (uint) 261344 @1258
+        'm_bonePosParent' : [3/3] @1174
+            (vec3) [0.000000, 0.000000, 0.000000] @125C
+            (vec3) [57.991741, -1.825707, -0.000000] @1268
+            (vec3) [44.264004, -0.000004, 0.000000] @1274
+        'm_boneRotParent' : [3/3] @117C
+            (quat) [0.707106, -0.000000, 0.707106, 0.001245] @1280
+            (quat) [0.000000, -0.000000, 0.000000, 1.000000] @1290
+            (quat) [0.999825, 0.018732, 0.000000, 0.000000] @12A0
+    'm_remappingTable' : [5/5] @1184
+        (short) 0 @12D2
+        (short) 1 @12D4
+        (short) 2 @12D6
+        (short) 0 @12D8
+        (short) 0 @12DA
+    'm_remappingTableStarts' : [1/1] @118C
+        (ushort) 0 @12D0
+    'm_boneFlexDrivers' : [0/0] @1194
+ 

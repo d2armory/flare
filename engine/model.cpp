@@ -275,19 +275,34 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			std::string* matArr = new std::string[rerlH->recordCount];
 			int matCount = 0;
 			
-			for(int x=0;x<rerlH->recordCount;x++)
+			int matLooper = 0;
+			
+			// check model material group
+			KeyValue* matGrp = mdlRoot->Find("m_materialGroups");
+			if(matGrp != 0 && matGrp->childCount > 0)
 			{
-				rerlRecord* rec = recEntries + x;
-				char* recName = ((char*) &rec->nameOffset) + rec->nameOffset;
-				std::string recNameS = std::string(recName);
-				if(recNameS.find("vmat")!=std::string::npos)
+				KeyValue* matGrpList = matGrp->Get(matOffset % matGrp->childCount)->Find("m_materials");
+				for(int x=0;x<matGrpList->childCount;x++)
 				{
-					matArr[matCount] = recNameS;
+					matArr[matCount] = std::string(matGrpList->Get(x)->AsName());
 					matCount++;
 				}
 			}
-			
-			int matLooper = matOffset;
+			else
+			{
+				for(int x=0;x<rerlH->recordCount;x++)
+				{
+					rerlRecord* rec = recEntries + x;
+					char* recName = ((char*) &rec->nameOffset) + rec->nameOffset;
+					std::string recNameS = std::string(recName);
+					if(recNameS.find("vmat")!=std::string::npos)
+					{
+						matArr[matCount] = recNameS;
+						matCount++;
+					}
+				}
+				matLooper = matOffset;
+			}
 			
 			for(int d=0;d<subModelCount;d++)
 			{

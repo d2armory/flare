@@ -69,7 +69,7 @@ void FileLoader::Load(const char* fileName)
 	lf->nextFile = loaded;
 	loaded = lf;
 	
-	emscripten_async_wget2(fileUrl.c_str(),fileName,"GET","",0,&FileLoader::LoadCallbackSuccess,&FileLoader::LoadCallbackFail,0);
+	emscripten_async_wget2(fileUrl.c_str(),fName.c_str(),"GET","",0,&FileLoader::LoadCallbackSuccess,&FileLoader::LoadCallbackFail,0);
 	
 }
 
