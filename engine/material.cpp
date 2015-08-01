@@ -59,7 +59,7 @@ void Material::Update()
 					printf("Use %s as normal\n",txtFNC);
 					if((textureNormal = Manager::find(txtFNC))==0) Manager::add(textureNormal = new Texture(txtFNC));
 				}
-				else if(strcmp("g_tMasks1",txt->Find("m_name")->AsName())==0)
+				else if(strcmp("g_tMasks1",txt->Find("m_name")->AsName())==0 || strcmp("g_tFresnelWarp",txt->Find("m_name")->AsName())==0)
 				{
 					std::string txtFilename = std::string(txt->Find("m_pValue")->AsHandle());
 					txtFilename = txtFilename + "_c";
@@ -67,7 +67,7 @@ void Material::Update()
 					printf("Use %s as mask 1\n",txtFNC);
 					if((textureMask1 = Manager::find(txtFNC))==0) Manager::add(textureMask1 = new Texture(txtFNC));
 				}
-				else if(strcmp("g_tMasks2",txt->Find("m_name")->AsName())==0)
+				else if(strcmp("g_tMasks2",txt->Find("m_name")->AsName())==0 || strcmp("g_tDetail2",txt->Find("m_name")->AsName())==0)
 				{
 					std::string txtFilename = std::string(txt->Find("m_pValue")->AsHandle());
 					txtFilename = txtFilename + "_c";

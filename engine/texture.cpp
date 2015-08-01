@@ -83,13 +83,19 @@ void Texture::Update()
 			if(isCubemap) txtType = GL_TEXTURE_CUBE_MAP;
 			int numFaces = (isCubemap)?6:1;
 			unsigned int sqImageType = squish::kDxt1;	// format in squish type
+			bool isCompressed = false;
 			switch(vtexH->format)
 			{
 				case 1://IMAGE_FORMAT_DXT1:
 					sqImageType = squish::kDxt1;
+					isCompressed = true;
 					break;
 				case 2://IMAGE_FORMAT_DXT5:
 					sqImageType = squish::kDxt5;
+					isCompressed = true;
+					break;
+				case 4://RGBA
+					sqImageType = 1 << 31;
 					break;
 				default:
 					sqImageType = 1 << 31;
@@ -120,6 +126,7 @@ void Texture::Update()
 			{
 				// I don't know why I have to x2 here ...
 				int compressedSize =  squish::GetStorageRequirements( tmpW, tmpH, sqImageType );
+				if(vtexH->format==4) compressedSize = tmpW * tmpH * 4;
 				imgSize[i*4 + 0] = tmpH;
 				imgSize[i*4 + 1] = tmpW;
 				imgSize[i*4 + 2] = compressedSize;
@@ -140,14 +147,14 @@ void Texture::Update()
 			}
 			
 			// load data into gpu here
-			char* entry = ((char*) txtData) + dmxH->fileSize;
+			unsigned char* entry = ((unsigned char*) txtData) + dmxH->fileSize;
 			for(int m=0;m<numMip;m++)
 			{
 				for(int f=0;f<numFaces;f++)
 				{
 					// get data pointer
-					char* data = entry + imgSize[m*4+3];
-					printf("----- mm #%d : %dx%d , dxtSize: %d, startAt: %d (%d from SoF, %d from entry)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],(unsigned int) data,(unsigned int) (data-txtData),imgSize[m*4+3]);
+					unsigned char* data = entry + imgSize[m*4+3];
+					printf("----- mm #%d : %dx%d , dxtSize: %d, startAt: %d (%d from SoF, %d from entry)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],(unsigned int) data,(unsigned int) (data-((unsigned char*)txtData)),imgSize[m*4+3]);
 					
 					/* if(m==numMip-1)
 					{
@@ -173,6 +180,10 @@ void Texture::Update()
 						{
 							glCompressedTexImage2D(	txtTypeFS, m, COMPRESSED_RGBA_S3TC_DXT5_EXT, imgSize[m*4+1], imgSize[m*4+0], 0, imgSize[m*4+2], data);
 						}
+						else if(vtexH->format == 4) // RGBA
+						{
+							glTexImage2D(txtTypeFS, m, GL_RGBA, imgSize[m*4 + 1], imgSize[m*4 + 0], 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+						}
 					}
 					else
 					{
@@ -181,9 +192,17 @@ void Texture::Update()
 						
 						// rgba
 						int allocSize = imgSize[m*4 + 0] * imgSize[m*4 + 1] * 4;
-						unsigned char* unpacked = (unsigned char*) malloc(allocSize);
+						unsigned char* unpacked = 0;
 						
-						squish::DecompressImage( unpacked, imgSize[m*4 + 1], imgSize[m*4 + 0], data, sqImageType );
+						if(isCompressed)
+						{
+							unpacked = (unsigned char*) malloc(allocSize);
+							squish::DecompressImage( unpacked, imgSize[m*4 + 1], imgSize[m*4 + 0], data, sqImageType );
+						}
+						else
+						{
+							unpacked = data;
+						}
 						
 						glTexImage2D(txtTypeFS, m, GL_RGBA, imgSize[m*4 + 1], imgSize[m*4 + 0], 0, GL_RGBA, GL_UNSIGNED_BYTE, unpacked);
 						
@@ -197,7 +216,7 @@ void Texture::Update()
 							printf("\n");
 						} */
 						
-						free(unpacked);
+						if(isCompressed) free(unpacked);
 					}
 				}
 				

@@ -29,7 +29,7 @@ int main()
 	// main code is here
 	printf("Openning file\n");
 	//const char* fileName = "testbin/axe_bg_default_lod0.vmesh_c";
-	const char* fileName = "testbin/bane_ward.vmdl_c";
+	const char* fileName = "testbin/venomancer_ward_color.vmat_c";
 	
 	FILE* fp = fopen(fileName,"rb");
 	fseek(fp, 0, SEEK_END);
