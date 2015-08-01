@@ -10,6 +10,24 @@ class Texture;
 
 #define MATERIAL_NAME_LENGTH 128
 
+struct MaterialShaderLocation
+{
+public:
+	GLuint locHqNormal;
+	
+	GLuint locUseMask1;
+	GLuint locUseMask2;
+	
+	GLuint locIsTranslucent;
+	GLuint locBlendType;
+	
+	GLuint locAmbientScale;
+	GLuint locSpecExponent;
+	GLuint locSpecScale;
+	GLuint locRimScale;
+	GLuint locCloakIntensity;
+};
+
 class Material
 {
 
@@ -21,7 +39,7 @@ public:
 	// function
 	void Update();
 	void Bind();
-	void SetUniform(GLuint locHqNormal);
+	void SetUniform(MaterialShaderLocation msl);
 	void Unbind();
 
 	char fileName[MATERIAL_NAME_LENGTH];
@@ -34,6 +52,20 @@ public:
 	Texture* textureMask1;
 	Texture* textureMask2;
 	Texture* textureDetail;
+	
+	// material properties
+	
+	int useMask1;
+	int useMask2;
+	
+	bool translucent;
+	int blendType;	// 1 = additive blend
+	
+	float ambientScale;
+	float specExponent;
+	float specScale;
+	float rimScale;
+	float cloakIntensity;
 	
 	// manager
 	Material* nextMaterial;

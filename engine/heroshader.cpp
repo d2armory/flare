@@ -95,7 +95,18 @@ bool HeroShader::Load()
 	locLightDir = glGetUniformLocation(programObject, "lightDir");
 	locTexture = glGetUniformLocation(programObject, "texture");
 	locDrawShadow = glGetUniformLocation(programObject, "drawShadow");
+	
 	locHqNormal = glGetUniformLocation(programObject, "hqNormal");
+	locIsTranslucent = glGetUniformLocation(programObject, "isTranslucent");
+	locBlendType = glGetUniformLocation(programObject, "blendType");
+	locUseMask1 = glGetUniformLocation(programObject, "useMask1");
+	locUseMask2 = glGetUniformLocation(programObject, "useMask2");
+	
+	locAmbientScale = glGetUniformLocation(programObject, "ambientScale");
+	locSpecExponent = glGetUniformLocation(programObject, "specExponent");
+	locSpecScale = glGetUniformLocation(programObject, "specScale");
+	locRimScale = glGetUniformLocation(programObject, "rimScale");
+	locCloakIntensity = glGetUniformLocation(programObject, "cloakIntensity");
 	
 	locBoneTexture = glGetUniformLocation(programObject, "boneTexture");
 	locUseBoneWeight = glGetUniformLocation(programObject, "useBoneWeight");
@@ -181,7 +192,18 @@ void HeroShader::Populate(Model* m, int index)
 	if(m->subModel[index]->material != 0)
 	{
 		m->subModel[index]->material->Bind();
-		m->subModel[index]->material->SetUniform(locHqNormal);
+		MaterialShaderLocation msl;
+		msl.locHqNormal = locIsTranslucent;
+		msl.locIsTranslucent = locIsTranslucent;
+		msl.locBlendType = locBlendType;
+		msl.locUseMask1 = locUseMask1;
+		msl.locUseMask2 = locUseMask2;
+		msl.locAmbientScale = locAmbientScale;
+		msl.locSpecExponent = locSpecExponent;
+		msl.locSpecScale = locSpecScale;
+		msl.locRimScale = locRimScale;
+		msl.locCloakIntensity = locCloakIntensity;
+		m->subModel[index]->material->SetUniform(msl);
 	}
 	// bind shadowmap
 	if(Scene::enableShadow)

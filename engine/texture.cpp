@@ -154,7 +154,7 @@ void Texture::Update()
 				{
 					// get data pointer
 					unsigned char* data = entry + imgSize[m*4+3];
-					printf("----- mm #%d : %dx%d , dxtSize: %d, startAt: %d (%d from SoF, %d from entry)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],(unsigned int) data,(unsigned int) (data-((unsigned char*)txtData)),imgSize[m*4+3]);
+					//printf("----- mm #%d : %dx%d , dxtSize: %d, startAt: %d (%d from SoF, %d from entry)\n",m,imgSize[m*4 + 1],imgSize[m*4 + 0],imgSize[m*4 + 2],(unsigned int) data,(unsigned int) (data-((unsigned char*)txtData)),imgSize[m*4+3]);
 					
 					/* if(m==numMip-1)
 					{

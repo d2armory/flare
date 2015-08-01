@@ -304,6 +304,12 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				matLooper = matOffset;
 			}
 			
+			printf("Potential material:\n");
+			for(int x=0;x<matCount;x++)
+			{
+				printf("%s\n",matArr[x].c_str());
+			}
+			
 			for(int d=0;d<subModelCount;d++)
 			{
 				
@@ -327,6 +333,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					printf("-- mat name: %s\n",txtFilename.c_str());
 					mat = new Material(txtFilename.c_str());
 					Manager::add(mat);
+					matLooper++;
 				}
 				else
 				{
@@ -863,7 +870,7 @@ void Model::Draw(ESContext *esContext)
 			if(anim != 0) anim->Draw(esContext, this);
 			
 			// draw each submodel
-			for(int i=0;i<subModelCount;i++) 
+			for(int i=subModelCount-1;i>=0;i--) 
 			{
 				if(subModel[i]->vertexVBO!=0)
 				{

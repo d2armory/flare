@@ -36,7 +36,17 @@ public:
 	GLuint locUseBoneWeight;
 	
 	GLuint locDrawShadow;
+	
 	GLuint locHqNormal;
+	GLuint locIsTranslucent;
+	GLuint locBlendType;
+	GLuint locUseMask1;
+	GLuint locUseMask2;
+	GLuint locAmbientScale;
+	GLuint locSpecExponent;
+	GLuint locSpecScale;
+	GLuint locRimScale;
+	GLuint locCloakIntensity;
 	
 	GLuint locBoneIndex;
 	GLuint locBoneTransform;

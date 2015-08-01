@@ -103,6 +103,10 @@ void ShadowShader::Populate(Model* m, int index)
 	//glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &p[0][0]);
 
 	glm::mat4 mvp = depthProjectionMatrix * depthViewMatrix * m->modelTransform;
+	
+	// don't render shadow for translucent material
+	if(m->subModel[index]->material != 0 && m->subModel[index]->material->translucent) mvp = glm::mat4(0);
+	
 	glUniformMatrix4fv(locMvpTransform, 1, GL_FALSE, &mvp[0][0]);
 	
 

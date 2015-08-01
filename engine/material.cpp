@@ -11,6 +11,18 @@ Material::Material(const char* fileName)
 	textureMask1 = 0;
 	textureMask2 = 0;
 	textureDetail = 0;
+	
+	translucent = false;
+	blendType = 0;
+	
+	ambientScale = 1;
+	specExponent = 1;
+	specScale = 1;
+	rimScale = 1;
+	cloakIntensity = 0;
+	
+	useMask1 = 0;
+	useMask2 = 0;
 }
 
 Material::~Material()
@@ -33,6 +45,8 @@ void Material::Update()
 			
 			unsigned int fSize = 0;
 			char* vmtData = FileLoader::ReadFile(fileName,fSize);
+
+			printf("Material %s\n",fileName);
 
 			// SOURCE 2 format
 			// binary key-value
@@ -77,7 +91,65 @@ void Material::Update()
 				}
 			}
 			
-			// TODO: add other parameter such as specular scale
+			KeyValue* intParams = root->Find("m_intParams");
+			for(int i=0;i<intParams->childCount;i++)
+			{
+				KeyValue* txt = intParams->Get(i);
+				if(strcmp("F_TRANSLUCENT",txt->Find("m_name")->AsName())==0)
+				{
+					int val = txt->Find("m_nValue")->AsInt();
+					translucent = (val>0)?true:false;
+				}
+				else if(strcmp("F_ADDITIVE_BLEND",txt->Find("m_name")->AsName())==0)
+				{
+					int val = txt->Find("m_nValue")->AsInt();
+					blendType = (val==1)?1:0;
+				}
+				else if(strcmp("F_MASKS_1",txt->Find("m_name")->AsName())==0)
+				{
+					int val = txt->Find("m_nValue")->AsInt();
+					useMask1 = (val==1)?1:0;
+				}
+				else if(strcmp("F_MASKS_2",txt->Find("m_name")->AsName())==0)
+				{
+					int val = txt->Find("m_nValue")->AsInt();
+					useMask2 = (val==1)?1:0;
+				}
+			}
+			
+			KeyValue* floatParams = root->Find("m_floatParams");
+			for(int i=0;i<floatParams->childCount;i++)
+			{
+				KeyValue* txt = floatParams->Get(i);
+				printf("%s: %f\n",txt->Find("m_name")->AsName(),txt->Find("m_flValue")->AsFloat());
+				if(strcmp("g_flAmbientScale",txt->Find("m_name")->AsName())==0)
+				{
+					float val = txt->Find("m_flValue")->AsFloat();
+					ambientScale = val;
+				}
+				else if(strcmp("g_flSpecularExponent",txt->Find("m_name")->AsName())==0)
+				{
+					float val = txt->Find("m_flValue")->AsFloat();
+					specExponent = val;
+				}
+				else if(strcmp("g_flSpecularScale",txt->Find("m_name")->AsName())==0)
+				{
+					float val = txt->Find("m_flValue")->AsFloat();
+					specScale = val;
+				}
+				else if(strcmp("g_flRimLightScale",txt->Find("m_name")->AsName())==0)
+				{
+					float val = txt->Find("m_flValue")->AsFloat();
+					rimScale = val;
+				}
+				else if(strcmp("g_flCloakIntensity",txt->Find("m_name")->AsName())==0)
+				{
+					float val = txt->Find("m_flValue")->AsFloat();
+					cloakIntensity = val;
+				}
+			}
+			
+			printf("translucent : %d, cloak intense : %f\n",translucent?1:0,cloakIntensity);
 			
 			KVReader2::Clean(root);
 			
@@ -100,6 +172,8 @@ void Material::Bind()
 		else Scene::defaultMask1->Bind(2);
 		if(textureMask2 && textureMask2->state == FS_READY) textureMask2->Bind(3);
 		else Scene::defaultMask2->Bind(3);
+		
+		//if(translucent) glDisable(GL_DEPTH_TEST);
 	}
 	else
 	{
@@ -110,11 +184,23 @@ void Material::Bind()
 	}
 }
 
-void Material::SetUniform(GLuint locHqNormal)
+void Material::SetUniform(MaterialShaderLocation msl)
 {
 	// HQ normal map
 	int hqn = 1;
-	glUniform1iv(locHqNormal, 1, &hqn);
+	glUniform1iv(msl.locHqNormal, 1, &hqn);
+	
+	int itl = (translucent)?1:0;
+	glUniform1iv(msl.locIsTranslucent, 1, &itl);
+	glUniform1iv(msl.locBlendType, 1, &blendType);
+	glUniform1iv(msl.locUseMask1, 1, &useMask1);
+	glUniform1iv(msl.locUseMask2, 1, &useMask2);
+	
+	glUniform1fv(msl.locAmbientScale,1,&ambientScale);
+	glUniform1fv(msl.locSpecExponent,1,&specExponent);
+	glUniform1fv(msl.locSpecScale,1,&specScale);
+	glUniform1fv(msl.locRimScale,1,&rimScale);
+	glUniform1fv(msl.locCloakIntensity,1,&cloakIntensity);
 }
 
 void Material::Unbind()
@@ -129,6 +215,8 @@ void Material::Unbind()
 		else Scene::defaultMask1->Unbind(2);
 		if(textureMask2 && textureMask2->state == FS_READY) textureMask2->Unbind(3);
 		else Scene::defaultMask2->Unbind(3);
+		
+		//if(translucent) glEnable(GL_DEPTH_TEST);
 	}
 	else
 	{
