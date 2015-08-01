@@ -70,9 +70,18 @@ void ModelAnimation::Update(ESContext *esContext, float deltaTime)
 			frameB = new BoneData[boneCount];
 			boneTransform = new glm::mat4[boneCount];
 			
+			for(int i=0;i<boneCount;i++)
+			{
+				frameC[i].pos = glm::vec3(0,0,0);
+				frameC[i].rot = glm::quat(0,0,0,1);
+				frameN[i].pos = glm::vec3(0,0,0);
+				frameN[i].rot = glm::quat(0,0,0,1);
+				boneTransform[i] = glm::mat4(1);
+			}
+			
 			printf("File %s prepared\n",fileName);
 			
-			ExtractFrame(frameC,fNum);
+			ExtractFrame(frameC,0);
 			
 			printf("Frame 0 data\n");
 			for(int i=0;i<boneCount;i++)
@@ -121,7 +130,7 @@ void ModelAnimation::Update(ESContext *esContext, float deltaTime)
 			
 			boneTransform[i] = glm::mat4(1);
 			boneTransform[i] = glm::mat4_cast(frameB[i].rot) * boneTransform[i];
-			boneTransform[i] = glm::translate(boneTransform[i],frameB[i].pos);
+			boneTransform[i] = glm::translate(glm::mat4(1),frameB[i].pos) * boneTransform[i];
 			if(bparent >= 0)
 			{
 				boneTransform[i] = boneTransform[bparent] * boneTransform[i];
@@ -151,7 +160,7 @@ void ModelAnimation::Draw(ESContext *esContext, Model* model)
 		{
 			if(model->boneMap[i] >= 0)
 			{
-				model->boneTransform[i] = glm::transpose(boneTransform[model->boneMap[i]] * model->invBoneTransform[i]);
+				model->boneTransform[i] = boneTransform[model->boneMap[i]] * model->invBoneTransform[i];
 			}
 			else
 			{
@@ -201,7 +210,7 @@ void ModelAnimation::ExtractFrame(BoneData*& output, int frame)
 	// data access
 	KeyValue* segmentArray = root->Find("m_segmentArray");
 	KeyValue* decoder = root->Find("m_decoderArray");
-	int boneCount = 59;
+	//int boneCount = 59;
 	for(int i=0;i<segIdxArray->childCount;i++)
 	{
 		int segId = segIdxArray->Get(i)->AsInt();
@@ -217,43 +226,55 @@ void ModelAnimation::ExtractFrame(BoneData*& output, int frame)
 		int perKey = containerDataSize/count;
 		int perKeyPerFrame = containerDataSize/count/framePerBlock;
 		
+		char isStatic = 0;
+		
 		void (ModelAnimation::*Extract)(BoneData&,const char*);
 		
 		if(strcmp(keyType,"CCompressedStaticFullVector3")==0)
 		{
 			Extract = &ModelAnimation::ExtractDataFullVector;
+			isStatic = 1;
+			perKeyPerFrame = 12;
 		}
 		else if(strcmp(keyType,"CCompressedStaticVector3")==0)
 		{
 			Extract = &ModelAnimation::ExtractDataHalfVector;
+			isStatic = 1;
+			perKeyPerFrame = 6;
 		}
 		else if(strcmp(keyType,"CCompressedFullVector3")==0)
 		{
 			Extract = &ModelAnimation::ExtractDataFullVector;
+			perKeyPerFrame = 12;
 		}
 		else if(strcmp(keyType,"CCompressedAnimVector3")==0)
 		{
 			Extract = &ModelAnimation::ExtractDataHalfVector;
+			perKeyPerFrame = 6;
 		}
 		else if(strcmp(keyType,"CCompressedStaticQuaternion")==0)
 		{
 			Extract = &ModelAnimation::ExtractDataQuaternion;
+			isStatic = 1;
+			perKeyPerFrame = 6;
 		}
 		else if(strcmp(keyType,"CCompressedAnimQuaternion")==0)
 		{
 			Extract = &ModelAnimation::ExtractDataQuaternion;
+			perKeyPerFrame = 6;
 		}
+		
+		if(isStatic) perKey = perKeyPerFrame;
+		else perKey = perKeyPerFrame * count;
 		
 		for(int j=0;j<count;j++)
 		{
 			int boneIdx = *((short*)(container+8+(j*2)));
 			boneIdx = boneIdx % boneCount;
 			int eFrame = frameInBlock;
-			if(perKeyPerFrame==0)
-			{
-				eFrame = 0;
-			}
-			char* fkData = containerData + perKeyPerFrame * count * eFrame + perKeyPerFrame * j;
+			char* fkData = containerData;
+			if(isStatic) fkData += perKey * j;	// static data
+			else fkData += perKeyPerFrame * count * eFrame + perKeyPerFrame * j;	// anim data
 			((*this).*Extract)(output[boneIdx],fkData);
 		}
 	}
@@ -300,7 +321,7 @@ void ModelAnimation::ExtractDataQuaternion(BoneData& output, const char* fkData)
 	
 	switch(pos)
 	{
-		case 3:
+		case 0:
 			output.rot = glm::quat(w,x,y,z);
 			break;
 		case 2:
@@ -309,7 +330,7 @@ void ModelAnimation::ExtractDataQuaternion(BoneData& output, const char* fkData)
 		case 1:
 			output.rot = glm::quat(x,y,w,z);
 			break;
-		case 0:
+		case 3:
 			output.rot = glm::quat(x,y,z,w);
 			break;
 			

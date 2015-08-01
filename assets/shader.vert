@@ -103,20 +103,20 @@ void main()
 	
 	highp vec3 vaPos = vPosition;
 	
- 	if(useBoneWeight>0)
+ 	/* if(useBoneWeight>0)
 	{
 		vaPos = vec3(0,0,0);
-		vec3 vaPos1 = (boneTransform[int(vBone1)] * vec4(vPosition,1)).xyz;
+		highp vec3 vaPos1 = (boneTransform[int(vBone1)] * vec4(vPosition,1)).xyz;
 		vaPos += vaPos1 * vBoneweight1;
-		vec3 vaPos2 = (boneTransform[int(vBone2)] * vec4(vPosition,1)).xyz;
+		highp vec3 vaPos2 = (boneTransform[int(vBone2)] * vec4(vPosition,1)).xyz;
 		vaPos += vaPos2 * vBoneweight2;
-		vec3 vaPos3 = (boneTransform[int(vBone3)] * vec4(vPosition,1)).xyz;
+		highp vec3 vaPos3 = (boneTransform[int(vBone3)] * vec4(vPosition,1)).xyz;
 		vaPos += vaPos3 * vBoneweight3;
 	}
 	else
 	{
 		vaPos = (boneTransform[int(vBone3)] * vec4(vPosition,1)).xyz;
-	}
+	} */
 	
 	/* vec3 vaPos = vec3(0,0,0);
 	vec3 vaPos1 = (boneTransform[boneIndex[int(vBone1)]] * vec4(vaPosIn,1)).xyz;

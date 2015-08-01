@@ -123,7 +123,7 @@ void main()
 	
 	vec3 lColor = vec3(0.8,0.8,0.8);
 	vec3 sColor = vec3(0.9,0.8,1.0);
-	vec3 ambient = vec3(0.35,0.35,0.35);
+	vec3 ambient = vec3(0.55,0.55,0.55);
 	
 	vec3 diffuse = vec3(0,0,0);
 	vec3 specular = vec3(0,0,0);

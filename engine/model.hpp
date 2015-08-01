@@ -80,6 +80,8 @@ public:
 	glm::vec4 position;
 	glm::vec4 rotation;	// euler
 	
+	int matOffset;
+	
 	glm::mat4 modelTransform;
 	
 	FILE_STATE state;

@@ -32,6 +32,8 @@ Model::Model(const char* fileName)
 	useAnimation = false;
 	//curFrame = -1;
 	//frameTime = 99999.0f;
+	
+	matOffset = 0;
 }
 
 Model::~Model()
@@ -87,11 +89,24 @@ void Model::Update(ESContext *esContext, float deltaTime)
 			if(animGrp)
 			{
 				std::string vaFilename = std::string(animGrp->Get(0)->AsName()) + "_c";
-				strncpy(this->vagrpFileName,vaFilename.c_str(),MODEL_NAME_LENGTH);
-				FileLoader::Load(vagrpFileName);
-				vagrpState = FS_LOADING;
 				
-				printf("VAGRP: %s\n",vaFilename.c_str());
+				if(vaFilename.compare("_c")!=0)
+				{
+					strncpy(this->vagrpFileName,vaFilename.c_str(),MODEL_NAME_LENGTH);
+					FileLoader::Load(vagrpFileName);
+					vagrpState = FS_LOADING;
+					
+					printf("VAGRP: %s\n",vaFilename.c_str());
+				}
+				else
+				{
+					vagrpState = FS_READY;
+					useAnimation = 0;
+					anim = 0;
+					animParent = 0;
+					printf("VAGRP: not found\n");
+				}
+				
 			}
 			else
 			{
@@ -99,6 +114,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				useAnimation = 0;
 				anim = 0;
 				animParent = 0;
+				printf("VAGRP: not found\n");
 			}
 			
 			// Prepare bone data
@@ -128,7 +144,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				KeyValue* boneRot = skeleton->Find("m_boneRotParent");
 				for(int i=0;i<numBone;i++)
 				{
-					boneMap[i] = i;
+					boneMap[i] = -1;//i;
 					// note: store temp bone transform to calc inv transform
 					
 					//boneTransform[i] = glm::mat4(1);
@@ -137,7 +153,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					short bparent = boneParent->Get(i)->AsShort();
 					
 					boneTransform[i] = glm::mat4_cast(boneRot->Get(i)->AsQuat()) * boneTransform[i];
-					boneTransform[i] = glm::translate(boneTransform[i],bonePos->Get(i)->AsVec3());
+					boneTransform[i] = glm::translate(glm::mat4(1),bonePos->Get(i)->AsVec3()) * boneTransform[i];
 					if(bparent >= 0)
 					{
 						boneTransform[i] = boneTransform[bparent] * boneTransform[i];
@@ -146,14 +162,14 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					invBoneTransform[i] = glm::inverse(boneTransform[i]);
 				}
 				
-				glGenTextures(1, &boneTransformTexture);
+				/* glGenTextures(1, &boneTransformTexture);
 				glActiveTexture(GL_TEXTURE0 + 5);
 				glBindTexture(GL_TEXTURE_2D, boneTransformTexture);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				glBindTexture(GL_TEXTURE_2D, 0);
+				glBindTexture(GL_TEXTURE_2D, 0); */
 			}
 			else
 			{
@@ -256,6 +272,23 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				printf("rerl %s\n",recName);
 			} */
 			
+			std::string* matArr = new std::string[rerlH->recordCount];
+			int matCount = 0;
+			
+			for(int x=0;x<rerlH->recordCount;x++)
+			{
+				rerlRecord* rec = recEntries + x;
+				char* recName = ((char*) &rec->nameOffset) + rec->nameOffset;
+				std::string recNameS = std::string(recName);
+				if(recNameS.find("vmat")!=std::string::npos)
+				{
+					matArr[matCount] = recNameS;
+					matCount++;
+				}
+			}
+			
+			int matLooper = matOffset;
+			
 			for(int d=0;d<subModelCount;d++)
 			{
 				
@@ -264,16 +297,26 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				// Prepare material
 				//KeyValue* materialNode = dc->Find("m_pMaterial");
 				
+				/*
 				rerlRecord* rec = recEntries + (rerlH->recordCount - subModelCount + d);
 				char* recName = ((char*) &rec->nameOffset) + rec->nameOffset;
 				printf("mat %s\n",recName);
 				std::string txtFilename = std::string(recName);
 				txtFilename = txtFilename + "_c";
-				
-				printf("-- mat name: %s\n",txtFilename.c_str());
-				
-				Material* mat = new Material(txtFilename.c_str());
-				Manager::add(mat);
+				*/
+				Material* mat = 0;
+				if(matCount>0)
+				{
+					std::string txtFilename = matArr[matLooper % matCount];
+					txtFilename = txtFilename + "_c";
+					printf("-- mat name: %s\n",txtFilename.c_str());
+					mat = new Material(txtFilename.c_str());
+					Manager::add(mat);
+				}
+				else
+				{
+					printf("-- no material found for this mesh\n");
+				}
 				
 				// Prepar variable
 				subModel[d] = new ModelDrawCall();
