@@ -17,7 +17,7 @@ varying vec4 fTangent;
 varying vec3 fN;
 varying vec3 fShadowCoord;
 
-varying float boneShader;
+varying vec4 boneShader;
 
 // uniform
 //uniform mat4 modelTransform;
@@ -238,4 +238,6 @@ void main()
 	{
 		gl_FragColor = vec4(0,0,boneShader/3.0 - 2.0,1);
 	} */
+	
+	//gl_FragColor = boneShader;
 }

@@ -1,0 +1,873 @@
+Adding directories to PATH:
+PATH += /root/emsdk_portable
+PATH += /root/emsdk_portable/clang/fastcomp/build_master_64/bin
+PATH += /root/emsdk_portable/emscripten/master
+
+Setting environment variables:
+EMSCRIPTEN = /root/emsdk_portable/emscripten/master
+
+Validating pointer size
+- Expected: 4, Runtime: 4
+Openning file
+File size: 20505 bytes
+File data read into memory (0x501040)
+RERL = 40, NTRO = 2828, DATA = 3470, ADDR = 501040
+[8/0] @3480
+    'm_nFlags' : (uint) 0 @3480
+    'm_name' : (str) '' @3484
+    'm_localHAnimArray' : [49/49] @348C
+        (str) 'models/heroes/axe/c588a788/loadout_spawn.vanim' @368
+        (str) 'models/heroes/axe/c588a788/loadout_rare.vanim' @397
+        (str) 'models/heroes/axe/c588a788/loadout.vanim' @3C5
+        (str) 'models/heroes/axe/c588a788/run.vanim' @3EE
+        (str) 'models/heroes/axe/c588a788/run_chase.vanim' @413
+        (str) 'models/heroes/axe/c588a788/run_haste.vanim' @43E
+        (str) 'models/heroes/axe/c588a788/run_injured.vanim' @469
+        (str) 'models/heroes/axe/c588a788/run_injured_blood_chaser.vanim' @496
+        (str) 'models/heroes/axe/c588a788/runn_blood_chaser.vanim' @4D0
+        (str) 'models/heroes/axe/c588a788/run_start2.vanim' @503
+        (str) 'models/heroes/axe/c588a788/runn_end.vanim' @52F
+        (str) 'models/heroes/axe/c588a788/idle.vanim' @559
+        (str) 'models/heroes/axe/c588a788/idle_alt.vanim' @57F
+        (str) 'models/heroes/axe/c588a788/idle_injured.vanim' @5A9
+        (str) 'models/heroes/axe/c588a788/idle_injured_blood_chaser.vanim' @5D7
+        (str) 'models/heroes/axe/c588a788/portrait.vanim' @612
+        (str) 'models/heroes/axe/c588a788/stun.vanim' @63C
+        (str) 'models/heroes/axe/c588a788/attack_main.vanim' @662
+        (str) 'models/heroes/axe/c588a788/attack_main_injured.vanim' @68F
+        (str) 'models/heroes/axe/c588a788/attack_alt.vanim' @6C4
+        (str) 'models/heroes/axe/c588a788/_berserkers_call.vanim' @6F0
+        (str) 'models/heroes/axe/c588a788/berserkers_call_statue.vanim' @722
+        (str) 'models/heroes/axe/c588a788/_rampant_berserkers_call.vanim' @75A
+        (str) 'models/heroes/axe/c588a788/_battle_hunger.vanim' @794
+        (str) 'models/heroes/axe/c588a788/_counter_helix.vanim' @7C4
+        (str) 'models/heroes/axe/c588a788/counter_helix_statue.vanim' @7F4
+        (str) 'models/heroes/axe/c588a788/culling_blade.vanim' @82A
+        (str) 'models/heroes/axe/c588a788/death.vanim' @859
+        (str) 'models/heroes/axe/c588a788/flail.vanim' @880
+        (str) 'models/heroes/axe/c588a788/idle_alt2.vanim' @8A7
+        (str) 'models/heroes/axe/c588a788/_counter_helix_blood_chaser.vanim' @8D2
+        (str) 'models/heroes/axe/c588a788/axe_taunt_01_come_get_it.vanim' @90F
+        (str) 'models/heroes/axe/c588a788/axe_taunt_02_good_day_sir.vanim' @949
+        (str) 'models/heroes/axe/c588a788/axe_spawn.vanim' @984
+        (str) 'models/heroes/axe/c588a788/axe_teleport.vanim' @9AF
+        (str) 'models/heroes/axe/c588a788/axe_teleport_end.vanim' @9DD
+        (str) 'models/heroes/axe/c588a788/workshop_anim_00.vanim' @A0F
+        (str) 'models/heroes/axe/c588a788/workshop_anim_01.vanim' @A41
+        (str) 'models/heroes/axe/c588a788/workshop_anim_02.vanim' @A73
+        (str) 'models/heroes/axe/c588a788/workshop_anim_03.vanim' @AA5
+        (str) 'models/heroes/axe/c588a788/workshop_anim_04.vanim' @AD7
+        (str) 'models/heroes/axe/c588a788/workshop_anim_05.vanim' @B09
+        (str) 'models/heroes/axe/c588a788/workshop_anim_06.vanim' @B3B
+        (str) 'models/heroes/axe/c588a788/workshop_anim_07.vanim' @B6D
+        (str) 'models/heroes/axe/c588a788/workshop_anim_08.vanim' @B9F
+        (str) 'models/heroes/axe/c588a788/workshop_anim_09.vanim' @BD1
+        (str) 'models/heroes/axe/c588a788/forcestaff.vanim' @C03
+        (str) 'models/heroes/axe/c588a788/axe_forcestaff_end.vanim' @C2F
+        (str) 'models/heroes/axe/c588a788/forcestaff_enemy.vanim' @C63
+    'm_includedGroupArray' : [0/0] @3494
+    'm_directHSeqGroup' : (str) '' @3498
+    'm_decodeKey' : [7/0] @34A0
+        'm_name' : (str) '' @34A0
+        'm_boneArray' : [59/59] @34A8
+            [6/0] @3F68
+                'm_name' : (str) 'root' @4C50
+                'm_parent' : (int) -1 @3F6C
+                'm_pos' : (vec3) [-13.710938, -0.000001, 76.500000] @3F70
+                'm_quat' : (quat) [0.000000, 0.000000, 0.000000, 1.000000] @3F7C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @3F8C
+                'm_flags' : (int) 0 @3F9C
+            [6/0] @3FA0
+                'm_name' : (str) 'spine1' @4C55
+                'm_parent' : (int) 0 @3FA4
+                'm_pos' : (vec3) [6.386480, 0.000000, 23.090080] @3FA8
+                'm_quat' : (quat) [0.000000, -0.690109, 0.000000, 0.723705] @3FB4
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @3FC4
+                'm_flags' : (int) 0 @3FD4
+            [6/0] @3FD8
+                'm_name' : (str) 'thigh_R' @4C5C
+                'm_parent' : (int) 0 @3FDC
+                'm_pos' : (vec3) [2.130366, -18.242081, -4.488007] @3FE0
+                'm_quat' : (quat) [-0.246476, -0.832248, 0.027163, 0.495859] @3FEC
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @3FFC
+                'm_flags' : (int) 0 @400C
+            [6/0] @4010
+                'm_name' : (str) 'thigh_L' @4C64
+                'm_parent' : (int) 0 @4014
+                'm_pos' : (vec3) [2.130366, 18.242085, -4.488007] @4018
+                'm_quat' : (quat) [0.027163, 0.495859, 0.246476, 0.832248] @4024
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4034
+                'm_flags' : (int) 0 @4044
+            [6/0] @4048
+                'm_name' : (str) 'spine2' @4C6C
+                'm_parent' : (int) 1 @404C
+                'm_pos' : (vec3) [14.015816, 0.000001, 0.000000] @4050
+                'm_quat' : (quat) [0.000000, 0.018934, -0.000000, 0.999821] @405C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @406C
+                'm_flags' : (int) 0 @407C
+            [6/0] @4080
+                'm_name' : (str) 'spine3' @4C73
+                'm_parent' : (int) 4 @4084
+                'm_pos' : (vec3) [14.051201, 0.000002, 0.000000] @4088
+                'm_quat' : (quat) [-0.000000, 0.065598, 0.000000, 0.997846] @4094
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @40A4
+                'm_flags' : (int) 0 @40B4
+            [6/0] @40B8
+                'm_name' : (str) 'clavicle_R' @4C7A
+                'm_parent' : (int) 5 @40BC
+                'm_pos' : (vec3) [1.227638, -6.463618, -6.827198] @40C0
+                'm_quat' : (quat) [-0.495659, -0.504304, 0.585046, 0.397141] @40CC
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @40DC
+                'm_flags' : (int) 0 @40EC
+            [6/0] @40F0
+                'm_name' : (str) 'clavicle_L' @4C85
+                'm_parent' : (int) 5 @40F4
+                'm_pos' : (vec3) [1.227646, 6.463616, -6.827196] @40F8
+                'm_quat' : (quat) [0.585046, 0.397141, 0.495659, 0.504304] @4104
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4114
+                'm_flags' : (int) 0 @4124
+            [6/0] @4128
+                'm_name' : (str) 'neck1' @4C90
+                'm_parent' : (int) 5 @412C
+                'm_pos' : (vec3) [13.661499, 0.000000, 0.000000] @4130
+                'm_quat' : (quat) [0.000000, 0.452065, -0.000000, 0.891985] @413C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @414C
+                'm_flags' : (int) 0 @415C
+            [6/0] @4160
+                'm_name' : (str) 'bicep_R' @4C96
+                'm_parent' : (int) 6 @4164
+                'm_pos' : (vec3) [-22.909100, 0.000004, -0.000008] @4168
+                'm_quat' : (quat) [-0.656310, 0.469336, 0.346777, 0.478254] @4174
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4184
+                'm_flags' : (int) 0 @4194
+            [6/0] @4198
+                'm_name' : (str) 'joint4' @4C9E
+                'm_parent' : (int) 9 @419C
+                'm_pos' : (vec3) [15.846626, 6.596169, 2.514086] @41A0
+                'm_quat' : (quat) [0.156592, 0.016464, -0.470451, 0.868264] @41AC
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @41BC
+                'm_flags' : (int) 0 @41CC
+            [6/0] @41D0
+                'm_name' : (str) 'elbow_R' @4CA5
+                'm_parent' : (int) 9 @41D4
+                'm_pos' : (vec3) [-32.901840, 0.000023, 0.000002] @41D8
+                'm_quat' : (quat) [0.000000, 0.245163, -0.000000, 0.969482] @41E4
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @41F4
+                'm_flags' : (int) 0 @4204
+            [6/0] @4208
+                'm_name' : (str) 'joint5' @4CAD
+                'm_parent' : (int) 9 @420C
+                'm_pos' : (vec3) [5.303093, 4.056129, 3.018064] @4210
+                'm_quat' : (quat) [0.150100, 0.019979, -0.470315, 0.869411] @421C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @422C
+                'm_flags' : (int) 0 @423C
+            [6/0] @4240
+                'm_name' : (str) 'wrist_R' @4CB4
+                'm_parent' : (int) 11 @4244
+                'm_pos' : (vec3) [-31.393375, -0.000015, 0.000008] @4248
+                'm_quat' : (quat) [-0.012243, 0.043540, 0.191707, 0.980410] @4254
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4264
+                'm_flags' : (int) 0 @4274
+            [6/0] @4278
+                'm_name' : (str) 'thumb_0_R' @4CBC
+                'm_parent' : (int) 13 @427C
+                'm_pos' : (vec3) [-2.773746, -5.330757, 7.654705] @4280
+                'm_quat' : (quat) [0.679523, 0.195573, -0.127696, 0.695481] @428C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @429C
+                'm_flags' : (int) 0 @42AC
+            [6/0] @42B0
+                'm_name' : (str) 'index_0_R' @4CC6
+                'm_parent' : (int) 13 @42B4
+                'm_pos' : (vec3) [-15.912941, 3.987114, 7.527115] @42B8
+                'm_quat' : (quat) [0.707107, -0.000000, -0.000000, 0.707107] @42C4
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @42D4
+                'm_flags' : (int) 0 @42E4
+            [6/0] @42E8
+                'm_name' : (str) 'mid_0_R' @4CD0
+                'm_parent' : (int) 13 @42EC
+                'm_pos' : (vec3) [-17.999912, 2.690376, -4.712173] @42F0
+                'm_quat' : (quat) [0.704812, 0.056928, 0.056928, 0.704812] @42FC
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @430C
+                'm_flags' : (int) 0 @431C
+            [6/0] @4320
+                'm_name' : (str) 'axe_1' @4CD8
+                'm_parent' : (int) 13 @4324
+                'm_pos' : (vec3) [-20.309111, -0.157944, 5.708931] @4328
+                'm_quat' : (quat) [-0.202968, -0.459272, -0.657567, 0.561675] @4334
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4344
+                'm_flags' : (int) 0 @4354
+            [6/0] @4358
+                'm_name' : (str) 'thumb_1_R' @4CDE
+                'm_parent' : (int) 14 @435C
+                'm_pos' : (vec3) [-13.311319, 0.000008, 0.000008] @4360
+                'm_quat' : (quat) [-0.000000, -0.000000, 0.000000, 1.000000] @436C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @437C
+                'm_flags' : (int) 0 @438C
+            [6/0] @4390
+                'm_name' : (str) 'index_1_R' @4CE8
+                'm_parent' : (int) 15 @4394
+                'm_pos' : (vec3) [-7.673418, -0.000011, -0.000015] @4398
+                'm_quat' : (quat) [0.000000, 0.231836, 0.000000, 0.972755] @43A4
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @43B4
+                'm_flags' : (int) 0 @43C4
+            [6/0] @43C8
+                'm_name' : (str) 'index_2_R' @4CF2
+                'm_parent' : (int) 19 @43CC
+                'm_pos' : (vec3) [-6.926258, 0.000000, -0.000008] @43D0
+                'm_quat' : (quat) [0.000000, 0.000000, -0.000000, 1.000000] @43DC
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @43EC
+                'm_flags' : (int) 0 @43FC
+            [6/0] @4400
+                'm_name' : (str) 'mid_1_R' @4CFC
+                'm_parent' : (int) 16 @4404
+                'm_pos' : (vec3) [-6.308594, -0.000023, -0.000031] @4408
+                'm_quat' : (quat) [0.000000, 0.227693, 0.000000, 0.973733] @4414
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4424
+                'm_flags' : (int) 0 @4434
+            [6/0] @4438
+                'm_name' : (str) 'mid_2_R' @4D04
+                'm_parent' : (int) 21 @443C
+                'm_pos' : (vec3) [-6.460514, 0.000004, 0.000000] @4440
+                'm_quat' : (quat) [0.000000, 0.000000, -0.000000, 1.000000] @444C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @445C
+                'm_flags' : (int) 0 @446C
+            [6/0] @4470
+                'm_name' : (str) 'chain_top_BC' @4D0C
+                'm_parent' : (int) 17 @4474
+                'm_pos' : (vec3) [14.013838, 6.409748, 12.119041] @4478
+                'm_quat' : (quat) [0.611238, -0.134200, 0.352959, 0.695556] @4484
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4494
+                'm_flags' : (int) 0 @44A4
+            [6/0] @44A8
+                'm_name' : (str) 'chain_top_R0C0' @4D19
+                'm_parent' : (int) 23 @44AC
+                'm_pos' : (vec3) [18.277481, 0.000008, 0.000008] @44B0
+                'm_quat' : (quat) [-0.000000, -0.000000, -0.000000, 1.000000] @44BC
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @44CC
+                'm_flags' : (int) 0 @44DC
+            [6/0] @44E0
+                'm_name' : (str) 'chain_bot_R0C0' @4D28
+                'm_parent' : (int) 23 @44E4
+                'm_pos' : (vec3) [-27.009857, 0.000015, 0.000004] @44E8
+                'm_quat' : (quat) [-0.000000, -1.000000, 0.000000, -0.000000] @44F4
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4504
+                'm_flags' : (int) 0 @4514
+            [6/0] @4518
+                'm_name' : (str) 'chain_top_R1C0' @4D37
+                'm_parent' : (int) 24 @451C
+                'm_pos' : (vec3) [6.109970, 0.000008, -0.000008] @4520
+                'm_quat' : (quat) [-0.000000, -0.000000, -0.000000, 1.000000] @452C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @453C
+                'm_flags' : (int) 0 @454C
+            [6/0] @4550
+                'm_name' : (str) 'chain_top_R2C0' @4D46
+                'm_parent' : (int) 26 @4554
+                'm_pos' : (vec3) [22.787643, 0.000000, 0.000011] @4558
+                'm_quat' : (quat) [0.000000, -0.000000, -0.000000, 1.000000] @4564
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4574
+                'm_flags' : (int) 0 @4584
+            [6/0] @4588
+                'm_name' : (str) 'chain_top_R3C0' @4D55
+                'm_parent' : (int) 27 @458C
+                'm_pos' : (vec3) [18.341583, -0.147720, -0.000008] @4590
+                'm_quat' : (quat) [0.000000, -0.000000, -0.000000, 1.000000] @459C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @45AC
+                'm_flags' : (int) 0 @45BC
+            [6/0] @45C0
+                'm_name' : (str) 'chain_top_R4C0' @4D64
+                'm_parent' : (int) 28 @45C4
+                'm_pos' : (vec3) [53.315216, -0.000008, -0.000008] @45C8
+                'm_quat' : (quat) [-0.000000, -0.000000, -0.000000, 1.000000] @45D4
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @45E4
+                'm_flags' : (int) 0 @45F4
+            [6/0] @45F8
+                'm_name' : (str) 'chain_bot_R1C0' @4D73
+                'm_parent' : (int) 25 @45FC
+                'm_pos' : (vec3) [17.537098, -0.000015, 0.000015] @4600
+                'm_quat' : (quat) [0.000000, -0.000000, 0.000000, 1.000000] @460C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @461C
+                'm_flags' : (int) 0 @462C
+            [6/0] @4630
+                'm_name' : (str) 'chain_bot_R2C0' @4D82
+                'm_parent' : (int) 30 @4634
+                'm_pos' : (vec3) [18.394743, -0.000008, 0.000000] @4638
+                'm_quat' : (quat) [0.000000, -0.000000, 0.000000, 1.000000] @4644
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4654
+                'm_flags' : (int) 0 @4664
+            [6/0] @4668
+                'm_name' : (str) 'chain_bot_R3C0' @4D91
+                'm_parent' : (int) 31 @466C
+                'm_pos' : (vec3) [34.689949, 0.000008, 0.000002] @4670
+                'm_quat' : (quat) [0.000000, -0.000000, 0.000000, 1.000000] @467C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @468C
+                'm_flags' : (int) 0 @469C
+            [6/0] @46A0
+                'm_name' : (str) 'bicep_L' @4DA0
+                'm_parent' : (int) 7 @46A4
+                'm_pos' : (vec3) [22.909111, 0.000006, -0.000008] @46A8
+                'm_quat' : (quat) [-0.656310, 0.469336, 0.346777, 0.478254] @46B4
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @46C4
+                'm_flags' : (int) 0 @46D4
+            [6/0] @46D8
+                'm_name' : (str) 'elbow_L' @4DA8
+                'm_parent' : (int) 33 @46DC
+                'm_pos' : (vec3) [32.901833, -0.000008, -0.000002] @46E0
+                'm_quat' : (quat) [0.000000, 0.245162, 0.000000, 0.969482] @46EC
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @46FC
+                'm_flags' : (int) 0 @470C
+            [6/0] @4710
+                'm_name' : (str) 'wrist_L' @4DB0
+                'm_parent' : (int) 34 @4714
+                'm_pos' : (vec3) [31.393438, 0.000023, 0.000034] @4718
+                'm_quat' : (quat) [-0.149742, 0.012172, 0.287812, 0.945830] @4724
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4734
+                'm_flags' : (int) 0 @4744
+            [6/0] @4748
+                'm_name' : (str) 'thumb_0_L' @4DB8
+                'm_parent' : (int) 35 @474C
+                'm_pos' : (vec3) [2.773758, 5.330750, -7.654694] @4750
+                'm_quat' : (quat) [0.679522, 0.195573, -0.127696, 0.695481] @475C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @476C
+                'm_flags' : (int) 0 @477C
+            [6/0] @4780
+                'm_name' : (str) 'index_0_L' @4DC2
+                'm_parent' : (int) 35 @4784
+                'm_pos' : (vec3) [15.912941, -3.987106, -7.527122] @4788
+                'm_quat' : (quat) [0.707107, 0.000000, 0.000000, 0.707107] @4794
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @47A4
+                'm_flags' : (int) 0 @47B4
+            [6/0] @47B8
+                'm_name' : (str) 'mid_0_L' @4DCC
+                'm_parent' : (int) 35 @47BC
+                'm_pos' : (vec3) [17.999916, -2.690399, 4.712166] @47C0
+                'm_quat' : (quat) [0.704811, 0.056928, 0.056928, 0.704812] @47CC
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @47DC
+                'm_flags' : (int) 0 @47EC
+            [6/0] @47F0
+                'm_name' : (str) 'thumb_1_L' @4DD4
+                'm_parent' : (int) 36 @47F4
+                'm_pos' : (vec3) [13.311296, -0.000031, -0.000019] @47F8
+                'm_quat' : (quat) [0.000000, -0.000000, 0.000000, 1.000000] @4804
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4814
+                'm_flags' : (int) 0 @4824
+            [6/0] @4828
+                'm_name' : (str) 'index_1_L' @4DDE
+                'm_parent' : (int) 37 @482C
+                'm_pos' : (vec3) [7.673409, -0.000008, -0.000027] @4830
+                'm_quat' : (quat) [-0.000000, 0.231836, 0.000000, 0.972755] @483C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @484C
+                'm_flags' : (int) 0 @485C
+            [6/0] @4860
+                'm_name' : (str) 'index_2_L' @4DE8
+                'm_parent' : (int) 40 @4864
+                'm_pos' : (vec3) [6.926262, 0.000000, 0.000011] @4868
+                'm_quat' : (quat) [0.000000, -0.000000, 0.000000, 1.000000] @4874
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4884
+                'm_flags' : (int) 0 @4894
+            [6/0] @4898
+                'm_name' : (str) 'mid_1_L' @4DF2
+                'm_parent' : (int) 38 @489C
+                'm_pos' : (vec3) [6.308586, 0.000000, -0.000023] @48A0
+                'm_quat' : (quat) [-0.000000, 0.227693, 0.000000, 0.973733] @48AC
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @48BC
+                'm_flags' : (int) 0 @48CC
+            [6/0] @48D0
+                'm_name' : (str) 'mid_2_L' @4DFA
+                'm_parent' : (int) 42 @48D4
+                'm_pos' : (vec3) [6.460518, 0.000000, 0.000010] @48D8
+                'm_quat' : (quat) [0.000000, -0.000000, -0.000000, 1.000000] @48E4
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @48F4
+                'm_flags' : (int) 0 @4904
+            [6/0] @4908
+                'm_name' : (str) 'head' @4E02
+                'm_parent' : (int) 8 @490C
+                'm_pos' : (vec3) [16.165680, 0.000003, 0.000000] @4910
+                'm_quat' : (quat) [-0.000000, 0.206484, -0.000000, 0.978450] @491C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @492C
+                'm_flags' : (int) 0 @493C
+            [6/0] @4940
+                'm_name' : (str) 'joint6' @4E07
+                'm_parent' : (int) 44 @4944
+                'm_pos' : (vec3) [10.615454, 9.240794, -6.015594] @4948
+                'm_quat' : (quat) [0.605075, 0.664375, -0.080058, 0.431371] @4954
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4964
+                'm_flags' : (int) 0 @4974
+            [6/0] @4978
+                'm_name' : (str) 'joint7' @4E0E
+                'm_parent' : (int) 44 @497C
+                'm_pos' : (vec3) [10.615454, -8.233770, -6.015594] @4980
+                'm_quat' : (quat) [0.515870, 0.653615, 0.453095, -0.318386] @498C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @499C
+                'm_flags' : (int) 0 @49AC
+            [6/0] @49B0
+                'm_name' : (str) 'hair_R0C0' @4E15
+                'm_parent' : (int) 44 @49B4
+                'm_pos' : (vec3) [-2.184920, -0.000001, 13.491333] @49B8
+                'm_quat' : (quat) [0.000000, -0.915950, -0.000000, 0.401293] @49C4
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @49D4
+                'm_flags' : (int) 0 @49E4
+            [6/0] @49E8
+                'm_name' : (str) 'jaw' @4E1F
+                'm_parent' : (int) 44 @49EC
+                'm_pos' : (vec3) [6.999992, 0.000001, -1.300018] @49F0
+                'm_quat' : (quat) [0.500000, 0.500000, 0.500000, 0.500000] @49FC
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4A0C
+                'm_flags' : (int) 0 @4A1C
+            [6/0] @4A20
+                'm_name' : (str) 'hair_R1C0' @4E23
+                'm_parent' : (int) 47 @4A24
+                'm_pos' : (vec3) [6.499352, 0.000000, 0.000015] @4A28
+                'm_quat' : (quat) [0.000087, -0.043354, -0.000041, 0.999060] @4A34
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4A44
+                'm_flags' : (int) 0 @4A54
+            [6/0] @4A58
+                'm_name' : (str) 'hair_R2C0' @4E2D
+                'm_parent' : (int) 49 @4A5C
+                'm_pos' : (vec3) [12.220444, 0.000000, -0.000023] @4A60
+                'm_quat' : (quat) [0.000000, -0.281097, 0.000000, 0.959679] @4A6C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4A7C
+                'm_flags' : (int) 0 @4A8C
+            [6/0] @4A90
+                'm_name' : (str) 'hair_R3C0' @4E37
+                'm_parent' : (int) 50 @4A94
+                'm_pos' : (vec3) [14.621193, -0.000001, -0.000015] @4A98
+                'm_quat' : (quat) [-0.000000, -0.238403, 0.000000, 0.971166] @4AA4
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4AB4
+                'm_flags' : (int) 0 @4AC4
+            [6/0] @4AC8
+                'm_name' : (str) 'hair_R4C0' @4E41
+                'm_parent' : (int) 51 @4ACC
+                'm_pos' : (vec3) [13.004658, 0.000001, 0.000015] @4AD0
+                'm_quat' : (quat) [0.000000, -0.098576, 0.000000, 0.995130] @4ADC
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4AEC
+                'm_flags' : (int) 0 @4AFC
+            [6/0] @4B00
+                'm_name' : (str) 'knee_R' @4E4B
+                'm_parent' : (int) 2 @4B04
+                'm_pos' : (vec3) [-33.535789, -0.000004, 0.000002] @4B08
+                'm_quat' : (quat) [0.000000, 0.347852, -0.000000, 0.937549] @4B14
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4B24
+                'm_flags' : (int) 0 @4B34
+            [6/0] @4B38
+                'm_name' : (str) 'ankle_R' @4E52
+                'm_parent' : (int) 53 @4B3C
+                'm_pos' : (vec3) [-34.422295, 0.000008, 0.000003] @4B40
+                'm_quat' : (quat) [0.126778, -0.548178, -0.213108, 0.798757] @4B4C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4B5C
+                'm_flags' : (int) 0 @4B6C
+            [6/0] @4B70
+                'm_name' : (str) 'toeBase_R' @4E5A
+                'm_parent' : (int) 54 @4B74
+                'm_pos' : (vec3) [-20.323769, 0.000000, -0.000006] @4B78
+                'm_quat' : (quat) [-0.010697, 0.957856, -0.003205, 0.287032] @4B84
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4B94
+                'm_flags' : (int) 0 @4BA4
+            [6/0] @4BA8
+                'm_name' : (str) 'knee_L' @4E64
+                'm_parent' : (int) 3 @4BAC
+                'm_pos' : (vec3) [33.535782, 0.000004, -0.000006] @4BB0
+                'm_quat' : (quat) [0.000000, 0.347852, -0.000000, 0.937549] @4BBC
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4BCC
+                'm_flags' : (int) 0 @4BDC
+            [6/0] @4BE0
+                'm_name' : (str) 'ankle_L' @4E6B
+                'm_parent' : (int) 56 @4BE4
+                'm_pos' : (vec3) [34.422283, -0.000004, 0.000000] @4BE8
+                'm_quat' : (quat) [0.126778, -0.548178, -0.213109, 0.798757] @4BF4
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4C04
+                'm_flags' : (int) 0 @4C14
+            [6/0] @4C18
+                'm_name' : (str) 'toeBase_L' @4E73
+                'm_parent' : (int) 57 @4C1C
+                'm_pos' : (vec3) [20.323780, -0.000004, -0.000003] @4C20
+                'm_quat' : (quat) [-0.003206, -0.287032, 0.010697, 0.957856] @4C2C
+                'm_qAlignment' : (quat) [0.000000, 0.000000, 0.000000, 0.000000] @4C3C
+                'm_flags' : (int) 0 @4C4C
+        'm_userArray' : [0/0] @34B0
+        'm_morphArray' : [0/0] @34B8
+        'm_IKChainArray' : [0/0] @34C0
+        'm_nChannelElements' : (int) 118 @34C4
+        'm_dataChannelArray' : [2/2] @34CC
+            [9/0] @34F8
+                'm_szChannelClass' : (str) 'BoneChannel' @3558
+                'm_szVariableName' : (str) 'Position' @3564
+                'm_nFlags' : (int) 0 @3500
+                'm_nType' : (int) 3 @3504
+                'm_szGrouping' : (str) '' @3508
+                'm_szDescription' : (str) '' @350C
+                'm_szElementNameArray' : [59/59] @3514
+                    (str) 'root' @3834
+                    (str) 'spine1' @3839
+                    (str) 'thigh_R' @3840
+                    (str) 'thigh_L' @3848
+                    (str) 'spine2' @3850
+                    (str) 'spine3' @3857
+                    (str) 'clavicle_R' @385E
+                    (str) 'clavicle_L' @3869
+                    (str) 'neck1' @3874
+                    (str) 'bicep_R' @387A
+                    (str) 'joint4' @3882
+                    (str) 'elbow_R' @3889
+                    (str) 'joint5' @3891
+                    (str) 'wrist_R' @3898
+                    (str) 'thumb_0_R' @38A0
+                    (str) 'index_0_R' @38AA
+                    (str) 'mid_0_R' @38B4
+                    (str) 'axe_1' @38BC
+                    (str) 'thumb_1_R' @38C2
+                    (str) 'index_1_R' @38CC
+                    (str) 'index_2_R' @38D6
+                    (str) 'mid_1_R' @38E0
+                    (str) 'mid_2_R' @38E8
+                    (str) 'chain_top_BC' @38F0
+                    (str) 'chain_top_R0C0' @38FD
+                    (str) 'chain_bot_R0C0' @390C
+                    (str) 'chain_top_R1C0' @391B
+                    (str) 'chain_top_R2C0' @392A
+                    (str) 'chain_top_R3C0' @3939
+                    (str) 'chain_top_R4C0' @3948
+                    (str) 'chain_bot_R1C0' @3957
+                    (str) 'chain_bot_R2C0' @3966
+                    (str) 'chain_bot_R3C0' @3975
+                    (str) 'bicep_L' @3984
+                    (str) 'elbow_L' @398C
+                    (str) 'wrist_L' @3994
+                    (str) 'thumb_0_L' @399C
+                    (str) 'index_0_L' @39A6
+                    (str) 'mid_0_L' @39B0
+                    (str) 'thumb_1_L' @39B8
+                    (str) 'index_1_L' @39C2
+                    (str) 'index_2_L' @39CC
+                    (str) 'mid_1_L' @39D6
+                    (str) 'mid_2_L' @39DE
+                    (str) 'head' @39E6
+                    (str) 'joint6' @39EB
+                    (str) 'joint7' @39F2
+                    (str) 'hair_R0C0' @39F9
+                    (str) 'jaw' @3A03
+                    (str) 'hair_R1C0' @3A07
+                    (str) 'hair_R2C0' @3A11
+                    (str) 'hair_R3C0' @3A1B
+                    (str) 'hair_R4C0' @3A25
+                    (str) 'knee_R' @3A2F
+                    (str) 'ankle_R' @3A36
+                    (str) 'toeBase_R' @3A3E
+                    (str) 'knee_L' @3A48
+                    (str) 'ankle_L' @3A4F
+                    (str) 'toeBase_L' @3A57
+                'm_nElementIndexArray' : [59/59] @351C
+                    (int) 0 @365C
+                    (int) 1 @3660
+                    (int) 2 @3664
+                    (int) 3 @3668
+                    (int) 4 @366C
+                    (int) 5 @3670
+                    (int) 6 @3674
+                    (int) 7 @3678
+                    (int) 8 @367C
+                    (int) 9 @3680
+                    (int) 10 @3684
+                    (int) 11 @3688
+                    (int) 12 @368C
+                    (int) 13 @3690
+                    (int) 14 @3694
+                    (int) 15 @3698
+                    (int) 16 @369C
+                    (int) 17 @36A0
+                    (int) 18 @36A4
+                    (int) 19 @36A8
+                    (int) 20 @36AC
+                    (int) 21 @36B0
+                    (int) 22 @36B4
+                    (int) 23 @36B8
+                    (int) 24 @36BC
+                    (int) 25 @36C0
+                    (int) 26 @36C4
+                    (int) 27 @36C8
+                    (int) 28 @36CC
+                    (int) 29 @36D0
+                    (int) 30 @36D4
+                    (int) 31 @36D8
+                    (int) 32 @36DC
+                    (int) 33 @36E0
+                    (int) 34 @36E4
+                    (int) 35 @36E8
+                    (int) 36 @36EC
+                    (int) 37 @36F0
+                    (int) 38 @36F4
+                    (int) 39 @36F8
+                    (int) 40 @36FC
+                    (int) 41 @3700
+                    (int) 42 @3704
+                    (int) 43 @3708
+                    (int) 44 @370C
+                    (int) 45 @3710
+                    (int) 46 @3714
+                    (int) 47 @3718
+                    (int) 48 @371C
+                    (int) 49 @3720
+                    (int) 50 @3724
+                    (int) 51 @3728
+                    (int) 52 @372C
+                    (int) 53 @3730
+                    (int) 54 @3734
+                    (int) 55 @3738
+                    (int) 56 @373C
+                    (int) 57 @3740
+                    (int) 58 @3744
+                'm_nElementMaskArray' : [59/59] @3524
+                    (uint) 1 @3748
+                    (uint) 1 @374C
+                    (uint) 2 @3750
+                    (uint) 2 @3754
+                    (uint) 4 @3758
+                    (uint) 4 @375C
+                    (uint) 8 @3760
+                    (uint) 8 @3764
+                    (uint) 16 @3768
+                    (uint) 16 @376C
+                    (uint) 32 @3770
+                    (uint) 32 @3774
+                    (uint) 64 @3778
+                    (uint) 128 @377C
+                    (uint) 128 @3780
+                    (uint) 256 @3784
+                    (uint) 256 @3788
+                    (uint) 512 @378C
+                    (uint) 512 @3790
+                    (uint) 1024 @3794
+                    (uint) 1024 @3798
+                    (uint) 2048 @379C
+                    (uint) 2048 @37A0
+                    (uint) 4096 @37A4
+                    (uint) 8192 @37A8
+                    (uint) 8192 @37AC
+                    (uint) 16384 @37B0
+                    (uint) 16384 @37B4
+                    (uint) 32768 @37B8
+                    (uint) 32768 @37BC
+                    (uint) 65536 @37C0
+                    (uint) 65536 @37C4
+                    (uint) 131072 @37C8
+                    (uint) 131072 @37CC
+                    (uint) 262144 @37D0
+                    (uint) 262144 @37D4
+                    (uint) 524288 @37D8
+                    (uint) 1048576 @37DC
+                    (uint) 1048576 @37E0
+                    (uint) 2097152 @37E4
+                    (uint) 2097152 @37E8
+                    (uint) 4194304 @37EC
+                    (uint) 4194304 @37F0
+                    (uint) 8388608 @37F4
+                    (uint) 8388608 @37F8
+                    (uint) 16777216 @37FC
+                    (uint) 16777216 @3800
+                    (uint) 33554432 @3804
+                    (uint) 67108864 @3808
+                    (uint) 67108864 @380C
+                    (uint) 134217728 @3810
+                    (uint) 134217728 @3814
+                    (uint) 268435456 @3818
+                    (uint) 268435456 @381C
+                    (uint) 536870912 @3820
+                    (uint) 536870912 @3824
+                    (uint) 1073741824 @3828
+                    (uint) 1073741824 @382C
+                    (uint) 2147483648 @3830
+            [9/0] @3528
+                'm_szChannelClass' : (str) 'BoneChannel' @3A61
+                'm_szVariableName' : (str) 'Angle' @3A6D
+                'm_nFlags' : (int) 0 @3530
+                'm_nType' : (int) 4 @3534
+                'm_szGrouping' : (str) '' @3538
+                'm_szDescription' : (str) '' @353C
+                'm_szElementNameArray' : [59/59] @3544
+                    (str) 'root' @3D38
+                    (str) 'spine1' @3D3D
+                    (str) 'thigh_R' @3D44
+                    (str) 'thigh_L' @3D4C
+                    (str) 'spine2' @3D54
+                    (str) 'spine3' @3D5B
+                    (str) 'clavicle_R' @3D62
+                    (str) 'clavicle_L' @3D6D
+                    (str) 'neck1' @3D78
+                    (str) 'bicep_R' @3D7E
+                    (str) 'joint4' @3D86
+                    (str) 'elbow_R' @3D8D
+                    (str) 'joint5' @3D95
+                    (str) 'wrist_R' @3D9C
+                    (str) 'thumb_0_R' @3DA4
+                    (str) 'index_0_R' @3DAE
+                    (str) 'mid_0_R' @3DB8
+                    (str) 'axe_1' @3DC0
+                    (str) 'thumb_1_R' @3DC6
+                    (str) 'index_1_R' @3DD0
+                    (str) 'index_2_R' @3DDA
+                    (str) 'mid_1_R' @3DE4
+                    (str) 'mid_2_R' @3DEC
+                    (str) 'chain_top_BC' @3DF4
+                    (str) 'chain_top_R0C0' @3E01
+                    (str) 'chain_bot_R0C0' @3E10
+                    (str) 'chain_top_R1C0' @3E1F
+                    (str) 'chain_top_R2C0' @3E2E
+                    (str) 'chain_top_R3C0' @3E3D
+                    (str) 'chain_top_R4C0' @3E4C
+                    (str) 'chain_bot_R1C0' @3E5B
+                    (str) 'chain_bot_R2C0' @3E6A
+                    (str) 'chain_bot_R3C0' @3E79
+                    (str) 'bicep_L' @3E88
+                    (str) 'elbow_L' @3E90
+                    (str) 'wrist_L' @3E98
+                    (str) 'thumb_0_L' @3EA0
+                    (str) 'index_0_L' @3EAA
+                    (str) 'mid_0_L' @3EB4
+                    (str) 'thumb_1_L' @3EBC
+                    (str) 'index_1_L' @3EC6
+                    (str) 'index_2_L' @3ED0
+                    (str) 'mid_1_L' @3EDA
+                    (str) 'mid_2_L' @3EE2
+                    (str) 'head' @3EEA
+                    (str) 'joint6' @3EEF
+                    (str) 'joint7' @3EF6
+                    (str) 'hair_R0C0' @3EFD
+                    (str) 'jaw' @3F07
+                    (str) 'hair_R1C0' @3F0B
+                    (str) 'hair_R2C0' @3F15
+                    (str) 'hair_R3C0' @3F1F
+                    (str) 'hair_R4C0' @3F29
+                    (str) 'knee_R' @3F33
+                    (str) 'ankle_R' @3F3A
+                    (str) 'toeBase_R' @3F42
+                    (str) 'knee_L' @3F4C
+                    (str) 'ankle_L' @3F53
+                    (str) 'toeBase_L' @3F5B
+                'm_nElementIndexArray' : [59/59] @354C
+                    (int) 59 @3B60
+                    (int) 60 @3B64
+                    (int) 61 @3B68
+                    (int) 62 @3B6C
+                    (int) 63 @3B70
+                    (int) 64 @3B74
+                    (int) 65 @3B78
+                    (int) 66 @3B7C
+                    (int) 67 @3B80
+                    (int) 68 @3B84
+                    (int) 69 @3B88
+                    (int) 70 @3B8C
+                    (int) 71 @3B90
+                    (int) 72 @3B94
+                    (int) 73 @3B98
+                    (int) 74 @3B9C
+                    (int) 75 @3BA0
+                    (int) 76 @3BA4
+                    (int) 77 @3BA8
+                    (int) 78 @3BAC
+                    (int) 79 @3BB0
+                    (int) 80 @3BB4
+                    (int) 81 @3BB8
+                    (int) 82 @3BBC
+                    (int) 83 @3BC0
+                    (int) 84 @3BC4
+                    (int) 85 @3BC8
+                    (int) 86 @3BCC
+                    (int) 87 @3BD0
+                    (int) 88 @3BD4
+                    (int) 89 @3BD8
+                    (int) 90 @3BDC
+                    (int) 91 @3BE0
+                    (int) 92 @3BE4
+                    (int) 93 @3BE8
+                    (int) 94 @3BEC
+                    (int) 95 @3BF0
+                    (int) 96 @3BF4
+                    (int) 97 @3BF8
+                    (int) 98 @3BFC
+                    (int) 99 @3C00
+                    (int) 100 @3C04
+                    (int) 101 @3C08
+                    (int) 102 @3C0C
+                    (int) 103 @3C10
+                    (int) 104 @3C14
+                    (int) 105 @3C18
+                    (int) 106 @3C1C
+                    (int) 107 @3C20
+                    (int) 108 @3C24
+                    (int) 109 @3C28
+                    (int) 110 @3C2C
+                    (int) 111 @3C30
+                    (int) 112 @3C34
+                    (int) 113 @3C38
+                    (int) 114 @3C3C
+                    (int) 115 @3C40
+                    (int) 116 @3C44
+                    (int) 117 @3C48
+                'm_nElementMaskArray' : [59/59] @3554
+                    (uint) 1 @3C4C
+                    (uint) 1 @3C50
+                    (uint) 2 @3C54
+                    (uint) 2 @3C58
+                    (uint) 4 @3C5C
+                    (uint) 4 @3C60
+                    (uint) 8 @3C64
+                    (uint) 8 @3C68
+                    (uint) 16 @3C6C
+                    (uint) 16 @3C70
+                    (uint) 32 @3C74
+                    (uint) 32 @3C78
+                    (uint) 64 @3C7C
+                    (uint) 128 @3C80
+                    (uint) 128 @3C84
+                    (uint) 256 @3C88
+                    (uint) 256 @3C8C
+                    (uint) 512 @3C90
+                    (uint) 512 @3C94
+                    (uint) 1024 @3C98
+                    (uint) 1024 @3C9C
+                    (uint) 2048 @3CA0
+                    (uint) 2048 @3CA4
+                    (uint) 4096 @3CA8
+                    (uint) 8192 @3CAC
+                    (uint) 8192 @3CB0
+                    (uint) 16384 @3CB4
+                    (uint) 16384 @3CB8
+                    (uint) 32768 @3CBC
+                    (uint) 32768 @3CC0
+                    (uint) 65536 @3CC4
+                    (uint) 65536 @3CC8
+                    (uint) 131072 @3CCC
+                    (uint) 131072 @3CD0
+                    (uint) 262144 @3CD4
+                    (uint) 262144 @3CD8
+                    (uint) 524288 @3CDC
+                    (uint) 1048576 @3CE0
+                    (uint) 1048576 @3CE4
+                    (uint) 2097152 @3CE8
+                    (uint) 2097152 @3CEC
+                    (uint) 4194304 @3CF0
+                    (uint) 4194304 @3CF4
+                    (uint) 8388608 @3CF8
+                    (uint) 8388608 @3CFC
+                    (uint) 16777216 @3D00
+                    (uint) 16777216 @3D04
+                    (uint) 33554432 @3D08
+                    (uint) 67108864 @3D0C
+                    (uint) 67108864 @3D10
+                    (uint) 134217728 @3D14
+                    (uint) 134217728 @3D18
+                    (uint) 268435456 @3D1C
+                    (uint) 268435456 @3D20
+                    (uint) 536870912 @3D24
+                    (uint) 536870912 @3D28
+                    (uint) 1073741824 @3D2C
+                    (uint) 1073741824 @3D30
+                    (uint) 2147483648 @3D34
+    'm_retarget' : [5/0] @34D0
+        'm_bEnableRetarget' : (int) 0 @34D0
+        'm_nRetargetStyle' : (int) 0 @34D4
+        'm_element' : [0/0] @34DC
+        'm_chain' : [0/0] @34E4
+        'm_replicated' : [0/0] @34EC
+    'm_szScripts' : [1/1] @34F4
+        (str) 'animation\heroes\axe\axe.lua' @500C
+ 

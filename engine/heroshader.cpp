@@ -97,7 +97,12 @@ bool HeroShader::Load()
 	locDrawShadow = glGetUniformLocation(programObject, "drawShadow");
 	locHqNormal = glGetUniformLocation(programObject, "hqNormal");
 	
-	locBoneIndex = glGetUniformLocation(programObject, "boneIndex");
+	locBoneTexture = glGetUniformLocation(programObject, "boneTexture");
+	locUseBoneWeight = glGetUniformLocation(programObject, "useBoneWeight");
+	
+	locBoneTransform = glGetUniformLocation(programObject, "boneTransform");
+	
+	//locBoneIndex = glGetUniformLocation(programObject, "boneIndex");
 	//locBonePos = glGetUniformLocation(programObject, "bonePos");
 	//locBoneRot = glGetUniformLocation(programObject, "boneRot");
 	//locBoneTransform1 = glGetUniformLocation(programObject, "boneTransform1");
@@ -186,6 +191,19 @@ void HeroShader::Populate(Model* m, int index)
 	}
 	const GLint samplers[5] = {0,1,2,3,4}; // we've bound our textures in textures 0 and 1.
 	glUniform1iv( locTexture, 5, samplers );
+	
+	const GLint boneTxt = 5;
+	glUniform1iv( locBoneTexture, 1, &boneTxt);
+	
+	int hasBoneweight = 0;
+	if(m->subModel[index]->vtOffset_bWeight > 0)
+	{
+		hasBoneweight = 1;
+	}
+	
+	glUniform1iv(locUseBoneWeight, 1, &hasBoneweight);
+	
+	glUniformMatrix4fv(locBoneTransform, m->numBone, GL_FALSE, &m->boneTransform[0][0][0]);
 	
 	//unsigned int boneIndex[128];
 	//unsigned int* boneIndexP = m->subModel[index]->meshBoneIndex;

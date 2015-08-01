@@ -98,6 +98,7 @@ public:
 	
 	KeyValue* mdlRoot;
 	KeyValue* meshRoot;
+	KeyValue* vagrpRoot;
 	
 	unsigned int subModelCount;
 	ModelDrawCall** subModel;

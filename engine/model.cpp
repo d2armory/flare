@@ -36,6 +36,7 @@ Model::Model(const char* fileName)
 
 Model::~Model()
 {
+	KVReader2::Clean(mdlRoot);
 	if(meshRoot)
 	{
 		KVReader2::Clean(meshRoot);
@@ -127,7 +128,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				KeyValue* boneRot = skeleton->Find("m_boneRotParent");
 				for(int i=0;i<numBone;i++)
 				{
-					boneMap[i] = -1;
+					boneMap[i] = i;
 					// note: store temp bone transform to calc inv transform
 					
 					//boneTransform[i] = glm::mat4(1);
@@ -160,7 +161,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 				numBone = 0;
 			}
 			
-			KVReader2::Clean(root);
+			//KVReader2::Clean(root);
 
 		}
 		if(meshState == FS_LOADING && FileLoader::FileExist(meshFileName))
@@ -169,22 +170,51 @@ void Model::Update(ESContext *esContext, float deltaTime)
 		}
 		if(vagrpState == FS_LOADING && FileLoader::FileExist(vagrpFileName))
 		{
-			// TODO: complete this
-			bool loadoutFound = 0;
-			if(loadoutFound)
+			
+			vagrpState = FS_READY;
+			
+			printf("Reading vagrp file %s\n",vagrpFileName);
+			
+			vanimData = FileLoader::ReadFile(vagrpFileName);
+			vagrpRoot = KVReader2::Parse(vanimData);
+			
+			KeyValue* animArr = vagrpRoot->Find("m_localHAnimArray");
+			
+			if(animArr && animArr->childCount > 0)
 			{
-				anim = 0;
-				useAnimation = 1;
+				printf("Found animArr\n");	
+				// assume loadout is in pos 2
+				// really don't know how to handle this without loading all anim
+				// maybe guess by filename?
+				
+				int animId = 0;
+				
+				if(animArr->childCount >= 2) animId = 2;
+				
+				printf("Using anim #%d\n",animId);
+				
+				const char* animFilename = animArr->Get(animId)->AsName();
+				std::string animFilenamec = std::string(animFilename) + "_c";
+				
+				useAnimation = true;
 				animParent = 0;
+				
+				anim = new ModelAnimation(animFilenamec.c_str());
+				anim->parent = this;
+				anim->boneCount = numBone;
+				
 			}
 			else
 			{
-				useAnimation = 0;
+				
+				printf("Empty animArr\n");
+				
+				useAnimation = false;
 				anim = 0;
 				animParent = 0;
 			}
 		}
-		if(mdlState == FS_READY && meshState == FS_READY)
+		if(mdlState == FS_READY && meshState == FS_READY && vagrpState == FS_READY)
 		{
 			state = FS_READY;
 			
@@ -310,7 +340,7 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					{
 						sm->vtOffset_UV = *((emscripten_align1_int*) (vaLabel + 40));
 					}
-					else if(strcmp("BLENDINDICE",vaLabel)==0)
+					else if(strcmp("BLENDINDICES",vaLabel)==0)
 					{
 						sm->vtOffset_bIndex = *((emscripten_align1_int*) (vaLabel + 40));
 					}
@@ -421,7 +451,16 @@ void Model::Update(ESContext *esContext, float deltaTime)
 					float tV = *txtV;
 					vertexExData[v].uv = glm::vec2(tU,tV);
 					
-					if(tU<0 || tU>1 || tV<0 || tV>1) printf("- vertex %d: UV out of bound - %f %f\n",v,tU,tV);
+					/* printf("v %d: %d - %d , %d - %d , %d - %d\n",v,
+						*((unsigned char*) (vertexData + vertexSize * v + sm->vtOffset_bIndex)),
+						*((unsigned char*) (vertexData + vertexSize * v + sm->vtOffset_bWeight)),
+						*((unsigned char*) (vertexData + vertexSize * v + sm->vtOffset_bIndex + 1)),
+						*((unsigned char*) (vertexData + vertexSize * v + sm->vtOffset_bWeight + 1)),
+						*((unsigned char*) (vertexData + vertexSize * v + sm->vtOffset_bIndex + 2)),
+						*((unsigned char*) (vertexData + vertexSize * v + sm->vtOffset_bWeight + 2))
+					); */
+					
+					//if(tU<0 || tU>1 || tV<0 || tV>1) printf("- vertex %d: UV out of bound - %f %f\n",v,tU,tV);
 				}
 				//if(alert==1) printf("UV out of bound [0-1]\n");
 				// tangent calculation moved to fragment shader
@@ -483,6 +522,12 @@ void Model::Update(ESContext *esContext, float deltaTime)
 	}
 	else if(state==FS_READY)
 	{
+		
+		if(anim)
+		{
+			anim->Update(esContext,deltaTime);
+		}
+		
 		// handle animation here
 		/* if(useAnimation)
 		{
@@ -756,6 +801,9 @@ void Model::Draw(ESContext *esContext)
 			
 		if(shaderActive)
 		{
+			
+			if(anim != 0) anim->Draw(esContext, this);
+			
 			// draw each submodel
 			for(int i=0;i<subModelCount;i++) 
 			{
@@ -779,6 +827,8 @@ void Model::Draw(ESContext *esContext)
 					
 					if(Scene::currentStep==RS_SCENE) shader->Populate(this, i);
 					else if(Scene::currentStep==RS_SHADOW) shaderShadow->Populate(this, i);
+		
+					
 		
 					// real drawing code, just 3 lines lol
 					glDrawElements(GL_TRIANGLES, subModel[i]->indexCount, GL_UNSIGNED_SHORT, 0);

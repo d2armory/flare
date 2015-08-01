@@ -45,6 +45,10 @@ uniform mat3 nTransform;
 //uniform vec4 boneTransform2[53];
 //uniform vec4 boneTransform3[53];
 
+uniform int useBoneWeight;
+//uniform sampler2D boneTexture;
+uniform mat4 boneTransform[64];
+
 // fs output
 varying vec2 fUV;
 varying highp vec3 fPos;
@@ -58,7 +62,7 @@ varying vec3 fN;
 
 varying vec3 fShadowCoord;
 
-varying float boneShader;
+varying vec4 boneShader;
 
 vec2 v2normalize(vec2 a)
 {
@@ -99,6 +103,21 @@ void main()
 	
 	highp vec3 vaPos = vPosition;
 	
+ 	if(useBoneWeight>0)
+	{
+		vaPos = vec3(0,0,0);
+		vec3 vaPos1 = (boneTransform[int(vBone1)] * vec4(vPosition,1)).xyz;
+		vaPos += vaPos1 * vBoneweight1;
+		vec3 vaPos2 = (boneTransform[int(vBone2)] * vec4(vPosition,1)).xyz;
+		vaPos += vaPos2 * vBoneweight2;
+		vec3 vaPos3 = (boneTransform[int(vBone3)] * vec4(vPosition,1)).xyz;
+		vaPos += vaPos3 * vBoneweight3;
+	}
+	else
+	{
+		vaPos = (boneTransform[int(vBone3)] * vec4(vPosition,1)).xyz;
+	}
+	
 	/* vec3 vaPos = vec3(0,0,0);
 	vec3 vaPos1 = (boneTransform[boneIndex[int(vBone1)]] * vec4(vaPosIn,1)).xyz;
 	vaPos += vaPos1 * vBoneweight1;
@@ -119,5 +138,7 @@ void main()
 	
 	fShadowCoord = (depthBiasMvpTransform * vec4(vaPos,1)).xyz;
 	
-	boneShader = (vBone1);// / 128.0;
+	float sbw = 1.0;//boneTransform[0][0][0];
+	
+	boneShader = vec4(sbw,sbw,sbw,1);// / 128.0;
 }

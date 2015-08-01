@@ -29,7 +29,7 @@ int main()
 	// main code is here
 	printf("Openning file\n");
 	//const char* fileName = "testbin/axe_bg_default_lod0.vmesh_c";
-	const char* fileName = "testbin/loadout.vanim_c";
+	const char* fileName = "testbin/asset_sequences_c588a788.vagrp_c";
 	
 	FILE* fp = fopen(fileName,"rb");
 	fseek(fp, 0, SEEK_END);
@@ -67,7 +67,13 @@ int main()
 	KeyValue* root = KVReader2::Parse(fileData);
 	
 	// Dump all
-	//KVReader2::Dump(root, (unsigned int) fileData);
+	KVReader2::Dump(root, (unsigned int) fileData);
+	
+	// Clean up
+	KVReader2::Clean(root);
+	
+	free(origFileData);
+	return 0;
 	
 	// Sample Usage
 	/* KeyValue* txtParams = root->Find("m_textureParams");
@@ -91,6 +97,7 @@ int main()
 			printf("Mask 2 material: %s\n",txt->Find("m_pValue")->AsHandle());
 		}
 	} */
+	
 	
 	KeyValue* animDesc = root->Find("m_frameData")->Get(0);
 	int numFrame = animDesc->Find("m_nFrames")->AsInt();

@@ -41,7 +41,7 @@ engine.bc: engine/fileLoader.cpp engine/fileLoader.hpp engine/material.cpp engin
 	$(COMPILER) $(OPTIMIZE) engine/kvreader.cpp -o engine/kvreader.bc
 	$(COMPILER) $(OPTIMIZE) engine/kvreader2.cpp -o engine/kvreader2.bc
 	$(COMPILER) $(OPTIMIZE) engine/scene.cpp -o engine/scene.bc
-	$(COMPILER) $(OPTIMIZE) engine/fileLoader.bc engine/material.bc engine/model.bc engine/texture.bc engine/manager.bc engine/shader.bc engine/heroshader.bc engine/shadowshader.bc engine/kvreader.bc engine/kvreader2.bc engine/scene.bc -o engine.bc
+	$(COMPILER) $(OPTIMIZE) engine/fileLoader.bc engine/material.bc engine/model.bc engine/modelanimation.bc engine/texture.bc engine/manager.bc engine/shader.bc engine/heroshader.bc engine/shadowshader.bc engine/kvreader.bc engine/kvreader2.bc engine/scene.bc -o engine.bc
 		
 squish.bc: squish/squish.h
 	$(COMPILER) $(OPTIMIZE) squish/alpha.cpp -o squish/alpha.bc
