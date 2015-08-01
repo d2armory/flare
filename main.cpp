@@ -457,6 +457,24 @@ std::string GetModel(int index)
 	return std::string("");
 }
 
+void SetPosition(std::string name, float x, float y, float z)
+{
+	Model* m = Manager::findModel(name.c_str());
+	if(m!=0)
+	{
+		m->position = glm::vec4(x,y,z,1);
+	}
+}
+
+void SetMatOffset(std::string name, int offset)
+{
+	Model* m = Manager::findModel(name.c_str());
+	if(m!=0)
+	{
+		m->matOffset = offset;
+	}
+}
+
 void setCamPosition(float x, float y, float z)
 {
 	Scene::camPosition = glm::vec3(x,y,z);
@@ -495,10 +513,14 @@ EMSCRIPTEN_BINDINGS(model_control)
 	function("MC_RemoveModel",&RemoveModel);
 	function("MC_ModelCount",&ModelCount);
 	function("MC_GetModel",&GetModel);
+	function("MC_SetPosition",&SetPosition);
+	function("MC_SetMatOffset",&SetMatOffset);
+	
 	function("SC_SetCamPosition",&setCamPosition);
 	function("SC_SetCamTarget",&setCamTarget);
 	function("SC_SetCamRotationSpeed",&setcamRotationSpeed);
 	function("SC_SetCamRotationAcc",&setcamRotationAcc);
 	function("SC_SetCamZoom",&setcamZoom);
+	
 	function("GL_SetViewPort",&setViewPort);
 }

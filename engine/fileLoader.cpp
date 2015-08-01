@@ -6,6 +6,7 @@ LoadedFile* FileLoader::loaded = 0;
 void FileLoader::PrepareDirectory(const char* fileName)
 {
 	std::string s(fileName);
+	s = UnHash(s);
 	std::string cur = "";
 
     std::string::size_type prev_pos = 0, pos = 0;
@@ -40,6 +41,7 @@ void FileLoader::Load(const char* fileName)
 	if(FileLoader::FileExist(fileName)) return;
 	
 	std::string fName(fileName);
+	fName = UnHash(fName);
 	
 	// currently loading file checl
 	LoadedFile* l = loaded;
@@ -83,8 +85,12 @@ void FileLoader::LoadCallbackFail(unsigned int num, void* some, int num2)
 
 bool FileLoader::FileExist(const char* fileName)
 {
+	
+	std::string fName(fileName);
+	fName = UnHash(fName);
+	
 	FILE *file;
-	file = fopen(fileName, "r");
+	file = fopen(fName.c_str(), "r");
 	if (file)
 	{
 		fclose(file);
@@ -95,7 +101,11 @@ bool FileLoader::FileExist(const char* fileName)
 
 char* FileLoader::ReadFile(const char* fileName, unsigned int& size)
 {
-	FILE* fp = fopen(fileName,"rb");
+	
+	std::string fName(fileName);
+	fName = UnHash(fName);
+	
+	FILE* fp = fopen(fName.c_str(),"rb");
 	
 	if(!fp)
 	{
@@ -127,4 +137,14 @@ char* FileLoader::ReadFile(const char* fileName)
 {
 	unsigned int size = 0;
 	return ReadFile(fileName, size);	
+}
+
+std::string FileLoader::UnHash(std::string fileName)
+{
+	int hPos = fileName.find("#");
+	if(hPos!=std::string::npos)
+	{
+		fileName = fileName.substr(0,hPos);
+	}
+	return fileName;
 }

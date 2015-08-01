@@ -47,7 +47,7 @@ uniform mat3 nTransform;
 
 uniform int useBoneWeight;
 //uniform sampler2D boneTexture;
-uniform mat4 boneTransform[64];
+uniform mat4 boneTransform[1];
 
 // fs output
 varying vec2 fUV;
