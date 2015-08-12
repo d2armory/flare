@@ -171,7 +171,7 @@ void main()
 	{
 		for(int i=0;i<16;i++)
 		{
-			shadow = texture2D( texture[4], fShadowCoord.xy + poissonDisk[i]/700.0);
+			shadow = texture2D( texture[4], fShadowCoord.xy);// + poissonDisk[i]/700.0);
 			if ( shadow.x  <  fShadowCoord.z - bias){
 				visibility -= 0.0625;
 			}
@@ -274,4 +274,8 @@ void main()
 	} */
 	
 	//gl_FragColor = boneShader;
+	
+	//gl_FragColor = vec4(diffuseLight,diffuseLight,diffuseLight,1);
+	gl_FragColor = vec4(visibility,visibility,visibility,1);
+	
 }

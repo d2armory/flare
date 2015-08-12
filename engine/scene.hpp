@@ -68,6 +68,9 @@ public:
 	static float nearZ;
 	static float farZ;
 	
+	static float shadowMapHeight;
+	static float shadowMapWidth;
+	
 	static Texture* defaultDiffuse;
 	static Texture* defaultNormal;
 	static Texture* defaultMask1;

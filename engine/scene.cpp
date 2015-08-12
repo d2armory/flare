@@ -43,6 +43,8 @@ float Scene::screenHeight = 640.0f;
 float Scene::screenWidth = 960.0f;
 float Scene::nearZ = 0.01f;
 float Scene::farZ = 1000.0f;
+float Scene::shadowMapHeight = 640.0f;
+float Scene::shadowMapWidth = 960.0f;
 
 glm::vec3 Scene::lightDir = glm::vec3(-1.0,-1.0,-1.0);
 
@@ -227,13 +229,16 @@ void Scene::InitShadowmap()
 	
 	if(!Scene::supportShadow) return;
 	
+	Scene::shadowMapHeight = floor(Scene::screenHeight);
+	Scene::shadowMapWidth = floor(Scene::screenWidth);
+	
 	shadowFrameBuffer = 0;
 	glGenFramebuffers(1, &shadowFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFrameBuffer);
 
 	glGenTextures(1, &shadowColorTexture);
 	glBindTexture(GL_TEXTURE_2D, shadowColorTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, floor(Scene::screenWidth), floor(Scene::screenHeight), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, floor(Scene::shadowMapWidth), floor(Scene::shadowMapHeight), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -242,7 +247,7 @@ void Scene::InitShadowmap()
 	// Depth texture. Slower than a depth buffer, but you can sample it later in your shader
 	glGenTextures(1, &shadowDepthTexture);
 	glBindTexture(GL_TEXTURE_2D, shadowDepthTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT, floor(Scene::screenWidth), floor(Scene::screenHeight), 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT, floor(Scene::shadowMapWidth), floor(Scene::shadowMapHeight), 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

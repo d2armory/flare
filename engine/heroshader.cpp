@@ -165,9 +165,9 @@ void HeroShader::Populate(Model* m, int index)
 	glm::mat4 depthMvp = depthProjectionMatrix * depthViewMatrix * m->modelTransform;
 	glm::mat4 biasMatrix(1);
 	// glm matrix is left to right
-	//biasMatrix = glm::scale(biasMatrix,glm::vec3(Scene::screenWidth/1024.0f,Scene::screenHeight/1024.0f,1.0f));
-	biasMatrix = glm::translate(biasMatrix,glm::vec3(0.5f,0.5f,0.5f));
+	biasMatrix = glm::scale(biasMatrix,glm::vec3(Scene::screenWidth/Scene::shadowMapWidth,Scene::screenHeight/Scene::shadowMapHeight,1.0f));
 	biasMatrix = glm::scale(biasMatrix,glm::vec3(0.5f,0.5f,0.5f));
+	biasMatrix = glm::translate(biasMatrix,glm::vec3(0.5f,0.5f,0.5f));
 	glm::mat4 depthBiasMvp = biasMatrix * depthMvp;
 	glUniformMatrix4fv(locDepthBiasMvpTransform, 1, GL_FALSE, &depthBiasMvp[0][0]);
 	int drawShadow = Scene::enableShadow;
