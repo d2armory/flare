@@ -49,7 +49,7 @@ int Init ( ESContext *esContext )
 	gettimeofday ( &t1 , &tz );
 	
 	// Scene setting
-	Scene::shadowMapCoverage = 250;
+	Scene::shadowMapCoverage = 450;
 	
 	// Init
 	Manager::Init();
@@ -505,6 +505,7 @@ void setViewPort(float w,float h)
 	Scene::screenWidth = w;
 	Scene::screenHeight = h;
 	glViewport(0, 0, floor(Scene::screenWidth), floor(Scene::screenHeight));
+	Scene::InitShadowmap();
 }
 
 EMSCRIPTEN_BINDINGS(model_control)

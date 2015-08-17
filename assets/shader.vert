@@ -138,7 +138,7 @@ void main()
 	
 	fShadowCoord = (depthBiasMvpTransform * vec4(vaPos,1)).xyz;
 	
-	gl_Position = vec4(fShadowCoord,1);
+	//gl_Position = vec4(fShadowCoord,1);
 	
 	float sbw = 1.0;//boneTransform[0][0][0];
 	

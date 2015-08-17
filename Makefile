@@ -18,8 +18,8 @@ release: flare
 
 flare: main.bc glm.bc assets.bc engine.bc squish.bc
 	$(COMPILER) $(OPTIMIZE) main.bc engine.bc squish.bc -o /usr/share/nginx/html/app/raw.html --preload-file assets $(LDLIBS)
-	sed -i 's/div\.emscripten_border { border: 1px solid black;/div\.emscripten_border { border: 1px solid black; background: white; background: url(Black_Texture___Ray_by_Ethenyl\.jpg) center bottom;/' /usr/share/nginx/html/app/raw.html
-	sed -i 's/alpha:\s*false/alpha:true/g' /usr/share/nginx/html/app/raw.js
+#	sed -i 's/div\.emscripten_border { border: 1px solid black;/div\.emscripten_border { border: 1px solid black; background: white; background: url(Black_Texture___Ray_by_Ethenyl\.jpg) center bottom;/' /usr/share/nginx/html/app/raw.html
+	sed -i 's/alpha:\s*false/alpha:true,preserveDrawingBuffer:true/g' /usr/share/nginx/html/app/raw.js
 	sed -i 's/backgroundColor\s*=\s*"black"/backgroundColor="rgba(0,0,0,0)"/g' /usr/share/nginx/html/app/raw.js
 
 main.bc: main.cpp

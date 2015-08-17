@@ -95,6 +95,7 @@ void Material::Update()
 			for(int i=0;i<intParams->childCount;i++)
 			{
 				KeyValue* txt = intParams->Get(i);
+				printf("%s: %d\n",txt->Find("m_name")->AsName(),txt->Find("m_nValue")->AsInt());
 				if(strcmp("F_TRANSLUCENT",txt->Find("m_name")->AsName())==0)
 				{
 					int val = txt->Find("m_nValue")->AsInt();

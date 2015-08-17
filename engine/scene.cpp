@@ -232,6 +232,13 @@ void Scene::InitShadowmap()
 	Scene::shadowMapHeight = floor(Scene::screenHeight);
 	Scene::shadowMapWidth = floor(Scene::screenWidth);
 	
+	if(shadowFrameBuffer != 0)
+	{
+		glDeleteFramebuffers(1, &shadowFrameBuffer);
+		glDeleteTextures(1, &shadowColorTexture);
+		glDeleteTextures(1, &shadowDepthTexture);
+	}
+	
 	shadowFrameBuffer = 0;
 	glGenFramebuffers(1, &shadowFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFrameBuffer);

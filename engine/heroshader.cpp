@@ -147,7 +147,7 @@ void HeroShader::Populate(Model* m, int index)
 		//glUniformMatrix4fv(locProjTransform, 1, GL_FALSE, &p[0][0]);
 		glm::mat4 mv = v * m->modelTransform;
 		glm::mat4 mvp = p * mv;
-		glm::mat3 nt = glm::mat3(mv);
+		glm::mat3 nt = glm::mat3(m->modelTransform);
 		glUniformMatrix4fv(locMvTransform, 1, GL_FALSE, &mv[0][0]);
 		glUniformMatrix4fv(locMvpTransform, 1, GL_FALSE, &mvp[0][0]);
 		glUniformMatrix3fv(locNTransform, 1, GL_FALSE, &nt[0][0]);
@@ -155,7 +155,7 @@ void HeroShader::Populate(Model* m, int index)
 	
 	// Light
 	glm::vec3 lightDirWorld = glm::normalize(Scene::lightDir);//glm::vec3(-1.0,-10.0,-1.0);
-	glm::vec3 lightDir = glm::mat3(v) * lightDirWorld;
+	glm::vec3 lightDir = lightDirWorld;
 	if(!renderInLightSpace) glUniform3fv(locLightDir, 1, &lightDir[0] );
 	
 	// Shadowmap Transform
@@ -165,10 +165,10 @@ void HeroShader::Populate(Model* m, int index)
 	glm::mat4 depthMvp = depthProjectionMatrix * depthViewMatrix * m->modelTransform;
 	glm::mat4 biasMatrix(1);
 	// glm matrix is left to right
-	biasMatrix = glm::scale(biasMatrix,glm::vec3(Scene::screenWidth/Scene::shadowMapWidth,Scene::screenHeight/Scene::shadowMapHeight,1.0f));
-	biasMatrix = glm::scale(biasMatrix,glm::vec3(0.5f,0.5f,0.5f));
-	biasMatrix = glm::translate(biasMatrix,glm::vec3(0.5f,0.5f,0.5f));
-	glm::mat4 depthBiasMvp = biasMatrix * depthMvp;
+	//biasMatrix = glm::scale(biasMatrix,glm::vec3(Scene::shadowMapWidth/Scene::screenWidth,Scene::shadowMapHeight/Scene::screenHeight,1.0f));
+	glm::mat4 scaleBias = glm::scale(biasMatrix,glm::vec3(0.5f,0.5f,1.0f));
+	glm::mat4 transBias = glm::translate(biasMatrix,glm::vec3(0.5f,0.5f,0.0f));
+	glm::mat4 depthBiasMvp = transBias * scaleBias * depthMvp;
 	glUniformMatrix4fv(locDepthBiasMvpTransform, 1, GL_FALSE, &depthBiasMvp[0][0]);
 	int drawShadow = Scene::enableShadow;
 	glUniform1iv(locDrawShadow, 1, &drawShadow);

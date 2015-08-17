@@ -38,6 +38,8 @@ uniform float cloakIntensity;
 uniform float specExponent;
 uniform float specScale;
 
+uniform mat3 nTransform;
+
 // 2 1/4 vec4
 
 /*
@@ -167,12 +169,13 @@ void main()
 	float bias = 0.005*tan(acos(NdotL)); // cosTheta is dot( n,l ), clamped between 0 and 1
 	bias = fclamp(bias, 0.0,0.01);
 	vec4 shadow = vec4(0,0,0,0);
+	float curZ = fShadowCoord.z * 0.5 + 0.5 - bias;
 	if(drawShadow==1)
 	{
 		for(int i=0;i<16;i++)
 		{
-			shadow = texture2D( texture[4], fShadowCoord.xy);// + poissonDisk[i]/700.0);
-			if ( shadow.x  <  fShadowCoord.z - bias){
+			shadow = texture2D( texture[4], fShadowCoord.xy + poissonDisk[i]/700.0);
+			if ( shadow.x  <  curZ){
 				visibility -= 0.0625;
 			}
 		}
@@ -213,7 +216,7 @@ void main()
 		//float specExp = 20.0;
 		//float specScale = 1.25;//2.5;
 		
-		float specExp = specExponent;
+		float specExp = specExponent / (1.0 + metalness * 7.0);
 		float specScl = specScale / 4.0 / 4.0 * (1.0 + metalness * 7.0);
 		
 		if(useMask2!=0) specExp = specExp * mask2.a;
@@ -239,7 +242,7 @@ void main()
 	
 	vec3 light = ambient + diffuse; 
 	
-	vec3 finalcolor = (color.rgb) * (1.0 - metalness);
+	vec3 finalcolor = (color.rgb) * (1.0 - metalness * 0.9);
 	//finalcolor = vec3(0.5,0.5,0.5) + (finalcolor * 0.5);
 	
 	//
@@ -275,7 +278,10 @@ void main()
 	
 	//gl_FragColor = boneShader;
 	
+	//gl_FragColor = vec4(color.xyz,1);
 	//gl_FragColor = vec4(diffuseLight,diffuseLight,diffuseLight,1);
-	gl_FragColor = vec4(visibility,visibility,visibility,1);
-	
+	//gl_FragColor = vec4(visibility,visibility,visibility,1);
+	//gl_FragColor = vec4(fShadowCoord.zzz * 0.5 + 0.5,1);
+	//gl_FragColor = vec4(finalcolor.xyz,1);
+	//gl_FragColor = vec4(metalness,metalness,metalness,1);
 }
