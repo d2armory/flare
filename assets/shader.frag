@@ -242,7 +242,7 @@ void main()
 	
 	vec3 light = ambient + diffuse; 
 	
-	vec3 finalcolor = (color.rgb) * (1.0 - metalness * 0.9);
+	vec3 finalcolor = (color.rgb) * (1.0 - metalness / 7.0 * 0.9);
 	//finalcolor = vec3(0.5,0.5,0.5) + (finalcolor * 0.5);
 	
 	//
